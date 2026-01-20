@@ -1,0 +1,31 @@
+{
+  "name": "Python 3.13",
+  "image": "mcr.microsoft.com/devcontainers/python:3.13-bullseye",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.linting.enabled": true,
+        "workbench.colorTheme": "Visual Studio Dark",
+        "autoDocstring.docstringFormat": "numpy"
+      },
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.vscode-python-envs",
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "ms-toolsai.jupyter",
+        "njpwerner.autodocstring",
+        "charliermarsh.ruff"
+      ]
+    }
+  }
+  // "postCreateCommand": "pip install uv && uv tool install llm && llm install llm-github-models && llm models default github/gpt-4.1 && curl -fsSL https://bun.sh/install | bash && source $HOME/.bashrc"
+}
