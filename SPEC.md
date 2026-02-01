@@ -20,11 +20,11 @@ This repo will be a monorepo that may eventually contain more than one independe
 
 ## Intermediate representation
 
-In its internal XML representation, an Excel workbook is a collection of cell arrays with formulas that reference other cell arrays. In the most abstract representation, the models represented in Excel are tensors indexed by meaningful dimensions (such as year, region, cost centre) which form a computational graph. The relationship between the two is many-to-many: for each abstract model, there are many possible ways to represent that as an Excel workbook; and although each Excel workbook has only one initial parsing, the abstract tensors can be combined and split in ways that preserve fidelity to the workbook, so there are also many abstract models per workbook.
+In its internal XML representation, an Excel workbook is a collection of cells with formulas that reference other cells. In the most abstract representation, the models represented in Excel are tensors indexed by meaningful dimensions (such as year, region, cost centre) which form a computational graph. The relationship between the two is many-to-many: for each abstract model, there are many possible ways to represent that as an Excel workbook; and although each Excel workbook has only one initial parsing, the cells can be combined and split into tensors in different ways that preserve fidelity to the workbook, so there are also many abstract models per workbook.
 
 This flexibility, along with the possibility of errors, leads to the need for AI intervention - without this, it'd be enough to build a deterministic parser. The AI can help here in four roles:
 
-1. The Excel workbook might contain errors - the agent can decide whether the workbook does what it's intended to do and flag up any suspected errors
+1. The Excel workbook might contain errors - e.g. a single cell in the middle of an array that doesn't follow the same formula - the agent can decide whether the workbook does what it's intended to do and flag up any suspected errors
 2. The initial parsing of the workbook will be _valid_ but may not be optimal for interpretation. The agent can make isomorphic edits to the abstract structure to improve the interpretability and usability of the model. For example, the parser might return three arrays, that should actually be considered as three slices of one 3d tensor.
 3. Documentation and explanation - the agent can add labels and documentation to explain what the model is intended to do
 4. Conversion - the agent can reimplement the model in a different form such as a Python notebook
