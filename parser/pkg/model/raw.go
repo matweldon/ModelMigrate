@@ -153,3 +153,35 @@ func NewRawSheet(name string) *RawSheet {
 		MergedRegions: []RangeRef{},
 	}
 }
+
+// SheetBounds holds the min/max row and column for a sheet.
+type SheetBounds struct {
+	MinRow, MaxRow, MinCol, MaxCol int
+}
+
+// Bounds returns the bounding box of non-empty cells in the sheet.
+func (s *RawSheet) Bounds() SheetBounds {
+	if len(s.Cells) == 0 {
+		return SheetBounds{0, -1, 0, -1}
+	}
+
+	minRow, maxRow := s.MaxRow, 0
+	minCol, maxCol := s.MaxCol, 0
+
+	for _, cell := range s.Cells {
+		if cell.Ref.Row < minRow {
+			minRow = cell.Ref.Row
+		}
+		if cell.Ref.Row > maxRow {
+			maxRow = cell.Ref.Row
+		}
+		if cell.Ref.Col < minCol {
+			minCol = cell.Ref.Col
+		}
+		if cell.Ref.Col > maxCol {
+			maxCol = cell.Ref.Col
+		}
+	}
+
+	return SheetBounds{minRow, maxRow, minCol, maxCol}
+}

@@ -77,10 +77,70 @@ Initial planning session to design the implementation approach for ModelMigrate.
    - Named ranges captured (7 total)
    - Number formats preserved for date/currency detection
 
+---
+
+## 2026-02-01: Session 2 - Layer 2 Implementation
+
+### Completed
+
+1. **Formula Parser** (`pkg/xlsx/formulas.go`)
+   - Regex-based extraction of cell references (A1, $A$1, Sheet1!A1)
+   - Range reference parsing (A1:B10)
+   - Function detection (SUM, VLOOKUP, etc.)
+   - Named reference extraction
+   - Handles quoted sheet names
+
+2. **Dependency Graph** (`pkg/inference/graph.go`)
+   - Builds directed graph from formula references
+   - Topological sort (Kahn's algorithm) for evaluation order
+   - GetDependents/GetDependencies traversal helpers
+   - Named range resolution
+
+3. **Array Detection** (`pkg/inference/arrays.go`)
+   - Finds contiguous regions with consistent formula patterns
+   - Formula compatibility checking (same functions, predictable offsets)
+   - Orientation detection (row_vector, col_vector, matrix)
+   - Data type inference (float64, str, datetime64)
+   - Header detection from adjacent text cells
+   - Formula template extraction with fixed/relative pattern classification
+
+4. **CLI Updates** (`cmd/parser/main.go`)
+   - Added `-mode` flag: `raw` (Layer 1) or `structural` (Layer 2)
+   - Structural summary output with array/scalar counts
+   - Coverage statistics
+
+### Test Results
+
+Against `tag-workbook.xlsx`:
+- 233 arrays detected
+- Formula templates extracted with 100% coverage
+- Column/row headers detected from adjacent cells
+- Dependency graph: 14 nodes, 14 edges
+- Example formula template: `(F7-G7)*I7` with relative patterns
+
+### Example Output
+
+```json
+{
+  "id": "arr_230",
+  "range_ref": {"sheet": "Calculations", "top_left": [6,9], "bottom_right": [7,9]},
+  "orientation": "col_vector",
+  "col_headers": ["Net private value of development (£'000)"],
+  "has_formulas": true,
+  "formula_template": {
+    "template_str": "(F7-G7)*I7",
+    "relative_patterns": {
+      "ref_0": {"base_offset": [0,-4], "row_delta": 1, "col_delta": 0}
+    },
+    "coverage": 1.0
+  }
+}
+```
+
 ### Next Steps
-1. Implement formula parsing (extract cell references from formula strings)
-2. Build dependency graph from formula references
-3. Implement array detection (contiguous regions with consistent patterns)
-4. Add header detection (adjacent text cells)
+1. Improve scalar detection (currently 0 scalars found - need to refine logic)
+2. Add data role classification (INPUT, PARAMETER, OUTPUT)
+3. Test against the larger gdpcr workbook (requires xls support or conversion)
+4. Consider adding formula template merging for related arrays
 
 ---
