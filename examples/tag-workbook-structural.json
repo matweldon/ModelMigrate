@@ -14741,6 +14741,96 @@
     "arr_001": {
       "id": "arr_001",
       "range_ref": {
+        "sheet": "README",
+        "top_left": [
+          7,
+          0
+        ],
+        "bottom_right": [
+          8,
+          0
+        ]
+      },
+      "orientation": "col_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_002": {
+      "id": "arr_002",
+      "range_ref": {
+        "sheet": "README",
+        "top_left": [
+          10,
+          0
+        ],
+        "bottom_right": [
+          11,
+          0
+        ]
+      },
+      "orientation": "col_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_003": {
+      "id": "arr_003",
+      "range_ref": {
+        "sheet": "README",
+        "top_left": [
+          13,
+          0
+        ],
+        "bottom_right": [
+          14,
+          0
+        ]
+      },
+      "orientation": "col_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_004": {
+      "id": "arr_004",
+      "range_ref": {
+        "sheet": "README",
+        "top_left": [
+          14,
+          1
+        ],
+        "bottom_right": [
+          15,
+          1
+        ]
+      },
+      "orientation": "col_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_005": {
+      "id": "arr_005",
+      "range_ref": {
+        "sheet": "README",
+        "top_left": [
+          19,
+          0
+        ],
+        "bottom_right": [
+          25,
+          0
+        ]
+      },
+      "orientation": "col_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_006": {
+      "id": "arr_006",
+      "range_ref": {
         "sheet": "Calculations",
         "top_left": [
           0,
@@ -14754,10 +14844,10 @@
       "orientation": "col_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_002": {
-      "id": "arr_002",
+    "arr_007": {
+      "id": "arr_007",
       "range_ref": {
         "sheet": "Calculations",
         "top_left": [
@@ -14772,10 +14862,10 @@
       "orientation": "col_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_003": {
-      "id": "arr_003",
+    "arr_008": {
+      "id": "arr_008",
       "range_ref": {
         "sheet": "Calculations",
         "top_left": [
@@ -14790,10 +14880,10 @@
       "orientation": "col_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_004": {
-      "id": "arr_004",
+    "arr_009": {
+      "id": "arr_009",
       "range_ref": {
         "sheet": "Calculations",
         "top_left": [
@@ -14808,10 +14898,10 @@
       "orientation": "col_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_005": {
-      "id": "arr_005",
+    "arr_010": {
+      "id": "arr_010",
       "range_ref": {
         "sheet": "Calculations",
         "top_left": [
@@ -14840,10 +14930,10 @@
       },
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_006": {
-      "id": "arr_006",
+    "arr_011": {
+      "id": "arr_011",
       "range_ref": {
         "sheet": "Calculations",
         "top_left": [
@@ -14872,10 +14962,10 @@
       },
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_007": {
-      "id": "arr_007",
+    "arr_012": {
+      "id": "arr_012",
       "range_ref": {
         "sheet": "Calculations",
         "top_left": [
@@ -14904,10 +14994,10 @@
       },
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_008": {
-      "id": "arr_008",
+    "arr_013": {
+      "id": "arr_013",
       "range_ref": {
         "sheet": "Calculations",
         "top_left": [
@@ -14969,8 +15059,8 @@
       },
       "data_role": "intermediate"
     },
-    "arr_009": {
-      "id": "arr_009",
+    "arr_014": {
+      "id": "arr_014",
       "range_ref": {
         "sheet": "Calculations",
         "top_left": [
@@ -15024,8 +15114,8 @@
       },
       "data_role": "intermediate"
     },
-    "arr_010": {
-      "id": "arr_010",
+    "arr_015": {
+      "id": "arr_015",
       "range_ref": {
         "sheet": "Calculations",
         "top_left": [
@@ -15077,10 +15167,10 @@
         },
         "coverage": 1
       },
-      "data_role": "intermediate"
+      "data_role": "output"
     },
-    "arr_011": {
-      "id": "arr_011",
+    "arr_016": {
+      "id": "arr_016",
       "range_ref": {
         "sheet": "Calculations",
         "top_left": [
@@ -15095,10 +15185,10 @@
       "orientation": "matrix",
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_012": {
-      "id": "arr_012",
+    "arr_017": {
+      "id": "arr_017",
       "range_ref": {
         "sheet": "Agricultural land values",
         "top_left": [
@@ -15113,10 +15203,10 @@
       "orientation": "col_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_013": {
-      "id": "arr_013",
+    "arr_018": {
+      "id": "arr_018",
       "range_ref": {
         "sheet": "Agricultural land values",
         "top_left": [
@@ -15131,10 +15221,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_014": {
-      "id": "arr_014",
+    "arr_019": {
+      "id": "arr_019",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15149,10 +15239,10 @@
       "orientation": "col_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_015": {
-      "id": "arr_015",
+    "arr_020": {
+      "id": "arr_020",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15167,10 +15257,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_016": {
-      "id": "arr_016",
+    "arr_021": {
+      "id": "arr_021",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15200,10 +15290,10 @@
       },
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_017": {
-      "id": "arr_017",
+    "arr_022": {
+      "id": "arr_022",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15218,10 +15308,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_018": {
-      "id": "arr_018",
+    "arr_023": {
+      "id": "arr_023",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15236,10 +15326,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_019": {
-      "id": "arr_019",
+    "arr_024": {
+      "id": "arr_024",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15269,10 +15359,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_020": {
-      "id": "arr_020",
+    "arr_025": {
+      "id": "arr_025",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15287,10 +15377,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_021": {
-      "id": "arr_021",
+    "arr_026": {
+      "id": "arr_026",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15320,10 +15410,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_022": {
-      "id": "arr_022",
+    "arr_027": {
+      "id": "arr_027",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15338,10 +15428,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_023": {
-      "id": "arr_023",
+    "arr_028": {
+      "id": "arr_028",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15356,10 +15446,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_024": {
-      "id": "arr_024",
+    "arr_029": {
+      "id": "arr_029",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15389,10 +15479,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_025": {
-      "id": "arr_025",
+    "arr_030": {
+      "id": "arr_030",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15407,10 +15497,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_026": {
-      "id": "arr_026",
+    "arr_031": {
+      "id": "arr_031",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15425,10 +15515,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_027": {
-      "id": "arr_027",
+    "arr_032": {
+      "id": "arr_032",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15458,10 +15548,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_028": {
-      "id": "arr_028",
+    "arr_033": {
+      "id": "arr_033",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15476,10 +15566,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_029": {
-      "id": "arr_029",
+    "arr_034": {
+      "id": "arr_034",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15509,10 +15599,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_030": {
-      "id": "arr_030",
+    "arr_035": {
+      "id": "arr_035",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15527,10 +15617,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_031": {
-      "id": "arr_031",
+    "arr_036": {
+      "id": "arr_036",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15560,10 +15650,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_032": {
-      "id": "arr_032",
+    "arr_037": {
+      "id": "arr_037",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15578,10 +15668,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_033": {
-      "id": "arr_033",
+    "arr_038": {
+      "id": "arr_038",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15611,10 +15701,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_034": {
-      "id": "arr_034",
+    "arr_039": {
+      "id": "arr_039",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15629,10 +15719,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_035": {
-      "id": "arr_035",
+    "arr_040": {
+      "id": "arr_040",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15662,10 +15752,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_036": {
-      "id": "arr_036",
+    "arr_041": {
+      "id": "arr_041",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15680,10 +15770,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_037": {
-      "id": "arr_037",
+    "arr_042": {
+      "id": "arr_042",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15713,10 +15803,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_038": {
-      "id": "arr_038",
+    "arr_043": {
+      "id": "arr_043",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15731,10 +15821,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_039": {
-      "id": "arr_039",
+    "arr_044": {
+      "id": "arr_044",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15764,10 +15854,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_040": {
-      "id": "arr_040",
+    "arr_045": {
+      "id": "arr_045",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15782,10 +15872,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_041": {
-      "id": "arr_041",
+    "arr_046": {
+      "id": "arr_046",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15815,10 +15905,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_042": {
-      "id": "arr_042",
+    "arr_047": {
+      "id": "arr_047",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15833,10 +15923,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_043": {
-      "id": "arr_043",
+    "arr_048": {
+      "id": "arr_048",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15866,10 +15956,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_044": {
-      "id": "arr_044",
+    "arr_049": {
+      "id": "arr_049",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15884,10 +15974,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_045": {
-      "id": "arr_045",
+    "arr_050": {
+      "id": "arr_050",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15917,10 +16007,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_046": {
-      "id": "arr_046",
+    "arr_051": {
+      "id": "arr_051",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15935,10 +16025,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_047": {
-      "id": "arr_047",
+    "arr_052": {
+      "id": "arr_052",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15953,10 +16043,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_048": {
-      "id": "arr_048",
+    "arr_053": {
+      "id": "arr_053",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -15986,10 +16076,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_049": {
-      "id": "arr_049",
+    "arr_054": {
+      "id": "arr_054",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16004,10 +16094,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_050": {
-      "id": "arr_050",
+    "arr_055": {
+      "id": "arr_055",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16037,10 +16127,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_051": {
-      "id": "arr_051",
+    "arr_056": {
+      "id": "arr_056",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16055,10 +16145,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_052": {
-      "id": "arr_052",
+    "arr_057": {
+      "id": "arr_057",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16073,10 +16163,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_053": {
-      "id": "arr_053",
+    "arr_058": {
+      "id": "arr_058",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16106,10 +16196,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_054": {
-      "id": "arr_054",
+    "arr_059": {
+      "id": "arr_059",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16124,10 +16214,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_055": {
-      "id": "arr_055",
+    "arr_060": {
+      "id": "arr_060",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16161,10 +16251,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_056": {
-      "id": "arr_056",
+    "arr_061": {
+      "id": "arr_061",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16193,10 +16283,10 @@
       },
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_057": {
-      "id": "arr_057",
+    "arr_062": {
+      "id": "arr_062",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16211,10 +16301,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_058": {
-      "id": "arr_058",
+    "arr_063": {
+      "id": "arr_063",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16244,10 +16334,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_059": {
-      "id": "arr_059",
+    "arr_064": {
+      "id": "arr_064",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16262,10 +16352,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_060": {
-      "id": "arr_060",
+    "arr_065": {
+      "id": "arr_065",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16295,10 +16385,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_061": {
-      "id": "arr_061",
+    "arr_066": {
+      "id": "arr_066",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16313,10 +16403,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_062": {
-      "id": "arr_062",
+    "arr_067": {
+      "id": "arr_067",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16331,10 +16421,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_063": {
-      "id": "arr_063",
+    "arr_068": {
+      "id": "arr_068",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16364,10 +16454,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_064": {
-      "id": "arr_064",
+    "arr_069": {
+      "id": "arr_069",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16382,10 +16472,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_065": {
-      "id": "arr_065",
+    "arr_070": {
+      "id": "arr_070",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16415,10 +16505,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_066": {
-      "id": "arr_066",
+    "arr_071": {
+      "id": "arr_071",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16433,10 +16523,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_067": {
-      "id": "arr_067",
+    "arr_072": {
+      "id": "arr_072",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16466,10 +16556,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_068": {
-      "id": "arr_068",
+    "arr_073": {
+      "id": "arr_073",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16484,10 +16574,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_069": {
-      "id": "arr_069",
+    "arr_074": {
+      "id": "arr_074",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16517,10 +16607,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_070": {
-      "id": "arr_070",
+    "arr_075": {
+      "id": "arr_075",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16535,10 +16625,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_071": {
-      "id": "arr_071",
+    "arr_076": {
+      "id": "arr_076",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16568,10 +16658,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_072": {
-      "id": "arr_072",
+    "arr_077": {
+      "id": "arr_077",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16586,10 +16676,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_073": {
-      "id": "arr_073",
+    "arr_078": {
+      "id": "arr_078",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16604,10 +16694,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_074": {
-      "id": "arr_074",
+    "arr_079": {
+      "id": "arr_079",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16637,10 +16727,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_075": {
-      "id": "arr_075",
+    "arr_080": {
+      "id": "arr_080",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16655,10 +16745,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_076": {
-      "id": "arr_076",
+    "arr_081": {
+      "id": "arr_081",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16688,10 +16778,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_077": {
-      "id": "arr_077",
+    "arr_082": {
+      "id": "arr_082",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16706,10 +16796,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_078": {
-      "id": "arr_078",
+    "arr_083": {
+      "id": "arr_083",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16724,10 +16814,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_079": {
-      "id": "arr_079",
+    "arr_084": {
+      "id": "arr_084",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16757,10 +16847,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_080": {
-      "id": "arr_080",
+    "arr_085": {
+      "id": "arr_085",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16775,10 +16865,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_081": {
-      "id": "arr_081",
+    "arr_086": {
+      "id": "arr_086",
       "range_ref": {
         "sheet": "Industrial land values ",
         "top_left": [
@@ -16793,10 +16883,3263 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_082": {
-      "id": "arr_082",
+    "arr_087": {
+      "id": "arr_087",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          0,
+          4
+        ],
+        "bottom_right": [
+          2,
+          4
+        ]
+      },
+      "orientation": "col_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_088": {
+      "id": "arr_088",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          2,
+          0
+        ],
+        "bottom_right": [
+          2,
+          2
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_089": {
+      "id": "arr_089",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          3,
+          0
+        ],
+        "bottom_right": [
+          3,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "col_headers": [
+        "LEP",
+        "Town (Largest Above)"
+      ],
+      "col_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          2,
+          0
+        ],
+        "bottom_right": [
+          2,
+          1
+        ]
+      },
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_090": {
+      "id": "arr_090",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          5,
+          0
+        ],
+        "bottom_right": [
+          5,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_091": {
+      "id": "arr_091",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          7,
+          0
+        ],
+        "bottom_right": [
+          7,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_092": {
+      "id": "arr_092",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          7,
+          2
+        ],
+        "bottom_right": [
+          8,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Warrington",
+        "Chester"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          7,
+          1
+        ],
+        "bottom_right": [
+          8,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_093": {
+      "id": "arr_093",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          10,
+          0
+        ],
+        "bottom_right": [
+          10,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_094": {
+      "id": "arr_094",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          10,
+          2
+        ],
+        "bottom_right": [
+          11,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Croydon",
+        "Brighton and Hove"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          10,
+          1
+        ],
+        "bottom_right": [
+          11,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_095": {
+      "id": "arr_095",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          13,
+          0
+        ],
+        "bottom_right": [
+          13,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_096": {
+      "id": "arr_096",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          15,
+          0
+        ],
+        "bottom_right": [
+          15,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_097": {
+      "id": "arr_097",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          15,
+          2
+        ],
+        "bottom_right": [
+          16,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Coventry ",
+        "Nuneaton"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          15,
+          1
+        ],
+        "bottom_right": [
+          16,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_098": {
+      "id": "arr_098",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          18,
+          0
+        ],
+        "bottom_right": [
+          18,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_099": {
+      "id": "arr_099",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          20,
+          0
+        ],
+        "bottom_right": [
+          20,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_100": {
+      "id": "arr_100",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          20,
+          2
+        ],
+        "bottom_right": [
+          21,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Sheffield",
+        "Nottingham"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          20,
+          1
+        ],
+        "bottom_right": [
+          21,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_101": {
+      "id": "arr_101",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          23,
+          0
+        ],
+        "bottom_right": [
+          23,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_102": {
+      "id": "arr_102",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          23,
+          2
+        ],
+        "bottom_right": [
+          24,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Bournemouth",
+        "Poole"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          23,
+          1
+        ],
+        "bottom_right": [
+          24,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_103": {
+      "id": "arr_103",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          26,
+          0
+        ],
+        "bottom_right": [
+          26,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_104": {
+      "id": "arr_104",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          26,
+          2
+        ],
+        "bottom_right": [
+          27,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Kingston upon Thames",
+        "Basingstoke"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          26,
+          1
+        ],
+        "bottom_right": [
+          27,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_105": {
+      "id": "arr_105",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          29,
+          0
+        ],
+        "bottom_right": [
+          29,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_106": {
+      "id": "arr_106",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          29,
+          2
+        ],
+        "bottom_right": [
+          30,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Gloucester",
+        "Cheltenham"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          29,
+          1
+        ],
+        "bottom_right": [
+          30,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_107": {
+      "id": "arr_107",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          32,
+          0
+        ],
+        "bottom_right": [
+          32,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_108": {
+      "id": "arr_108",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          32,
+          2
+        ],
+        "bottom_right": [
+          33,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Birmingham",
+        "Solihull"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          32,
+          1
+        ],
+        "bottom_right": [
+          33,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_109": {
+      "id": "arr_109",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          35,
+          0
+        ],
+        "bottom_right": [
+          35,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_110": {
+      "id": "arr_110",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          35,
+          2
+        ],
+        "bottom_right": [
+          36,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Peterborough",
+        "Cambridge"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          35,
+          1
+        ],
+        "bottom_right": [
+          36,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_111": {
+      "id": "arr_111",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          38,
+          0
+        ],
+        "bottom_right": [
+          38,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_112": {
+      "id": "arr_112",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          38,
+          2
+        ],
+        "bottom_right": [
+          39,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Lincoln",
+        "Grimsby"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          38,
+          1
+        ],
+        "bottom_right": [
+          39,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_113": {
+      "id": "arr_113",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          41,
+          0
+        ],
+        "bottom_right": [
+          41,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_114": {
+      "id": "arr_114",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          41,
+          2
+        ],
+        "bottom_right": [
+          42,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Manchester",
+        "Bolton"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          41,
+          1
+        ],
+        "bottom_right": [
+          42,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_115": {
+      "id": "arr_115",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          44,
+          0
+        ],
+        "bottom_right": [
+          44,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_116": {
+      "id": "arr_116",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          44,
+          2
+        ],
+        "bottom_right": [
+          45,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Plymouth",
+        "Exeter"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          44,
+          1
+        ],
+        "bottom_right": [
+          45,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_117": {
+      "id": "arr_117",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          47,
+          0
+        ],
+        "bottom_right": [
+          47,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_118": {
+      "id": "arr_118",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          47,
+          2
+        ],
+        "bottom_right": [
+          48,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Watford",
+        "Hemel Hempstead"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          47,
+          1
+        ],
+        "bottom_right": [
+          48,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_119": {
+      "id": "arr_119",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          50,
+          0
+        ],
+        "bottom_right": [
+          50,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_120": {
+      "id": "arr_120",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          52,
+          0
+        ],
+        "bottom_right": [
+          52,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_121": {
+      "id": "arr_121",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          52,
+          2
+        ],
+        "bottom_right": [
+          53,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Blackpool",
+        "Blackburn"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          52,
+          1
+        ],
+        "bottom_right": [
+          53,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_122": {
+      "id": "arr_122",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          55,
+          0
+        ],
+        "bottom_right": [
+          55,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_123": {
+      "id": "arr_123",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          55,
+          2
+        ],
+        "bottom_right": [
+          56,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Leeds",
+        "Bradford"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          55,
+          1
+        ],
+        "bottom_right": [
+          56,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_124": {
+      "id": "arr_124",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          58,
+          0
+        ],
+        "bottom_right": [
+          58,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_125": {
+      "id": "arr_125",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          60,
+          0
+        ],
+        "bottom_right": [
+          60,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_126": {
+      "id": "arr_126",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          60,
+          2
+        ],
+        "bottom_right": [
+          61,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Liverpool",
+        "Birkenhead"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          60,
+          1
+        ],
+        "bottom_right": [
+          61,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_127": {
+      "id": "arr_127",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          63,
+          0
+        ],
+        "bottom_right": [
+          63,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_128": {
+      "id": "arr_128",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          63,
+          2
+        ],
+        "bottom_right": [
+          66,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Victoria",
+        "Southwark",
+        "Harrow",
+        "Bromley"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          63,
+          1
+        ],
+        "bottom_right": [
+          66,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_129": {
+      "id": "arr_129",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          64,
+          1
+        ],
+        "bottom_right": [
+          66,
+          1
+        ]
+      },
+      "orientation": "col_vector",
+      "col_headers": [
+        "Victoria"
+      ],
+      "col_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          63,
+          1
+        ],
+        "bottom_right": [
+          63,
+          1
+        ]
+      },
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_130": {
+      "id": "arr_130",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          68,
+          0
+        ],
+        "bottom_right": [
+          68,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_131": {
+      "id": "arr_131",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          68,
+          2
+        ],
+        "bottom_right": [
+          69,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Norwich",
+        "Ipswich"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          68,
+          1
+        ],
+        "bottom_right": [
+          69,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_132": {
+      "id": "arr_132",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          71,
+          0
+        ],
+        "bottom_right": [
+          71,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_133": {
+      "id": "arr_133",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          71,
+          2
+        ],
+        "bottom_right": [
+          72,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Newcastle upon Tyne",
+        "Sunderland"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          71,
+          1
+        ],
+        "bottom_right": [
+          72,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_134": {
+      "id": "arr_134",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          74,
+          0
+        ],
+        "bottom_right": [
+          74,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_135": {
+      "id": "arr_135",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          76,
+          0
+        ],
+        "bottom_right": [
+          76,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_136": {
+      "id": "arr_136",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          76,
+          2
+        ],
+        "bottom_right": [
+          77,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Doncaster",
+        "Rotherham"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          76,
+          1
+        ],
+        "bottom_right": [
+          77,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_137": {
+      "id": "arr_137",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          79,
+          0
+        ],
+        "bottom_right": [
+          79,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_138": {
+      "id": "arr_138",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          79,
+          2
+        ],
+        "bottom_right": [
+          80,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Southampton",
+        "Portsmouth"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          79,
+          1
+        ],
+        "bottom_right": [
+          80,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_139": {
+      "id": "arr_139",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          82,
+          0
+        ],
+        "bottom_right": [
+          82,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_140": {
+      "id": "arr_140",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          82,
+          2
+        ],
+        "bottom_right": [
+          83,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Redbridge",
+        "Bexley"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          82,
+          1
+        ],
+        "bottom_right": [
+          83,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_141": {
+      "id": "arr_141",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          85,
+          0
+        ],
+        "bottom_right": [
+          85,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_142": {
+      "id": "arr_142",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          85,
+          2
+        ],
+        "bottom_right": [
+          86,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Northampton",
+        "Luton"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          85,
+          1
+        ],
+        "bottom_right": [
+          86,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_143": {
+      "id": "arr_143",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          88,
+          0
+        ],
+        "bottom_right": [
+          88,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_144": {
+      "id": "arr_144",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          88,
+          2
+        ],
+        "bottom_right": [
+          89,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Stoke-on-Trent",
+        "Wolverhampton"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          88,
+          1
+        ],
+        "bottom_right": [
+          89,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_145": {
+      "id": "arr_145",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          91,
+          0
+        ],
+        "bottom_right": [
+          91,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_146": {
+      "id": "arr_146",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          93,
+          0
+        ],
+        "bottom_right": [
+          93,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_147": {
+      "id": "arr_147",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          93,
+          2
+        ],
+        "bottom_right": [
+          94,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Middlesbrough",
+        "Darlington"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          93,
+          1
+        ],
+        "bottom_right": [
+          94,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_148": {
+      "id": "arr_148",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          96,
+          0
+        ],
+        "bottom_right": [
+          96,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_149": {
+      "id": "arr_149",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          96,
+          2
+        ],
+        "bottom_right": [
+          97,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Reading",
+        "Slough"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          96,
+          1
+        ],
+        "bottom_right": [
+          97,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_150": {
+      "id": "arr_150",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          99,
+          0
+        ],
+        "bottom_right": [
+          99,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_151": {
+      "id": "arr_151",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          101,
+          0
+        ],
+        "bottom_right": [
+          101,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_152": {
+      "id": "arr_152",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          101,
+          2
+        ],
+        "bottom_right": [
+          102,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Bristol ",
+        "Bath"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          101,
+          1
+        ],
+        "bottom_right": [
+          102,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_153": {
+      "id": "arr_153",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          104,
+          0
+        ],
+        "bottom_right": [
+          104,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_154": {
+      "id": "arr_154",
+      "range_ref": {
+        "sheet": "Commercial land values (CBD)",
+        "top_left": [
+          106,
+          0
+        ],
+        "bottom_right": [
+          106,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_155": {
+      "id": "arr_155",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          0,
+          4
+        ],
+        "bottom_right": [
+          2,
+          4
+        ]
+      },
+      "orientation": "col_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_156": {
+      "id": "arr_156",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          2,
+          0
+        ],
+        "bottom_right": [
+          2,
+          2
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_157": {
+      "id": "arr_157",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          3,
+          0
+        ],
+        "bottom_right": [
+          3,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "col_headers": [
+        "LEP",
+        "Town (Largest Above)"
+      ],
+      "col_header_source": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          2,
+          0
+        ],
+        "bottom_right": [
+          2,
+          1
+        ]
+      },
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_158": {
+      "id": "arr_158",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          5,
+          0
+        ],
+        "bottom_right": [
+          5,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_159": {
+      "id": "arr_159",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          7,
+          0
+        ],
+        "bottom_right": [
+          7,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_160": {
+      "id": "arr_160",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          7,
+          2
+        ],
+        "bottom_right": [
+          8,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Warrington",
+        "Chester"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          7,
+          1
+        ],
+        "bottom_right": [
+          8,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_161": {
+      "id": "arr_161",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          10,
+          0
+        ],
+        "bottom_right": [
+          10,
+          2
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_162": {
+      "id": "arr_162",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          13,
+          0
+        ],
+        "bottom_right": [
+          13,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_163": {
+      "id": "arr_163",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          15,
+          0
+        ],
+        "bottom_right": [
+          15,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_164": {
+      "id": "arr_164",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          15,
+          2
+        ],
+        "bottom_right": [
+          16,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Coventry ",
+        "Nuneaton"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          15,
+          1
+        ],
+        "bottom_right": [
+          16,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_165": {
+      "id": "arr_165",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          18,
+          0
+        ],
+        "bottom_right": [
+          18,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_166": {
+      "id": "arr_166",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          20,
+          0
+        ],
+        "bottom_right": [
+          20,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_167": {
+      "id": "arr_167",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          20,
+          2
+        ],
+        "bottom_right": [
+          21,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Sheffield",
+        "Nottingham"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          20,
+          1
+        ],
+        "bottom_right": [
+          21,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_168": {
+      "id": "arr_168",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          23,
+          0
+        ],
+        "bottom_right": [
+          23,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_169": {
+      "id": "arr_169",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          23,
+          2
+        ],
+        "bottom_right": [
+          24,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Bournemouth",
+        "Poole"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          23,
+          1
+        ],
+        "bottom_right": [
+          24,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_170": {
+      "id": "arr_170",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          26,
+          0
+        ],
+        "bottom_right": [
+          26,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_171": {
+      "id": "arr_171",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          26,
+          2
+        ],
+        "bottom_right": [
+          27,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Kingston upon Thames",
+        "Basingstoke"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          26,
+          1
+        ],
+        "bottom_right": [
+          27,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_172": {
+      "id": "arr_172",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          29,
+          0
+        ],
+        "bottom_right": [
+          29,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_173": {
+      "id": "arr_173",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          29,
+          2
+        ],
+        "bottom_right": [
+          30,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Gloucester",
+        "Cheltenham"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          29,
+          1
+        ],
+        "bottom_right": [
+          30,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_174": {
+      "id": "arr_174",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          32,
+          0
+        ],
+        "bottom_right": [
+          32,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_175": {
+      "id": "arr_175",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          32,
+          2
+        ],
+        "bottom_right": [
+          33,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Birmingham",
+        "Solihull"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          32,
+          1
+        ],
+        "bottom_right": [
+          33,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_176": {
+      "id": "arr_176",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          35,
+          0
+        ],
+        "bottom_right": [
+          35,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_177": {
+      "id": "arr_177",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          35,
+          2
+        ],
+        "bottom_right": [
+          36,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Peterborough",
+        "Cambridge"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          35,
+          1
+        ],
+        "bottom_right": [
+          36,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_178": {
+      "id": "arr_178",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          38,
+          0
+        ],
+        "bottom_right": [
+          38,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_179": {
+      "id": "arr_179",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          38,
+          2
+        ],
+        "bottom_right": [
+          39,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Lincoln",
+        "Grimsby"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          38,
+          1
+        ],
+        "bottom_right": [
+          39,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_180": {
+      "id": "arr_180",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          41,
+          0
+        ],
+        "bottom_right": [
+          41,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_181": {
+      "id": "arr_181",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          41,
+          2
+        ],
+        "bottom_right": [
+          42,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Manchester",
+        "Bolton"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          41,
+          1
+        ],
+        "bottom_right": [
+          42,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_182": {
+      "id": "arr_182",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          44,
+          0
+        ],
+        "bottom_right": [
+          44,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_183": {
+      "id": "arr_183",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          44,
+          2
+        ],
+        "bottom_right": [
+          45,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Plymouth",
+        "Exeter"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          44,
+          1
+        ],
+        "bottom_right": [
+          45,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_184": {
+      "id": "arr_184",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          47,
+          0
+        ],
+        "bottom_right": [
+          47,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_185": {
+      "id": "arr_185",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          47,
+          2
+        ],
+        "bottom_right": [
+          48,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Watford",
+        "Hemel Hempstead"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          47,
+          1
+        ],
+        "bottom_right": [
+          48,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_186": {
+      "id": "arr_186",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          50,
+          0
+        ],
+        "bottom_right": [
+          50,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_187": {
+      "id": "arr_187",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          52,
+          0
+        ],
+        "bottom_right": [
+          52,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_188": {
+      "id": "arr_188",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          52,
+          2
+        ],
+        "bottom_right": [
+          53,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Blackpool",
+        "Blackburn"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          52,
+          1
+        ],
+        "bottom_right": [
+          53,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_189": {
+      "id": "arr_189",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          55,
+          0
+        ],
+        "bottom_right": [
+          55,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_190": {
+      "id": "arr_190",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          55,
+          2
+        ],
+        "bottom_right": [
+          56,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Leeds",
+        "Bradford"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          55,
+          1
+        ],
+        "bottom_right": [
+          56,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_191": {
+      "id": "arr_191",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          58,
+          0
+        ],
+        "bottom_right": [
+          58,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_192": {
+      "id": "arr_192",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          60,
+          0
+        ],
+        "bottom_right": [
+          60,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_193": {
+      "id": "arr_193",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          60,
+          2
+        ],
+        "bottom_right": [
+          61,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Liverpool",
+        "Birkenhead"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          60,
+          1
+        ],
+        "bottom_right": [
+          61,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_194": {
+      "id": "arr_194",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          63,
+          0
+        ],
+        "bottom_right": [
+          63,
+          2
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_195": {
+      "id": "arr_195",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          64,
+          1
+        ],
+        "bottom_right": [
+          66,
+          2
+        ]
+      },
+      "orientation": "matrix",
+      "col_headers": [
+        "Victoria",
+        "N/A"
+      ],
+      "col_header_source": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          63,
+          1
+        ],
+        "bottom_right": [
+          63,
+          2
+        ]
+      },
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_196": {
+      "id": "arr_196",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          68,
+          0
+        ],
+        "bottom_right": [
+          68,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_197": {
+      "id": "arr_197",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          68,
+          2
+        ],
+        "bottom_right": [
+          69,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Norwich",
+        "Ipswich"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          68,
+          1
+        ],
+        "bottom_right": [
+          69,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_198": {
+      "id": "arr_198",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          71,
+          0
+        ],
+        "bottom_right": [
+          71,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_199": {
+      "id": "arr_199",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          71,
+          2
+        ],
+        "bottom_right": [
+          72,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Newcastle upon Tyne",
+        "Sunderland"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          71,
+          1
+        ],
+        "bottom_right": [
+          72,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_200": {
+      "id": "arr_200",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          74,
+          0
+        ],
+        "bottom_right": [
+          74,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_201": {
+      "id": "arr_201",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          76,
+          0
+        ],
+        "bottom_right": [
+          76,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_202": {
+      "id": "arr_202",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          76,
+          2
+        ],
+        "bottom_right": [
+          77,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Doncaster",
+        "Rotherham"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          76,
+          1
+        ],
+        "bottom_right": [
+          77,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_203": {
+      "id": "arr_203",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          79,
+          0
+        ],
+        "bottom_right": [
+          79,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_204": {
+      "id": "arr_204",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          79,
+          2
+        ],
+        "bottom_right": [
+          80,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Southampton",
+        "Portsmouth"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          79,
+          1
+        ],
+        "bottom_right": [
+          80,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_205": {
+      "id": "arr_205",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          82,
+          0
+        ],
+        "bottom_right": [
+          82,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_206": {
+      "id": "arr_206",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          82,
+          2
+        ],
+        "bottom_right": [
+          83,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Redbridge",
+        "Bexley"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          82,
+          1
+        ],
+        "bottom_right": [
+          83,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_207": {
+      "id": "arr_207",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          85,
+          0
+        ],
+        "bottom_right": [
+          85,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_208": {
+      "id": "arr_208",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          85,
+          2
+        ],
+        "bottom_right": [
+          86,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Northampton",
+        "Luton"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          85,
+          1
+        ],
+        "bottom_right": [
+          86,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_209": {
+      "id": "arr_209",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          88,
+          0
+        ],
+        "bottom_right": [
+          88,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_210": {
+      "id": "arr_210",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          88,
+          2
+        ],
+        "bottom_right": [
+          89,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Stoke-on-Trent",
+        "Wolverhampton"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          88,
+          1
+        ],
+        "bottom_right": [
+          89,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_211": {
+      "id": "arr_211",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          91,
+          0
+        ],
+        "bottom_right": [
+          91,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_212": {
+      "id": "arr_212",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          93,
+          0
+        ],
+        "bottom_right": [
+          93,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_213": {
+      "id": "arr_213",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          93,
+          2
+        ],
+        "bottom_right": [
+          94,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Middlesbrough",
+        "Darlington"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          93,
+          1
+        ],
+        "bottom_right": [
+          94,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_214": {
+      "id": "arr_214",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          96,
+          0
+        ],
+        "bottom_right": [
+          96,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_215": {
+      "id": "arr_215",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          96,
+          2
+        ],
+        "bottom_right": [
+          97,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Reading",
+        "Slough"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          96,
+          1
+        ],
+        "bottom_right": [
+          97,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_216": {
+      "id": "arr_216",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          99,
+          0
+        ],
+        "bottom_right": [
+          99,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_217": {
+      "id": "arr_217",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          101,
+          0
+        ],
+        "bottom_right": [
+          101,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_218": {
+      "id": "arr_218",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          101,
+          2
+        ],
+        "bottom_right": [
+          102,
+          2
+        ]
+      },
+      "orientation": "col_vector",
+      "row_headers": [
+        "Bristol ",
+        "Bath"
+      ],
+      "row_header_source": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          101,
+          1
+        ],
+        "bottom_right": [
+          102,
+          1
+        ]
+      },
+      "dtype": "float64",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_219": {
+      "id": "arr_219",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          104,
+          0
+        ],
+        "bottom_right": [
+          104,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_220": {
+      "id": "arr_220",
+      "range_ref": {
+        "sheet": "Commercial land values (OoT)",
+        "top_left": [
+          106,
+          0
+        ],
+        "bottom_right": [
+          106,
+          1
+        ]
+      },
+      "orientation": "row_vector",
+      "dtype": "str",
+      "has_formulas": false,
+      "data_role": "input"
+    },
+    "arr_221": {
+      "id": "arr_221",
       "range_ref": {
         "sheet": "Externality Values",
         "top_left": [
@@ -16811,10 +20154,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_083": {
-      "id": "arr_083",
+    "arr_222": {
+      "id": "arr_222",
       "range_ref": {
         "sheet": "Externality Values",
         "top_left": [
@@ -16843,10 +20186,10 @@
       },
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_084": {
-      "id": "arr_084",
+    "arr_223": {
+      "id": "arr_223",
       "range_ref": {
         "sheet": "Externality Values",
         "top_left": [
@@ -16896,10 +20239,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_085": {
-      "id": "arr_085",
+    "arr_224": {
+      "id": "arr_224",
       "range_ref": {
         "sheet": "Externality Values",
         "top_left": [
@@ -16928,10 +20271,10 @@
       },
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_086": {
-      "id": "arr_086",
+    "arr_225": {
+      "id": "arr_225",
       "range_ref": {
         "sheet": "Externality Values",
         "top_left": [
@@ -16946,100 +20289,64 @@
       "orientation": "col_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_087": {
-      "id": "arr_087",
+    "arr_226": {
+      "id": "arr_226",
       "range_ref": {
-        "sheet": "README",
+        "sheet": "Introduction",
         "top_left": [
-          7,
+          2,
           0
         ],
         "bottom_right": [
-          8,
+          5,
           0
         ]
       },
       "orientation": "col_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_088": {
-      "id": "arr_088",
+    "arr_227": {
+      "id": "arr_227",
       "range_ref": {
-        "sheet": "README",
+        "sheet": "Introduction",
         "top_left": [
-          10,
+          17,
           0
         ],
         "bottom_right": [
-          11,
+          18,
           0
         ]
       },
       "orientation": "col_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_089": {
-      "id": "arr_089",
+    "arr_228": {
+      "id": "arr_228",
       "range_ref": {
-        "sheet": "README",
+        "sheet": "Introduction",
         "top_left": [
-          13,
+          20,
           0
         ],
         "bottom_right": [
-          14,
+          21,
           0
         ]
       },
       "orientation": "col_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_090": {
-      "id": "arr_090",
-      "range_ref": {
-        "sheet": "README",
-        "top_left": [
-          14,
-          1
-        ],
-        "bottom_right": [
-          15,
-          1
-        ]
-      },
-      "orientation": "col_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_091": {
-      "id": "arr_091",
-      "range_ref": {
-        "sheet": "README",
-        "top_left": [
-          19,
-          0
-        ],
-        "bottom_right": [
-          25,
-          0
-        ]
-      },
-      "orientation": "col_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_092": {
-      "id": "arr_092",
+    "arr_229": {
+      "id": "arr_229",
       "range_ref": {
         "sheet": " Residential land values",
         "top_left": [
@@ -17054,10 +20361,10 @@
       "orientation": "col_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_093": {
-      "id": "arr_093",
+    "arr_230": {
+      "id": "arr_230",
       "range_ref": {
         "sheet": " Residential land values",
         "top_left": [
@@ -17072,10 +20379,10 @@
       "orientation": "row_vector",
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_094": {
-      "id": "arr_094",
+    "arr_231": {
+      "id": "arr_231",
       "range_ref": {
         "sheet": " Residential land values",
         "top_left": [
@@ -17105,10 +20412,10 @@
       },
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_095": {
-      "id": "arr_095",
+    "arr_232": {
+      "id": "arr_232",
       "range_ref": {
         "sheet": " Residential land values",
         "top_left": [
@@ -17476,10 +20783,10 @@
       },
       "dtype": "float64",
       "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     },
-    "arr_096": {
-      "id": "arr_096",
+    "arr_233": {
+      "id": "arr_233",
       "range_ref": {
         "sheet": " Residential land values",
         "top_left": [
@@ -17508,3314 +20815,7 @@
       },
       "dtype": "str",
       "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_097": {
-      "id": "arr_097",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          0,
-          4
-        ],
-        "bottom_right": [
-          2,
-          4
-        ]
-      },
-      "orientation": "col_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_098": {
-      "id": "arr_098",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          2,
-          0
-        ],
-        "bottom_right": [
-          2,
-          2
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_099": {
-      "id": "arr_099",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          3,
-          0
-        ],
-        "bottom_right": [
-          3,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "col_headers": [
-        "LEP",
-        "Town (Largest Above)"
-      ],
-      "col_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          2,
-          0
-        ],
-        "bottom_right": [
-          2,
-          1
-        ]
-      },
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_100": {
-      "id": "arr_100",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          5,
-          0
-        ],
-        "bottom_right": [
-          5,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_101": {
-      "id": "arr_101",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          7,
-          0
-        ],
-        "bottom_right": [
-          7,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_102": {
-      "id": "arr_102",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          7,
-          2
-        ],
-        "bottom_right": [
-          8,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Warrington",
-        "Chester"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          7,
-          1
-        ],
-        "bottom_right": [
-          8,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_103": {
-      "id": "arr_103",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          10,
-          0
-        ],
-        "bottom_right": [
-          10,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_104": {
-      "id": "arr_104",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          10,
-          2
-        ],
-        "bottom_right": [
-          11,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Croydon",
-        "Brighton and Hove"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          10,
-          1
-        ],
-        "bottom_right": [
-          11,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_105": {
-      "id": "arr_105",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          13,
-          0
-        ],
-        "bottom_right": [
-          13,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_106": {
-      "id": "arr_106",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          15,
-          0
-        ],
-        "bottom_right": [
-          15,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_107": {
-      "id": "arr_107",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          15,
-          2
-        ],
-        "bottom_right": [
-          16,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Coventry ",
-        "Nuneaton"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          15,
-          1
-        ],
-        "bottom_right": [
-          16,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_108": {
-      "id": "arr_108",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          18,
-          0
-        ],
-        "bottom_right": [
-          18,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_109": {
-      "id": "arr_109",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          20,
-          0
-        ],
-        "bottom_right": [
-          20,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_110": {
-      "id": "arr_110",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          20,
-          2
-        ],
-        "bottom_right": [
-          21,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Sheffield",
-        "Nottingham"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          20,
-          1
-        ],
-        "bottom_right": [
-          21,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_111": {
-      "id": "arr_111",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          23,
-          0
-        ],
-        "bottom_right": [
-          23,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_112": {
-      "id": "arr_112",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          23,
-          2
-        ],
-        "bottom_right": [
-          24,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Bournemouth",
-        "Poole"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          23,
-          1
-        ],
-        "bottom_right": [
-          24,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_113": {
-      "id": "arr_113",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          26,
-          0
-        ],
-        "bottom_right": [
-          26,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_114": {
-      "id": "arr_114",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          26,
-          2
-        ],
-        "bottom_right": [
-          27,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Kingston upon Thames",
-        "Basingstoke"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          26,
-          1
-        ],
-        "bottom_right": [
-          27,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_115": {
-      "id": "arr_115",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          29,
-          0
-        ],
-        "bottom_right": [
-          29,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_116": {
-      "id": "arr_116",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          29,
-          2
-        ],
-        "bottom_right": [
-          30,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Gloucester",
-        "Cheltenham"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          29,
-          1
-        ],
-        "bottom_right": [
-          30,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_117": {
-      "id": "arr_117",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          32,
-          0
-        ],
-        "bottom_right": [
-          32,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_118": {
-      "id": "arr_118",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          32,
-          2
-        ],
-        "bottom_right": [
-          33,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Birmingham",
-        "Solihull"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          32,
-          1
-        ],
-        "bottom_right": [
-          33,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_119": {
-      "id": "arr_119",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          35,
-          0
-        ],
-        "bottom_right": [
-          35,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_120": {
-      "id": "arr_120",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          35,
-          2
-        ],
-        "bottom_right": [
-          36,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Peterborough",
-        "Cambridge"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          35,
-          1
-        ],
-        "bottom_right": [
-          36,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_121": {
-      "id": "arr_121",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          38,
-          0
-        ],
-        "bottom_right": [
-          38,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_122": {
-      "id": "arr_122",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          38,
-          2
-        ],
-        "bottom_right": [
-          39,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Lincoln",
-        "Grimsby"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          38,
-          1
-        ],
-        "bottom_right": [
-          39,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_123": {
-      "id": "arr_123",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          41,
-          0
-        ],
-        "bottom_right": [
-          41,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_124": {
-      "id": "arr_124",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          41,
-          2
-        ],
-        "bottom_right": [
-          42,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Manchester",
-        "Bolton"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          41,
-          1
-        ],
-        "bottom_right": [
-          42,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_125": {
-      "id": "arr_125",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          44,
-          0
-        ],
-        "bottom_right": [
-          44,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_126": {
-      "id": "arr_126",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          44,
-          2
-        ],
-        "bottom_right": [
-          45,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Plymouth",
-        "Exeter"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          44,
-          1
-        ],
-        "bottom_right": [
-          45,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_127": {
-      "id": "arr_127",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          47,
-          0
-        ],
-        "bottom_right": [
-          47,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_128": {
-      "id": "arr_128",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          47,
-          2
-        ],
-        "bottom_right": [
-          48,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Watford",
-        "Hemel Hempstead"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          47,
-          1
-        ],
-        "bottom_right": [
-          48,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_129": {
-      "id": "arr_129",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          50,
-          0
-        ],
-        "bottom_right": [
-          50,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_130": {
-      "id": "arr_130",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          52,
-          0
-        ],
-        "bottom_right": [
-          52,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_131": {
-      "id": "arr_131",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          52,
-          2
-        ],
-        "bottom_right": [
-          53,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Blackpool",
-        "Blackburn"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          52,
-          1
-        ],
-        "bottom_right": [
-          53,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_132": {
-      "id": "arr_132",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          55,
-          0
-        ],
-        "bottom_right": [
-          55,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_133": {
-      "id": "arr_133",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          55,
-          2
-        ],
-        "bottom_right": [
-          56,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Leeds",
-        "Bradford"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          55,
-          1
-        ],
-        "bottom_right": [
-          56,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_134": {
-      "id": "arr_134",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          58,
-          0
-        ],
-        "bottom_right": [
-          58,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_135": {
-      "id": "arr_135",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          60,
-          0
-        ],
-        "bottom_right": [
-          60,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_136": {
-      "id": "arr_136",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          60,
-          2
-        ],
-        "bottom_right": [
-          61,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Liverpool",
-        "Birkenhead"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          60,
-          1
-        ],
-        "bottom_right": [
-          61,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_137": {
-      "id": "arr_137",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          63,
-          0
-        ],
-        "bottom_right": [
-          63,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_138": {
-      "id": "arr_138",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          63,
-          2
-        ],
-        "bottom_right": [
-          66,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Victoria",
-        "Southwark",
-        "Harrow",
-        "Bromley"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          63,
-          1
-        ],
-        "bottom_right": [
-          66,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_139": {
-      "id": "arr_139",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          64,
-          1
-        ],
-        "bottom_right": [
-          66,
-          1
-        ]
-      },
-      "orientation": "col_vector",
-      "col_headers": [
-        "Victoria"
-      ],
-      "col_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          63,
-          1
-        ],
-        "bottom_right": [
-          63,
-          1
-        ]
-      },
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_140": {
-      "id": "arr_140",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          68,
-          0
-        ],
-        "bottom_right": [
-          68,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_141": {
-      "id": "arr_141",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          68,
-          2
-        ],
-        "bottom_right": [
-          69,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Norwich",
-        "Ipswich"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          68,
-          1
-        ],
-        "bottom_right": [
-          69,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_142": {
-      "id": "arr_142",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          71,
-          0
-        ],
-        "bottom_right": [
-          71,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_143": {
-      "id": "arr_143",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          71,
-          2
-        ],
-        "bottom_right": [
-          72,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Newcastle upon Tyne",
-        "Sunderland"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          71,
-          1
-        ],
-        "bottom_right": [
-          72,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_144": {
-      "id": "arr_144",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          74,
-          0
-        ],
-        "bottom_right": [
-          74,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_145": {
-      "id": "arr_145",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          76,
-          0
-        ],
-        "bottom_right": [
-          76,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_146": {
-      "id": "arr_146",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          76,
-          2
-        ],
-        "bottom_right": [
-          77,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Doncaster",
-        "Rotherham"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          76,
-          1
-        ],
-        "bottom_right": [
-          77,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_147": {
-      "id": "arr_147",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          79,
-          0
-        ],
-        "bottom_right": [
-          79,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_148": {
-      "id": "arr_148",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          79,
-          2
-        ],
-        "bottom_right": [
-          80,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Southampton",
-        "Portsmouth"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          79,
-          1
-        ],
-        "bottom_right": [
-          80,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_149": {
-      "id": "arr_149",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          82,
-          0
-        ],
-        "bottom_right": [
-          82,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_150": {
-      "id": "arr_150",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          82,
-          2
-        ],
-        "bottom_right": [
-          83,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Redbridge",
-        "Bexley"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          82,
-          1
-        ],
-        "bottom_right": [
-          83,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_151": {
-      "id": "arr_151",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          85,
-          0
-        ],
-        "bottom_right": [
-          85,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_152": {
-      "id": "arr_152",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          85,
-          2
-        ],
-        "bottom_right": [
-          86,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Northampton",
-        "Luton"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          85,
-          1
-        ],
-        "bottom_right": [
-          86,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_153": {
-      "id": "arr_153",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          88,
-          0
-        ],
-        "bottom_right": [
-          88,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_154": {
-      "id": "arr_154",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          88,
-          2
-        ],
-        "bottom_right": [
-          89,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Stoke-on-Trent",
-        "Wolverhampton"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          88,
-          1
-        ],
-        "bottom_right": [
-          89,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_155": {
-      "id": "arr_155",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          91,
-          0
-        ],
-        "bottom_right": [
-          91,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_156": {
-      "id": "arr_156",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          93,
-          0
-        ],
-        "bottom_right": [
-          93,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_157": {
-      "id": "arr_157",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          93,
-          2
-        ],
-        "bottom_right": [
-          94,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Middlesbrough",
-        "Darlington"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          93,
-          1
-        ],
-        "bottom_right": [
-          94,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_158": {
-      "id": "arr_158",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          96,
-          0
-        ],
-        "bottom_right": [
-          96,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_159": {
-      "id": "arr_159",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          96,
-          2
-        ],
-        "bottom_right": [
-          97,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Reading",
-        "Slough"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          96,
-          1
-        ],
-        "bottom_right": [
-          97,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_160": {
-      "id": "arr_160",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          99,
-          0
-        ],
-        "bottom_right": [
-          99,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_161": {
-      "id": "arr_161",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          101,
-          0
-        ],
-        "bottom_right": [
-          101,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_162": {
-      "id": "arr_162",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          101,
-          2
-        ],
-        "bottom_right": [
-          102,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Bristol ",
-        "Bath"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          101,
-          1
-        ],
-        "bottom_right": [
-          102,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_163": {
-      "id": "arr_163",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          104,
-          0
-        ],
-        "bottom_right": [
-          104,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_164": {
-      "id": "arr_164",
-      "range_ref": {
-        "sheet": "Commercial land values (CBD)",
-        "top_left": [
-          106,
-          0
-        ],
-        "bottom_right": [
-          106,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_165": {
-      "id": "arr_165",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          0,
-          4
-        ],
-        "bottom_right": [
-          2,
-          4
-        ]
-      },
-      "orientation": "col_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_166": {
-      "id": "arr_166",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          2,
-          0
-        ],
-        "bottom_right": [
-          2,
-          2
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_167": {
-      "id": "arr_167",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          3,
-          0
-        ],
-        "bottom_right": [
-          3,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "col_headers": [
-        "LEP",
-        "Town (Largest Above)"
-      ],
-      "col_header_source": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          2,
-          0
-        ],
-        "bottom_right": [
-          2,
-          1
-        ]
-      },
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_168": {
-      "id": "arr_168",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          5,
-          0
-        ],
-        "bottom_right": [
-          5,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_169": {
-      "id": "arr_169",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          7,
-          0
-        ],
-        "bottom_right": [
-          7,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_170": {
-      "id": "arr_170",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          7,
-          2
-        ],
-        "bottom_right": [
-          8,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Warrington",
-        "Chester"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          7,
-          1
-        ],
-        "bottom_right": [
-          8,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_171": {
-      "id": "arr_171",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          10,
-          0
-        ],
-        "bottom_right": [
-          10,
-          2
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_172": {
-      "id": "arr_172",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          13,
-          0
-        ],
-        "bottom_right": [
-          13,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_173": {
-      "id": "arr_173",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          15,
-          0
-        ],
-        "bottom_right": [
-          15,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_174": {
-      "id": "arr_174",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          15,
-          2
-        ],
-        "bottom_right": [
-          16,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Coventry ",
-        "Nuneaton"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          15,
-          1
-        ],
-        "bottom_right": [
-          16,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_175": {
-      "id": "arr_175",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          18,
-          0
-        ],
-        "bottom_right": [
-          18,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_176": {
-      "id": "arr_176",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          20,
-          0
-        ],
-        "bottom_right": [
-          20,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_177": {
-      "id": "arr_177",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          20,
-          2
-        ],
-        "bottom_right": [
-          21,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Sheffield",
-        "Nottingham"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          20,
-          1
-        ],
-        "bottom_right": [
-          21,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_178": {
-      "id": "arr_178",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          23,
-          0
-        ],
-        "bottom_right": [
-          23,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_179": {
-      "id": "arr_179",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          23,
-          2
-        ],
-        "bottom_right": [
-          24,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Bournemouth",
-        "Poole"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          23,
-          1
-        ],
-        "bottom_right": [
-          24,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_180": {
-      "id": "arr_180",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          26,
-          0
-        ],
-        "bottom_right": [
-          26,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_181": {
-      "id": "arr_181",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          26,
-          2
-        ],
-        "bottom_right": [
-          27,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Kingston upon Thames",
-        "Basingstoke"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          26,
-          1
-        ],
-        "bottom_right": [
-          27,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_182": {
-      "id": "arr_182",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          29,
-          0
-        ],
-        "bottom_right": [
-          29,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_183": {
-      "id": "arr_183",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          29,
-          2
-        ],
-        "bottom_right": [
-          30,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Gloucester",
-        "Cheltenham"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          29,
-          1
-        ],
-        "bottom_right": [
-          30,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_184": {
-      "id": "arr_184",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          32,
-          0
-        ],
-        "bottom_right": [
-          32,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_185": {
-      "id": "arr_185",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          32,
-          2
-        ],
-        "bottom_right": [
-          33,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Birmingham",
-        "Solihull"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          32,
-          1
-        ],
-        "bottom_right": [
-          33,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_186": {
-      "id": "arr_186",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          35,
-          0
-        ],
-        "bottom_right": [
-          35,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_187": {
-      "id": "arr_187",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          35,
-          2
-        ],
-        "bottom_right": [
-          36,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Peterborough",
-        "Cambridge"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          35,
-          1
-        ],
-        "bottom_right": [
-          36,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_188": {
-      "id": "arr_188",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          38,
-          0
-        ],
-        "bottom_right": [
-          38,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_189": {
-      "id": "arr_189",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          38,
-          2
-        ],
-        "bottom_right": [
-          39,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Lincoln",
-        "Grimsby"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          38,
-          1
-        ],
-        "bottom_right": [
-          39,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_190": {
-      "id": "arr_190",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          41,
-          0
-        ],
-        "bottom_right": [
-          41,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_191": {
-      "id": "arr_191",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          41,
-          2
-        ],
-        "bottom_right": [
-          42,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Manchester",
-        "Bolton"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          41,
-          1
-        ],
-        "bottom_right": [
-          42,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_192": {
-      "id": "arr_192",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          44,
-          0
-        ],
-        "bottom_right": [
-          44,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_193": {
-      "id": "arr_193",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          44,
-          2
-        ],
-        "bottom_right": [
-          45,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Plymouth",
-        "Exeter"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          44,
-          1
-        ],
-        "bottom_right": [
-          45,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_194": {
-      "id": "arr_194",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          47,
-          0
-        ],
-        "bottom_right": [
-          47,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_195": {
-      "id": "arr_195",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          47,
-          2
-        ],
-        "bottom_right": [
-          48,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Watford",
-        "Hemel Hempstead"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          47,
-          1
-        ],
-        "bottom_right": [
-          48,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_196": {
-      "id": "arr_196",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          50,
-          0
-        ],
-        "bottom_right": [
-          50,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_197": {
-      "id": "arr_197",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          52,
-          0
-        ],
-        "bottom_right": [
-          52,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_198": {
-      "id": "arr_198",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          52,
-          2
-        ],
-        "bottom_right": [
-          53,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Blackpool",
-        "Blackburn"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          52,
-          1
-        ],
-        "bottom_right": [
-          53,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_199": {
-      "id": "arr_199",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          55,
-          0
-        ],
-        "bottom_right": [
-          55,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_200": {
-      "id": "arr_200",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          55,
-          2
-        ],
-        "bottom_right": [
-          56,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Leeds",
-        "Bradford"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          55,
-          1
-        ],
-        "bottom_right": [
-          56,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_201": {
-      "id": "arr_201",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          58,
-          0
-        ],
-        "bottom_right": [
-          58,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_202": {
-      "id": "arr_202",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          60,
-          0
-        ],
-        "bottom_right": [
-          60,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_203": {
-      "id": "arr_203",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          60,
-          2
-        ],
-        "bottom_right": [
-          61,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Liverpool",
-        "Birkenhead"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          60,
-          1
-        ],
-        "bottom_right": [
-          61,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_204": {
-      "id": "arr_204",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          63,
-          0
-        ],
-        "bottom_right": [
-          63,
-          2
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_205": {
-      "id": "arr_205",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          64,
-          1
-        ],
-        "bottom_right": [
-          66,
-          2
-        ]
-      },
-      "orientation": "matrix",
-      "col_headers": [
-        "Victoria",
-        "N/A"
-      ],
-      "col_header_source": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          63,
-          1
-        ],
-        "bottom_right": [
-          63,
-          2
-        ]
-      },
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_206": {
-      "id": "arr_206",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          68,
-          0
-        ],
-        "bottom_right": [
-          68,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_207": {
-      "id": "arr_207",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          68,
-          2
-        ],
-        "bottom_right": [
-          69,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Norwich",
-        "Ipswich"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          68,
-          1
-        ],
-        "bottom_right": [
-          69,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_208": {
-      "id": "arr_208",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          71,
-          0
-        ],
-        "bottom_right": [
-          71,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_209": {
-      "id": "arr_209",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          71,
-          2
-        ],
-        "bottom_right": [
-          72,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Newcastle upon Tyne",
-        "Sunderland"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          71,
-          1
-        ],
-        "bottom_right": [
-          72,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_210": {
-      "id": "arr_210",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          74,
-          0
-        ],
-        "bottom_right": [
-          74,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_211": {
-      "id": "arr_211",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          76,
-          0
-        ],
-        "bottom_right": [
-          76,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_212": {
-      "id": "arr_212",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          76,
-          2
-        ],
-        "bottom_right": [
-          77,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Doncaster",
-        "Rotherham"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          76,
-          1
-        ],
-        "bottom_right": [
-          77,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_213": {
-      "id": "arr_213",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          79,
-          0
-        ],
-        "bottom_right": [
-          79,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_214": {
-      "id": "arr_214",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          79,
-          2
-        ],
-        "bottom_right": [
-          80,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Southampton",
-        "Portsmouth"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          79,
-          1
-        ],
-        "bottom_right": [
-          80,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_215": {
-      "id": "arr_215",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          82,
-          0
-        ],
-        "bottom_right": [
-          82,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_216": {
-      "id": "arr_216",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          82,
-          2
-        ],
-        "bottom_right": [
-          83,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Redbridge",
-        "Bexley"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          82,
-          1
-        ],
-        "bottom_right": [
-          83,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_217": {
-      "id": "arr_217",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          85,
-          0
-        ],
-        "bottom_right": [
-          85,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_218": {
-      "id": "arr_218",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          85,
-          2
-        ],
-        "bottom_right": [
-          86,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Northampton",
-        "Luton"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          85,
-          1
-        ],
-        "bottom_right": [
-          86,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_219": {
-      "id": "arr_219",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          88,
-          0
-        ],
-        "bottom_right": [
-          88,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_220": {
-      "id": "arr_220",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          88,
-          2
-        ],
-        "bottom_right": [
-          89,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Stoke-on-Trent",
-        "Wolverhampton"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          88,
-          1
-        ],
-        "bottom_right": [
-          89,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_221": {
-      "id": "arr_221",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          91,
-          0
-        ],
-        "bottom_right": [
-          91,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_222": {
-      "id": "arr_222",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          93,
-          0
-        ],
-        "bottom_right": [
-          93,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_223": {
-      "id": "arr_223",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          93,
-          2
-        ],
-        "bottom_right": [
-          94,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Middlesbrough",
-        "Darlington"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          93,
-          1
-        ],
-        "bottom_right": [
-          94,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_224": {
-      "id": "arr_224",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          96,
-          0
-        ],
-        "bottom_right": [
-          96,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_225": {
-      "id": "arr_225",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          96,
-          2
-        ],
-        "bottom_right": [
-          97,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Reading",
-        "Slough"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          96,
-          1
-        ],
-        "bottom_right": [
-          97,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_226": {
-      "id": "arr_226",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          99,
-          0
-        ],
-        "bottom_right": [
-          99,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_227": {
-      "id": "arr_227",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          101,
-          0
-        ],
-        "bottom_right": [
-          101,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_228": {
-      "id": "arr_228",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          101,
-          2
-        ],
-        "bottom_right": [
-          102,
-          2
-        ]
-      },
-      "orientation": "col_vector",
-      "row_headers": [
-        "Bristol ",
-        "Bath"
-      ],
-      "row_header_source": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          101,
-          1
-        ],
-        "bottom_right": [
-          102,
-          1
-        ]
-      },
-      "dtype": "float64",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_229": {
-      "id": "arr_229",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          104,
-          0
-        ],
-        "bottom_right": [
-          104,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_230": {
-      "id": "arr_230",
-      "range_ref": {
-        "sheet": "Commercial land values (OoT)",
-        "top_left": [
-          106,
-          0
-        ],
-        "bottom_right": [
-          106,
-          1
-        ]
-      },
-      "orientation": "row_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_231": {
-      "id": "arr_231",
-      "range_ref": {
-        "sheet": "Introduction",
-        "top_left": [
-          2,
-          0
-        ],
-        "bottom_right": [
-          5,
-          0
-        ]
-      },
-      "orientation": "col_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_232": {
-      "id": "arr_232",
-      "range_ref": {
-        "sheet": "Introduction",
-        "top_left": [
-          17,
-          0
-        ],
-        "bottom_right": [
-          18,
-          0
-        ]
-      },
-      "orientation": "col_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
-    },
-    "arr_233": {
-      "id": "arr_233",
-      "range_ref": {
-        "sheet": "Introduction",
-        "top_left": [
-          20,
-          0
-        ],
-        "bottom_right": [
-          21,
-          0
-        ]
-      },
-      "orientation": "col_vector",
-      "dtype": "str",
-      "has_formulas": false,
-      "data_role": "intermediate"
+      "data_role": "input"
     }
   },
   "scalars": {},
@@ -20839,13 +20839,23 @@
     ],
     "edges": [
       {
-        "source": "Calculations!7,9",
-        "target": "Calculations!7,11",
+        "source": "Calculations!6,7",
+        "target": "Calculations!6,10",
         "ref_type": "direct"
       },
       {
-        "source": "Calculations!7,10",
-        "target": "Calculations!7,11",
+        "source": "Calculations!6,8",
+        "target": "Calculations!6,10",
+        "ref_type": "direct"
+      },
+      {
+        "source": "Calculations!7,7",
+        "target": "Calculations!7,10",
+        "ref_type": "direct"
+      },
+      {
+        "source": "Calculations!7,8",
+        "target": "Calculations!7,10",
         "ref_type": "direct"
       },
       {
@@ -20864,16 +20874,6 @@
         "ref_type": "direct"
       },
       {
-        "source": "Calculations!7,7",
-        "target": "Calculations!7,10",
-        "ref_type": "direct"
-      },
-      {
-        "source": "Calculations!7,8",
-        "target": "Calculations!7,10",
-        "ref_type": "direct"
-      },
-      {
         "source": "Calculations!7,5",
         "target": "Calculations!7,9",
         "ref_type": "direct"
@@ -20889,16 +20889,6 @@
         "ref_type": "direct"
       },
       {
-        "source": "Calculations!6,7",
-        "target": "Calculations!6,10",
-        "ref_type": "direct"
-      },
-      {
-        "source": "Calculations!6,8",
-        "target": "Calculations!6,10",
-        "ref_type": "direct"
-      },
-      {
         "source": "Calculations!6,9",
         "target": "Calculations!6,11",
         "ref_type": "direct"
@@ -20906,6 +20896,16 @@
       {
         "source": "Calculations!6,10",
         "target": "Calculations!6,11",
+        "ref_type": "direct"
+      },
+      {
+        "source": "Calculations!7,9",
+        "target": "Calculations!7,11",
+        "ref_type": "direct"
+      },
+      {
+        "source": "Calculations!7,10",
+        "target": "Calculations!7,11",
         "ref_type": "direct"
       }
     ]
@@ -20915,9 +20915,9 @@
     "cells_in_arrays": 1295,
     "cells_in_scalars": 0,
     "template_coverage": {
-      "arr_008": 1,
-      "arr_009": 1,
-      "arr_010": 1
+      "arr_013": 1,
+      "arr_014": 1,
+      "arr_015": 1
     }
   }
 }

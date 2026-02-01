@@ -137,10 +137,27 @@ Against `tag-workbook.xlsx`:
 }
 ```
 
+### Continuation: Data Role Classification
+
+Added `ClassifyDataRoles()` function to analyze dependency graph and classify arrays:
+
+| Role | Description | Count |
+|------|-------------|-------|
+| INPUT | No formulas, not referenced by formulas | 230 |
+| PARAMETER | No formulas, referenced by formulas | 0 |
+| INTERMEDIATE | Has formulas, referenced by other formulas | 2 |
+| OUTPUT | Has formulas, not referenced | 1 |
+
+**Key finding**: The Calculations sheet has:
+- Formula arrays at rows 6-7, cols 9-11 (J7-L8) with formulas like `(F7-G7)*I7`
+- These reference cells F7-I8 which are **empty** in the workbook (phantom inputs)
+- This is typical of template workbooks waiting for user input
+
+**Array fragmentation**: 233 arrays detected because data sheets (Commercial land values, Industrial land values) have sparse, irregular layouts with many small disjoint regions. This correctly reflects the workbook structure.
+
 ### Next Steps
-1. Improve scalar detection (currently 0 scalars found - need to refine logic)
-2. Add data role classification (INPUT, PARAMETER, OUTPUT)
-3. Test against the larger gdpcr workbook (requires xls support or conversion)
-4. Consider adding formula template merging for related arrays
+1. Test against the larger gdpcr workbook (requires xls support or conversion)
+2. Consider adding formula template merging for related arrays
+3. Add "phantom input" detection for referenced but non-existent cells
 
 ---

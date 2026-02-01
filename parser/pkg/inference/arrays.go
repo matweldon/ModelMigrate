@@ -472,6 +472,51 @@ func boolToInt(b bool) int {
 	return 0
 }
 
+// ClassifyDataRoles updates data roles for arrays based on dependency graph analysis.
+func ClassifyDataRoles(arrays []*model.InferredArray, graph *model.DependencyGraph) {
+	// Build maps for quick lookup
+	hasIncoming := make(map[string]bool) // cells that are targets of edges (have dependencies)
+	hasOutgoing := make(map[string]bool) // cells that are sources of edges (are referenced)
+
+	for _, edge := range graph.Edges {
+		hasOutgoing[edge.Source] = true
+		hasIncoming[edge.Target] = true
+	}
+
+	for _, arr := range arrays {
+		// Check if any cells in the array are referenced by other formulas
+		anyReferenced := false
+
+		for row := arr.RangeRef.TopLeft[0]; row <= arr.RangeRef.BottomRight[0]; row++ {
+			for col := arr.RangeRef.TopLeft[1]; col <= arr.RangeRef.BottomRight[1]; col++ {
+				cellKey := fmt.Sprintf("%s!%d,%d", arr.RangeRef.Sheet, row, col)
+				if hasOutgoing[cellKey] {
+					anyReferenced = true
+					break
+				}
+			}
+			if anyReferenced {
+				break
+			}
+		}
+
+		// Classify based on formula and reference status
+		if arr.HasFormulas {
+			if anyReferenced {
+				arr.DataRole = model.RoleIntermediate
+			} else {
+				arr.DataRole = model.RoleOutput
+			}
+		} else {
+			if anyReferenced {
+				arr.DataRole = model.RoleParameter
+			} else {
+				arr.DataRole = model.RoleInput
+			}
+		}
+	}
+}
+
 // DetectScalars finds scalar values (single cells) that are referenced by formulas.
 func DetectScalars(workbook *model.RawWorkbook, graph *model.DependencyGraph, arrays []*model.InferredArray) []*model.InferredScalar {
 	var scalars []*model.InferredScalar

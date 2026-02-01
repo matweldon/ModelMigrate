@@ -91,6 +91,9 @@ func runInference(workbook *model.RawWorkbook) *model.StructuralModel {
 	detector := inference.NewArrayDetector(workbook, parsedFormulas)
 	arrays := detector.DetectArrays()
 
+	// Classify data roles based on dependency analysis
+	inference.ClassifyDataRoles(arrays, graph)
+
 	// Detect scalars
 	scalars := inference.DetectScalars(workbook, graph, arrays)
 
@@ -158,12 +161,31 @@ func formatRawSummary(workbook *model.RawWorkbook) string {
 func formatStructuralSummary(structural *model.StructuralModel) string {
 	s := "\nStructural analysis summary (Layer 2):\n"
 	s += fmt.Sprintf("  Sheets: %d\n", len(structural.Source.SheetOrder))
+
+	// Count arrays by role
+	roleCounts := make(map[model.DataRole]int)
+	for _, arr := range structural.Arrays {
+		roleCounts[arr.DataRole]++
+	}
+
 	s += fmt.Sprintf("  Arrays detected: %d\n", len(structural.Arrays))
+	s += fmt.Sprintf("    - INPUT: %d, PARAMETER: %d, INTERMEDIATE: %d, OUTPUT: %d\n",
+		roleCounts[model.RoleInput], roleCounts[model.RoleParameter],
+		roleCounts[model.RoleIntermediate], roleCounts[model.RoleOutput])
+
+	// Show a sample of arrays by role
+	s += "  Sample arrays:\n"
+	shown := make(map[model.DataRole]int)
 	for id, arr := range structural.Arrays {
+		if shown[arr.DataRole] >= 2 {
+			continue
+		}
 		rows := arr.RangeRef.BottomRight[0] - arr.RangeRef.TopLeft[0] + 1
 		cols := arr.RangeRef.BottomRight[1] - arr.RangeRef.TopLeft[1] + 1
-		s += fmt.Sprintf("    - %s: %s %dx%d (%s)\n", id, arr.RangeRef.Sheet, rows, cols, arr.Orientation)
+		s += fmt.Sprintf("    - %s [%s]: %s %dx%d (%s)\n", id, arr.DataRole, arr.RangeRef.Sheet, rows, cols, arr.Orientation)
+		shown[arr.DataRole]++
 	}
+
 	s += fmt.Sprintf("  Scalars detected: %d\n", len(structural.Scalars))
 	s += fmt.Sprintf("  Dependency graph: %d nodes, %d edges\n", len(structural.Graph.Nodes), len(structural.Graph.Edges))
 	s += fmt.Sprintf("  Coverage: %d formula cells, %d in arrays, %d scalars\n",
