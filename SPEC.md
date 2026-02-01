@@ -40,4 +40,106 @@ This flexibility, along with the possibility of errors, leads to the need for AI
 
 # Plan
 
-To be completed...
+## Phase 1: Go Parser Foundation (Layers 1-2)
+
+### 1.1 xlsx Parsing (Layer 1 - Raw Extraction)
+
+Build a Go microservice that extracts raw data from xlsx files:
+
+**Inputs:** xlsx file path
+**Outputs:** JSON intermediate representation
+
+Data extracted:
+- Sheets (names, dimensions)
+- Cells (position, value, formula, number format, type)
+- Named ranges (name → range reference mapping)
+- Merged regions
+- External links
+
+**xlsx format notes:**
+- xlsx is a ZIP archive containing XML files
+- `xl/workbook.xml` - sheet list and named ranges
+- `xl/worksheets/sheet*.xml` - cell data
+- `xl/sharedStrings.xml` - deduplicated string values
+- `xl/styles.xml` - number formats for date/percentage detection
+
+### 1.2 Structural Inference (Layer 2)
+
+Deterministic heuristics to identify computational structure:
+
+**Arrays:** Contiguous regions with consistent formula patterns
+- Detect orientation (row vector, column vector, time-horizontal, matrix)
+- Extract row/column headers from adjacent text cells
+- Build formula templates capturing the pattern
+- Track exceptions (cells that break the pattern)
+
+**Scalars:** Single cells with computational significance
+- Link to named ranges if present
+- Infer labels from adjacent cells
+- Classify role (INPUT, PARAMETER, INTERMEDIATE, OUTPUT)
+
+**Dependency Graph:**
+- Parse formula references
+- Build directed graph of cell/array dependencies
+- Compute topological order for evaluation
+
+### 1.3 Deliverables
+
+```
+parser/
+├── cmd/
+│   └── parser/
+│       └── main.go          # CLI entrypoint
+├── pkg/
+│   ├── xlsx/
+│   │   ├── reader.go        # ZIP/XML extraction
+│   │   ├── cells.go         # Cell parsing
+│   │   ├── formulas.go      # Formula parsing
+│   │   └── names.go         # Named range extraction
+│   ├── model/
+│   │   ├── raw.go           # Layer 1 data structures
+│   │   └── structural.go    # Layer 2 data structures
+│   └── inference/
+│       ├── arrays.go        # Array detection
+│       ├── graph.go         # Dependency graph
+│       └── templates.go     # Formula template extraction
+├── go.mod
+└── go.sum
+```
+
+## Phase 2: Python Integration
+
+### 2.1 Harness Development
+- Call Go parser as subprocess or via gRPC
+- Load JSON output into Python dataclasses
+- Implement validation contract generation
+
+### 2.2 AI Agent Tools
+- Structure summary tool
+- Element detail tool
+- Annotation submission tool
+- Code generation tool
+
+## Phase 3: Frontend & Cloud
+
+### 3.1 Frontend (TypeScript/Bun)
+- Upload workbook
+- View structural analysis
+- Review AI annotations
+- Download generated Python
+
+### 3.2 Cloud Architecture
+- Async processing with pub/sub
+- Workbook storage
+- Job queue for AI processing
+
+---
+
+## Test Workbooks
+
+| File | Format | Size | Description |
+|------|--------|------|-------------|
+| `tag-workbook-valuing-dependent-development-workbook.xlsx` | xlsx | 88KB | Land valuation model (9 sheets) |
+| `15710-gdpcr_0.xls` | xls | 625KB | UK Gas Distribution Price Control Review (31 sheets) |
+
+Priority: xlsx format first, xls support later.
