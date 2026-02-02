@@ -12,17 +12,20 @@ import (
 	"github.com/matweldon/modelmigrate/parser/pkg/xlsx"
 )
 
+var algoVersion string
+
 func main() {
 	// Parse command line flags
 	inputFile := flag.String("input", "", "Path to xlsx file to parse")
 	outputFile := flag.String("output", "", "Path to output JSON file (default: stdout)")
 	pretty := flag.Bool("pretty", true, "Pretty-print JSON output")
 	mode := flag.String("mode", "structural", "Output mode: 'raw' (Layer 1) or 'structural' (Layer 2)")
+	flag.StringVar(&algoVersion, "algo", "v2", "Array detection algorithm: 'v1' or 'v2' (column-first)")
 	flag.Parse()
 
 	if *inputFile == "" {
 		fmt.Fprintln(os.Stderr, "Error: -input flag is required")
-		fmt.Fprintln(os.Stderr, "Usage: parser -input <file.xlsx> [-output <file.json>] [-pretty=true] [-mode=structural]")
+		fmt.Fprintln(os.Stderr, "Usage: parser -input <file.xlsx> [-output <file.json>] [-pretty=true] [-mode=structural] [-algo=v2]")
 		os.Exit(1)
 	}
 
@@ -87,9 +90,15 @@ func runInference(workbook *model.RawWorkbook) *model.StructuralModel {
 	// Build dependency graph
 	graph, parsedFormulas := inference.BuildDependencyGraph(workbook)
 
-	// Detect arrays
-	detector := inference.NewArrayDetector(workbook, parsedFormulas)
-	arrays := detector.DetectArrays()
+	// Detect arrays using selected algorithm
+	var arrays []*model.InferredArray
+	if algoVersion == "v2" {
+		detector := inference.NewArrayDetectorV2(workbook, parsedFormulas)
+		arrays = detector.DetectArrays()
+	} else {
+		detector := inference.NewArrayDetector(workbook, parsedFormulas)
+		arrays = detector.DetectArrays()
+	}
 
 	// Classify data roles based on dependency analysis
 	inference.ClassifyDataRoles(arrays, graph)
