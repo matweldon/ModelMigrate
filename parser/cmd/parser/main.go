@@ -7,19 +7,25 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/matweldon/modelmigrate/parser/pkg/inference"
+	"github.com/matweldon/modelmigrate/parser/pkg/model"
 	"github.com/matweldon/modelmigrate/parser/pkg/xlsx"
 )
+
+var algoVersion string
 
 func main() {
 	// Parse command line flags
 	inputFile := flag.String("input", "", "Path to xlsx file to parse")
 	outputFile := flag.String("output", "", "Path to output JSON file (default: stdout)")
 	pretty := flag.Bool("pretty", true, "Pretty-print JSON output")
+	mode := flag.String("mode", "structural", "Output mode: 'raw' (Layer 1) or 'structural' (Layer 2)")
+	flag.StringVar(&algoVersion, "algo", "v2", "Array detection algorithm: 'v1' or 'v2' (column-first)")
 	flag.Parse()
 
 	if *inputFile == "" {
 		fmt.Fprintln(os.Stderr, "Error: -input flag is required")
-		fmt.Fprintln(os.Stderr, "Usage: parser -input <file.xlsx> [-output <file.json>] [-pretty=true]")
+		fmt.Fprintln(os.Stderr, "Usage: parser -input <file.xlsx> [-output <file.json>] [-pretty=true] [-mode=structural] [-algo=v2]")
 		os.Exit(1)
 	}
 
@@ -37,12 +43,28 @@ func main() {
 		os.Exit(1)
 	}
 
+	var output interface{}
+	var summary string
+
+	switch *mode {
+	case "raw":
+		output = workbook
+		summary = formatRawSummary(workbook)
+	case "structural":
+		structural := runInference(workbook)
+		output = structural
+		summary = formatStructuralSummary(structural)
+	default:
+		fmt.Fprintf(os.Stderr, "Error: unknown mode '%s'. Use 'raw' or 'structural'\n", *mode)
+		os.Exit(1)
+	}
+
 	// Serialize to JSON
 	var jsonBytes []byte
 	if *pretty {
-		jsonBytes, err = json.MarshalIndent(workbook, "", "  ")
+		jsonBytes, err = json.MarshalIndent(output, "", "  ")
 	} else {
-		jsonBytes, err = json.Marshal(workbook)
+		jsonBytes, err = json.Marshal(output)
 	}
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error serializing to JSON: %v\n", err)
@@ -61,11 +83,121 @@ func main() {
 	}
 
 	// Print summary to stderr
-	fmt.Fprintf(os.Stderr, "\nParsed workbook summary:\n")
-	fmt.Fprintf(os.Stderr, "  Sheets: %d\n", len(workbook.SheetOrder))
+	fmt.Fprint(os.Stderr, summary)
+}
+
+func runInference(workbook *model.RawWorkbook) *model.StructuralModel {
+	// Build dependency graph
+	graph, parsedFormulas := inference.BuildDependencyGraph(workbook)
+
+	// Detect arrays using selected algorithm
+	var arrays []*model.InferredArray
+	if algoVersion == "v2" {
+		detector := inference.NewArrayDetectorV2(workbook, parsedFormulas)
+		arrays = detector.DetectArrays()
+	} else {
+		detector := inference.NewArrayDetector(workbook, parsedFormulas)
+		arrays = detector.DetectArrays()
+	}
+
+	// Classify data roles based on dependency analysis
+	inference.ClassifyDataRoles(arrays, graph)
+
+	// Detect scalars
+	scalars := inference.DetectScalars(workbook, graph, arrays)
+
+	// Build structural model
+	structural := model.NewStructuralModel(workbook)
+	structural.Graph = *graph
+
+	for _, arr := range arrays {
+		structural.Arrays[arr.ID] = arr
+	}
+	for _, scl := range scalars {
+		structural.Scalars[scl.ID] = scl
+	}
+
+	// Calculate coverage stats
+	totalFormulaCells := 0
+	for _, sheet := range workbook.Sheets {
+		for _, cell := range sheet.Cells {
+			if cell.Formula != "" {
+				totalFormulaCells++
+			}
+		}
+	}
+
+	cellsInArrays := 0
+	for _, arr := range arrays {
+		rows := arr.RangeRef.BottomRight[0] - arr.RangeRef.TopLeft[0] + 1
+		cols := arr.RangeRef.BottomRight[1] - arr.RangeRef.TopLeft[1] + 1
+		cellsInArrays += rows * cols
+	}
+
+	structural.Coverage = model.CoverageStats{
+		TotalFormulaCells: totalFormulaCells,
+		CellsInArrays:     cellsInArrays,
+		CellsInScalars:    len(scalars),
+		TemplateCoverage:  make(map[string]float64),
+	}
+
+	for id, arr := range structural.Arrays {
+		if arr.FormulaTemplate != nil {
+			structural.Coverage.TemplateCoverage[id] = arr.FormulaTemplate.Coverage
+		}
+	}
+
+	// Compute topological order
+	topoOrder := inference.TopologicalSort(graph)
+	if topoOrder != nil {
+		structural.Graph.Nodes = topoOrder
+	}
+
+	return structural
+}
+
+func formatRawSummary(workbook *model.RawWorkbook) string {
+	s := "\nParsed workbook summary (Layer 1 - Raw):\n"
+	s += fmt.Sprintf("  Sheets: %d\n", len(workbook.SheetOrder))
 	for _, name := range workbook.SheetOrder {
 		sheet := workbook.Sheets[name]
-		fmt.Fprintf(os.Stderr, "    - %s: %d cells\n", name, len(sheet.Cells))
+		s += fmt.Sprintf("    - %s: %d cells\n", name, len(sheet.Cells))
 	}
-	fmt.Fprintf(os.Stderr, "  Named ranges: %d\n", len(workbook.NamedRanges))
+	s += fmt.Sprintf("  Named ranges: %d\n", len(workbook.NamedRanges))
+	return s
+}
+
+func formatStructuralSummary(structural *model.StructuralModel) string {
+	s := "\nStructural analysis summary (Layer 2):\n"
+	s += fmt.Sprintf("  Sheets: %d\n", len(structural.Source.SheetOrder))
+
+	// Count arrays by role
+	roleCounts := make(map[model.DataRole]int)
+	for _, arr := range structural.Arrays {
+		roleCounts[arr.DataRole]++
+	}
+
+	s += fmt.Sprintf("  Arrays detected: %d\n", len(structural.Arrays))
+	s += fmt.Sprintf("    - INPUT: %d, PARAMETER: %d, INTERMEDIATE: %d, OUTPUT: %d\n",
+		roleCounts[model.RoleInput], roleCounts[model.RoleParameter],
+		roleCounts[model.RoleIntermediate], roleCounts[model.RoleOutput])
+
+	// Show a sample of arrays by role
+	s += "  Sample arrays:\n"
+	shown := make(map[model.DataRole]int)
+	for id, arr := range structural.Arrays {
+		if shown[arr.DataRole] >= 2 {
+			continue
+		}
+		rows := arr.RangeRef.BottomRight[0] - arr.RangeRef.TopLeft[0] + 1
+		cols := arr.RangeRef.BottomRight[1] - arr.RangeRef.TopLeft[1] + 1
+		s += fmt.Sprintf("    - %s [%s]: %s %dx%d (%s)\n", id, arr.DataRole, arr.RangeRef.Sheet, rows, cols, arr.Orientation)
+		shown[arr.DataRole]++
+	}
+
+	s += fmt.Sprintf("  Scalars detected: %d\n", len(structural.Scalars))
+	s += fmt.Sprintf("  Dependency graph: %d nodes, %d edges\n", len(structural.Graph.Nodes), len(structural.Graph.Edges))
+	s += fmt.Sprintf("  Coverage: %d formula cells, %d in arrays, %d scalars\n",
+		structural.Coverage.TotalFormulaCells, structural.Coverage.CellsInArrays, structural.Coverage.CellsInScalars)
+	return s
 }

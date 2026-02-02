@@ -142,4 +142,4 @@ parser/
 | `tag-workbook-valuing-dependent-development-workbook.xlsx` | xlsx | 88KB | Land valuation model (9 sheets) |
 | `15710-gdpcr_0.xls` | xls | 625KB | UK Gas Distribution Price Control Review (31 sheets) |
 
-Priority: xlsx format first, xls support later.
+Priority: xlsx format only. xls (legacy binary format) is out of scope.
