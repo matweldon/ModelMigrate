@@ -68,6 +68,9 @@ func (d *ArrayDetectorV2) DetectArrays() []*model.InferredArray {
 	// Phase 3: Assign string labels
 	d.assignLabels(numericArrays)
 
+	// Phase 3.5: Build formula templates for arrays with formulas
+	d.buildFormulaTemplates(numericArrays)
+
 	// Phase 4: Gather remaining cells
 	remainingArrays := d.gatherRemainingCells()
 
@@ -711,4 +714,179 @@ func (d *ArrayDetectorV2) expandStringRunToArray(sheet string, run VerticalRun, 
 	}
 
 	return array
+}
+
+// buildFormulaTemplates extracts formula patterns for arrays with formulas
+func (d *ArrayDetectorV2) buildFormulaTemplates(arrays []*model.InferredArray) {
+	for _, arr := range arrays {
+		if !arr.HasFormulas {
+			continue
+		}
+		arr.FormulaTemplate = d.extractFormulaTemplate(arr)
+	}
+}
+
+// extractFormulaTemplate builds a formula template for an array
+func (d *ArrayDetectorV2) extractFormulaTemplate(arr *model.InferredArray) *model.FormulaTemplate {
+	sheet := arr.RangeRef.Sheet
+	startRow := arr.RangeRef.TopLeft[0]
+	startCol := arr.RangeRef.TopLeft[1]
+	endRow := arr.RangeRef.BottomRight[0]
+	endCol := arr.RangeRef.BottomRight[1]
+
+	// Get the first formula cell as template basis
+	firstKey := fmt.Sprintf("%s!%d,%d", sheet, startRow, startCol)
+	firstParsed := d.parsedFormulas[firstKey]
+	if firstParsed == nil {
+		return nil
+	}
+
+	// Get the raw cell to get the formula string
+	rawSheet := d.workbook.Sheets[sheet]
+	if rawSheet == nil {
+		return nil
+	}
+	firstCell := rawSheet.Cells[fmt.Sprintf("%d,%d", startRow, startCol)]
+	if firstCell == nil || firstCell.Formula == "" {
+		return nil
+	}
+
+	template := &model.FormulaTemplate{
+		TemplateStr:      firstCell.Formula,
+		FixedRefs:        make(map[string]model.CellRef),
+		RelativePatterns: make(map[string]model.RelativePattern),
+		Exceptions:       make(map[string]string),
+		Coverage:         1.0,
+	}
+
+	// Analyze reference patterns by comparing first cell to others
+	for i, ref := range firstParsed.References {
+		refName := fmt.Sprintf("ref_%d", i)
+
+		// Check if reference is fixed or relative by sampling other cells
+		isRowFixed := true
+		isColFixed := true
+
+		// Sample second row if exists
+		if endRow > startRow {
+			key := fmt.Sprintf("%s!%d,%d", sheet, startRow+1, startCol)
+			if parsed := d.parsedFormulas[key]; parsed != nil && len(parsed.References) > i {
+				ref2 := parsed.References[i]
+				if ref2.Row != ref.Row {
+					isRowFixed = false
+				}
+				if ref2.Col != ref.Col {
+					isColFixed = false
+				}
+			}
+		}
+
+		// Sample second column if exists
+		if endCol > startCol {
+			key := fmt.Sprintf("%s!%d,%d", sheet, startRow, startCol+1)
+			if parsed := d.parsedFormulas[key]; parsed != nil && len(parsed.References) > i {
+				ref2 := parsed.References[i]
+				if ref2.Row != ref.Row {
+					isRowFixed = false
+				}
+				if ref2.Col != ref.Col {
+					isColFixed = false
+				}
+			}
+		}
+
+		if isRowFixed && isColFixed {
+			template.FixedRefs[refName] = ref
+		} else {
+			template.RelativePatterns[refName] = model.RelativePattern{
+				BaseOffset: [2]int{ref.Row - startRow, ref.Col - startCol},
+				RowDelta:   boolToIntV2(!isRowFixed),
+				ColDelta:   boolToIntV2(!isColFixed),
+			}
+		}
+	}
+
+	// Count exceptions (cells that don't match the pattern)
+	totalCells := (endRow - startRow + 1) * (endCol - startCol + 1)
+	matchingCells := 0
+
+	for row := startRow; row <= endRow; row++ {
+		for col := startCol; col <= endCol; col++ {
+			if row == startRow && col == startCol {
+				matchingCells++
+				continue
+			}
+
+			if d.formulasCompatibleV2(sheet, startRow, startCol, row, col) {
+				matchingCells++
+			} else {
+				cell := rawSheet.Cells[fmt.Sprintf("%d,%d", row, col)]
+				if cell != nil && cell.Formula != "" {
+					posKey := fmt.Sprintf("%d,%d", row-startRow, col-startCol)
+					template.Exceptions[posKey] = cell.Formula
+				}
+			}
+		}
+	}
+
+	template.Coverage = float64(matchingCells) / float64(totalCells)
+
+	return template
+}
+
+// formulasCompatibleV2 checks if two cells have compatible formulas
+func (d *ArrayDetectorV2) formulasCompatibleV2(sheet string, baseRow, baseCol, targetRow, targetCol int) bool {
+	baseKey := fmt.Sprintf("%s!%d,%d", sheet, baseRow, baseCol)
+	targetKey := fmt.Sprintf("%s!%d,%d", sheet, targetRow, targetCol)
+
+	baseParsed := d.parsedFormulas[baseKey]
+	targetParsed := d.parsedFormulas[targetKey]
+
+	if baseParsed == nil || targetParsed == nil {
+		return baseParsed == targetParsed
+	}
+
+	// Check if same functions are used
+	if len(baseParsed.Functions) != len(targetParsed.Functions) {
+		return false
+	}
+	for i, fn := range baseParsed.Functions {
+		if i >= len(targetParsed.Functions) || targetParsed.Functions[i] != fn {
+			return false
+		}
+	}
+
+	// Check if same number of references
+	if len(baseParsed.References) != len(targetParsed.References) {
+		return false
+	}
+
+	// Check if references follow consistent offset pattern
+	rowDiff := targetRow - baseRow
+	colDiff := targetCol - baseCol
+
+	for i, baseRef := range baseParsed.References {
+		targetRef := targetParsed.References[i]
+
+		// Reference should either be fixed or move with the cell
+		rowRefDiff := targetRef.Row - baseRef.Row
+		colRefDiff := targetRef.Col - baseRef.Col
+
+		// References should move by 0 (fixed) or by the cell offset (relative)
+		if rowRefDiff != 0 && rowRefDiff != rowDiff {
+			return false
+		}
+		if colRefDiff != 0 && colRefDiff != colDiff {
+			return false
+		}
+	}
+
+	return true
+}
+
+func boolToIntV2(b bool) int {
+	if b {
+		return 1
+	}
+	return 0
 }

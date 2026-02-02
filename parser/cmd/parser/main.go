@@ -6,6 +6,8 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"sort"
+	"strings"
 
 	"github.com/matweldon/modelmigrate/parser/pkg/inference"
 	"github.com/matweldon/modelmigrate/parser/pkg/model"
@@ -19,7 +21,7 @@ func main() {
 	inputFile := flag.String("input", "", "Path to xlsx file to parse")
 	outputFile := flag.String("output", "", "Path to output JSON file (default: stdout)")
 	pretty := flag.Bool("pretty", true, "Pretty-print JSON output")
-	mode := flag.String("mode", "structural", "Output mode: 'raw' (Layer 1) or 'structural' (Layer 2)")
+	mode := flag.String("mode", "structural", "Output mode: 'raw' (Layer 1), 'structural' (Layer 2), or 'summary' (human-readable)")
 	flag.StringVar(&algoVersion, "algo", "v2", "Array detection algorithm: 'v1' or 'v2' (column-first)")
 	flag.Parse()
 
@@ -54,36 +56,46 @@ func main() {
 		structural := runInference(workbook)
 		output = structural
 		summary = formatStructuralSummary(structural)
+	case "summary":
+		structural := runInference(workbook)
+		output = nil // No JSON output for summary mode
+		summary = formatDetailedSummary(structural)
 	default:
-		fmt.Fprintf(os.Stderr, "Error: unknown mode '%s'. Use 'raw' or 'structural'\n", *mode)
+		fmt.Fprintf(os.Stderr, "Error: unknown mode '%s'. Use 'raw', 'structural', or 'summary'\n", *mode)
 		os.Exit(1)
 	}
 
-	// Serialize to JSON
-	var jsonBytes []byte
-	if *pretty {
-		jsonBytes, err = json.MarshalIndent(output, "", "  ")
-	} else {
-		jsonBytes, err = json.Marshal(output)
-	}
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error serializing to JSON: %v\n", err)
-		os.Exit(1)
-	}
-
-	// Write output
-	if *outputFile != "" {
-		if err := os.WriteFile(*outputFile, jsonBytes, 0644); err != nil {
-			fmt.Fprintf(os.Stderr, "Error writing output file: %v\n", err)
+	// Serialize to JSON (skip for summary mode)
+	if output != nil {
+		var jsonBytes []byte
+		if *pretty {
+			jsonBytes, err = json.MarshalIndent(output, "", "  ")
+		} else {
+			jsonBytes, err = json.Marshal(output)
+		}
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error serializing to JSON: %v\n", err)
 			os.Exit(1)
 		}
-		fmt.Fprintf(os.Stderr, "Wrote output to %s\n", *outputFile)
-	} else {
-		fmt.Println(string(jsonBytes))
+
+		// Write output
+		if *outputFile != "" {
+			if err := os.WriteFile(*outputFile, jsonBytes, 0644); err != nil {
+				fmt.Fprintf(os.Stderr, "Error writing output file: %v\n", err)
+				os.Exit(1)
+			}
+			fmt.Fprintf(os.Stderr, "Wrote output to %s\n", *outputFile)
+		} else {
+			fmt.Println(string(jsonBytes))
+		}
 	}
 
-	// Print summary to stderr
-	fmt.Fprint(os.Stderr, summary)
+	// Print summary (to stderr for JSON modes, stdout for summary mode)
+	if *mode == "summary" {
+		fmt.Print(summary)
+	} else {
+		fmt.Fprint(os.Stderr, summary)
+	}
 }
 
 func runInference(workbook *model.RawWorkbook) *model.StructuralModel {
@@ -200,4 +212,156 @@ func formatStructuralSummary(structural *model.StructuralModel) string {
 	s += fmt.Sprintf("  Coverage: %d formula cells, %d in arrays, %d scalars\n",
 		structural.Coverage.TotalFormulaCells, structural.Coverage.CellsInArrays, structural.Coverage.CellsInScalars)
 	return s
+}
+
+func formatDetailedSummary(structural *model.StructuralModel) string {
+	var sb strings.Builder
+
+	sb.WriteString("═══════════════════════════════════════════════════════════════════\n")
+	sb.WriteString("                    MODELMIGRATE STRUCTURAL ANALYSIS\n")
+	sb.WriteString("═══════════════════════════════════════════════════════════════════\n\n")
+
+	// Overview
+	sb.WriteString("OVERVIEW\n")
+	sb.WriteString("────────────────────────────────────────────────────────────────────\n")
+	sb.WriteString(fmt.Sprintf("  Sheets:           %d\n", len(structural.Source.SheetOrder)))
+	sb.WriteString(fmt.Sprintf("  Arrays:           %d\n", len(structural.Arrays)))
+	sb.WriteString(fmt.Sprintf("  Scalars:          %d\n", len(structural.Scalars)))
+	sb.WriteString(fmt.Sprintf("  Named ranges:     %d\n", len(structural.Source.NamedRanges)))
+	sb.WriteString(fmt.Sprintf("  Formula cells:    %d\n", structural.Coverage.TotalFormulaCells))
+	sb.WriteString(fmt.Sprintf("  Dependency edges: %d\n\n", len(structural.Graph.Edges)))
+
+	// Data roles summary
+	roleCounts := make(map[model.DataRole]int)
+	for _, arr := range structural.Arrays {
+		roleCounts[arr.DataRole]++
+	}
+	sb.WriteString("DATA ROLES\n")
+	sb.WriteString("────────────────────────────────────────────────────────────────────\n")
+	sb.WriteString(fmt.Sprintf("  INPUT:        %3d  (data entry cells without formulas)\n", roleCounts[model.RoleInput]))
+	sb.WriteString(fmt.Sprintf("  PARAMETER:    %3d  (input cells referenced by formulas)\n", roleCounts[model.RoleParameter]))
+	sb.WriteString(fmt.Sprintf("  INTERMEDIATE: %3d  (formula cells used by other formulas)\n", roleCounts[model.RoleIntermediate]))
+	sb.WriteString(fmt.Sprintf("  OUTPUT:       %3d  (final formula results)\n\n", roleCounts[model.RoleOutput]))
+
+	// Per-sheet breakdown
+	sb.WriteString("SHEETS\n")
+	sb.WriteString("────────────────────────────────────────────────────────────────────\n")
+
+	// Group arrays by sheet
+	bySheet := make(map[string][]*model.InferredArray)
+	for _, arr := range structural.Arrays {
+		bySheet[arr.RangeRef.Sheet] = append(bySheet[arr.RangeRef.Sheet], arr)
+	}
+
+	for _, sheetName := range structural.Source.SheetOrder {
+		sheet := structural.Source.Sheets[sheetName]
+		arrays := bySheet[sheetName]
+
+		// Count formulas in sheet
+		formulaCount := 0
+		for _, cell := range sheet.Cells {
+			if cell.Formula != "" {
+				formulaCount++
+			}
+		}
+
+		// Array size stats
+		totalCells := 0
+		singleCells := 0
+		for _, arr := range arrays {
+			rows := arr.RangeRef.BottomRight[0] - arr.RangeRef.TopLeft[0] + 1
+			cols := arr.RangeRef.BottomRight[1] - arr.RangeRef.TopLeft[1] + 1
+			size := rows * cols
+			totalCells += size
+			if size == 1 {
+				singleCells++
+			}
+		}
+
+		sb.WriteString(fmt.Sprintf("\n  %s\n", sheetName))
+		sb.WriteString(fmt.Sprintf("    Cells: %d, Formulas: %d\n", len(sheet.Cells), formulaCount))
+		sb.WriteString(fmt.Sprintf("    Arrays: %d (%d single-cell)\n", len(arrays), singleCells))
+
+		// Show largest arrays
+		if len(arrays) > 0 {
+			// Sort by size
+			sorted := make([]*model.InferredArray, len(arrays))
+			copy(sorted, arrays)
+			sort.Slice(sorted, func(i, j int) bool {
+				si := (sorted[i].RangeRef.BottomRight[0] - sorted[i].RangeRef.TopLeft[0] + 1) *
+					(sorted[i].RangeRef.BottomRight[1] - sorted[i].RangeRef.TopLeft[1] + 1)
+				sj := (sorted[j].RangeRef.BottomRight[0] - sorted[j].RangeRef.TopLeft[0] + 1) *
+					(sorted[j].RangeRef.BottomRight[1] - sorted[j].RangeRef.TopLeft[1] + 1)
+				return si > sj
+			})
+
+			sb.WriteString("    Largest arrays:\n")
+			for i, arr := range sorted[:min(3, len(sorted))] {
+				rows := arr.RangeRef.BottomRight[0] - arr.RangeRef.TopLeft[0] + 1
+				cols := arr.RangeRef.BottomRight[1] - arr.RangeRef.TopLeft[1] + 1
+				formula := ""
+				if arr.HasFormulas {
+					formula = " [formulas]"
+				}
+				headers := ""
+				if len(arr.ColHeaders) > 0 {
+					headers = fmt.Sprintf(" headers=%v", arr.ColHeaders[:min(2, len(arr.ColHeaders))])
+				}
+				sb.WriteString(fmt.Sprintf("      %d. %s: %dx%d %s%s%s\n",
+					i+1, arr.ID, rows, cols, arr.DataRole, formula, headers))
+			}
+		}
+	}
+
+	// Formula template coverage
+	sb.WriteString("\n\nFORMULA TEMPLATES\n")
+	sb.WriteString("────────────────────────────────────────────────────────────────────\n")
+
+	withTemplates := 0
+	perfect := 0
+	lowCoverage := []*model.InferredArray{}
+
+	for _, arr := range structural.Arrays {
+		if arr.FormulaTemplate != nil && arr.FormulaTemplate.TemplateStr != "" {
+			withTemplates++
+			if arr.FormulaTemplate.Coverage == 1.0 {
+				perfect++
+			} else if arr.FormulaTemplate.Coverage < 0.5 {
+				lowCoverage = append(lowCoverage, arr)
+			}
+		}
+	}
+
+	sb.WriteString(fmt.Sprintf("  Arrays with formulas: %d\n", withTemplates))
+	sb.WriteString(fmt.Sprintf("  100%% coverage:        %d\n", perfect))
+	sb.WriteString(fmt.Sprintf("  <50%% coverage:        %d\n", len(lowCoverage)))
+
+	if len(lowCoverage) > 0 {
+		sb.WriteString("\n  Arrays with low template coverage (may contain errors or variations):\n")
+		sort.Slice(lowCoverage, func(i, j int) bool {
+			return lowCoverage[i].FormulaTemplate.Coverage < lowCoverage[j].FormulaTemplate.Coverage
+		})
+		for _, arr := range lowCoverage[:min(5, len(lowCoverage))] {
+			rows := arr.RangeRef.BottomRight[0] - arr.RangeRef.TopLeft[0] + 1
+			cols := arr.RangeRef.BottomRight[1] - arr.RangeRef.TopLeft[1] + 1
+			template := arr.FormulaTemplate.TemplateStr
+			if len(template) > 40 {
+				template = template[:40] + "..."
+			}
+			sb.WriteString(fmt.Sprintf("    %s (%s, %dx%d): %.0f%% coverage\n",
+				arr.ID, arr.RangeRef.Sheet, rows, cols, arr.FormulaTemplate.Coverage*100))
+			sb.WriteString(fmt.Sprintf("      Formula: %s\n", template))
+		}
+	}
+
+	sb.WriteString("\n═══════════════════════════════════════════════════════════════════\n")
+
+	return sb.String()
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }

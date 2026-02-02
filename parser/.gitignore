@@ -1,1 +1,3 @@
 bin/
+/parser
+coverage.out

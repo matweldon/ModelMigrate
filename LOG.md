@@ -265,3 +265,72 @@ Added `data/` directory with test workbooks:
    - [ ] xls format support still out of scope
 
 ---
+
+## 2026-02-02: Session 4 - Testing & CI/CD Setup
+
+### Completed
+
+1. **Created TODO.md** - Task tracking file for agent sessions
+   - Added instructions to AGENTS.md on how to use it
+
+2. **Go Testing Infrastructure**
+   - Created `pkg/xlsx/formulas_test.go` - 10 tests for formula parsing
+   - Created `pkg/xlsx/reader_test.go` - Integration tests with real xlsx files
+   - Created `pkg/model/raw_test.go` - 5 tests for model utilities
+   - Created `pkg/inference/graph_test.go` - 7 tests for dependency graph
+
+3. **Test Coverage**:
+   | Package | Coverage |
+   |---------|----------|
+   | pkg/model | 96% |
+   | pkg/xlsx | 87% |
+   | pkg/inference | 7% |
+   | Total | 32% |
+
+4. **GitHub Actions CI/CD** (`.github/workflows/test.yml`)
+   - Runs on push to main and PRs
+   - Go test with coverage report
+   - Coverage threshold check (30% minimum)
+   - Codecov integration ready
+   - Go build and vet checks
+
+5. **Fixed Formula Template Extraction in v2 Algorithm**
+   - Issue: v2 algorithm was detecting arrays with formulas but not populating `FormulaTemplate`
+   - Solution: Added `buildFormulaTemplates()`, `extractFormulaTemplate()`, and `formulasCompatibleV2()` functions to `arrays_v2.go`
+   - Result: All 257 arrays with formulas now have formula templates
+
+### Parser Output Sample (fcerm-appraisal.xlsx)
+
+```
+Structural analysis summary (Layer 2):
+  Sheets: 8
+  Arrays detected: 551
+    - INPUT: 136, PARAMETER: 158, INTERMEDIATE: 119, OUTPUT: 138
+  Scalars detected: 5
+  Dependency graph: 4786 nodes, 86675 edges
+  Coverage: 1181 formula cells, 9920 in arrays, 5 scalars
+```
+
+Sample formula templates now working:
+- `CONCATENATE("Total PV Costs ",C8)` - Fixed refs
+- `(B16+B17+B18)*($C$9)` - Mixed fixed/relative refs (100% coverage)
+- `SUM(B23:B33)` - Range reference
+
+### Files Changed
+
+- **NEW**: `TODO.md` - Task tracking
+- **NEW**: `.github/workflows/test.yml` - CI/CD pipeline
+- **NEW**: `parser/pkg/xlsx/formulas_test.go` - Formula parsing tests
+- **NEW**: `parser/pkg/xlsx/reader_test.go` - xlsx reader integration tests
+- **NEW**: `parser/pkg/model/raw_test.go` - Model utility tests
+- **NEW**: `parser/pkg/inference/graph_test.go` - Dependency graph tests
+- **MODIFIED**: `AGENTS.md` - Added Task Tracking and Go sections
+- **MODIFIED**: `parser/pkg/inference/arrays_v2.go` - Added formula template extraction
+
+### Next Steps
+
+1. Increase test coverage for inference package (currently 7%)
+2. Continue analyzing parser output for improvements
+3. Consider error detection prototypes
+
+---
