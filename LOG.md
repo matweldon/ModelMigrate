@@ -242,12 +242,10 @@ Dependency graph shows computation flow:
 ### Data Folder Setup
 
 Added `data/` directory with test workbooks:
-- `tag-workbook-valuing-dependent-development-workbook.xlsx` - Land valuation model (9 sheets, formulas)
-- `financial-sample.xlsx` - Microsoft Power BI sample (flat data table, no formulas)
-
-### Analysis Notes
-
-The financial-sample.xlsx is a flat data table (701 rows, no formulas) - not ideal for testing computational structure. The tag-workbook remains our primary test case with its calculation sheet and cross-sheet data.
+- `tag-workbook-valuing-dependent-development-workbook.xlsx` - Land valuation model (9 sheets, 340 arrays, 6 formula cells)
+- `fcerm-appraisal.xlsx` - UK Environment Agency flood/erosion appraisal (8 sheets, 551 arrays, 1,181 formula cells, 86,675 edges)
+- `smartsheet-npv-irr.xlsx` - NPV/IRR calculator (3 sheets, 54 arrays, 24 formula cells)
+- `babson-bloomberg.xlsx` - DCF valuation model (1 sheet, 64 arrays, 79 formula cells)
 
 ### Pending Tasks for Next Session
 
@@ -255,7 +253,7 @@ The financial-sample.xlsx is a flat data table (701 rows, no formulas) - not ide
    - [ ] Handle formula congruence with absolute refs ($A$1 vs A1)
    - [ ] Improve formula template representation to reference arrays instead of cells
    - [ ] Test stability with different cell orderings (shuffle test)
-   - [ ] Find more complex test workbooks with formulas
+   - [x] Find more complex test workbooks with formulas
 
 2. **Downstream prototypes**:
    - [ ] Error detection: Look for common spreadsheet errors
@@ -263,7 +261,7 @@ The financial-sample.xlsx is a flat data table (701 rows, no formulas) - not ide
    - [ ] AI annotation layer design
 
 3. **Infrastructure**:
-   - [ ] Consider adding more workbook sources
+   - [x] Added more workbook sources (see data/README.md)
    - [ ] xls format support still out of scope
 
 ---
