@@ -980,6 +980,133 @@ func TestArrayDetectorV2_MixedTypesNoMerge(t *testing.T) {
 	}
 }
 
+// Test formula congruence with absolute references
+func TestFormulasCompatibleV2_AbsoluteRefs(t *testing.T) {
+	wb := makeTestWorkbook()
+	sheet := wb.Sheets["Sheet1"]
+
+	// Create a parameter cell at A1 (will be referenced with $A$1)
+	sheet.SetCell(&model.RawCell{
+		Ref:   model.CellRef{Sheet: "Sheet1", Row: 0, Col: 0},
+		Value: 10.0,
+		Type:  model.CellTypeNumber,
+	})
+
+	// Create input values in column B
+	for i := 0; i < 3; i++ {
+		sheet.SetCell(&model.RawCell{
+			Ref:   model.CellRef{Sheet: "Sheet1", Row: i, Col: 1},
+			Value: float64(i + 1),
+			Type:  model.CellTypeNumber,
+		})
+	}
+
+	// Create formulas in column C with mixed absolute/relative references
+	// C1 = B1 * $A$1, C2 = B2 * $A$1, C3 = B3 * $A$1
+	formulas := []string{"B1*$A$1", "B2*$A$1", "B3*$A$1"}
+	parsedFormulas := make(map[string]*xlsx.ParsedFormula)
+	for i, f := range formulas {
+		sheet.SetCell(&model.RawCell{
+			Ref:     model.CellRef{Sheet: "Sheet1", Row: i, Col: 2},
+			Value:   float64((i + 1) * 10),
+			Formula: f,
+			Type:    model.CellTypeFormula,
+		})
+		key := fmt.Sprintf("Sheet1!%d,2", i)
+		parsedFormulas[key] = xlsx.ParseFormula(f, "Sheet1")
+	}
+
+	detector := NewArrayDetectorV2(wb, parsedFormulas)
+
+	// These should be compatible - B moves relatively, A is fixed
+	if !detector.formulasCompatibleV2("Sheet1", 0, 2, 1, 2) {
+		t.Error("expected formulas with mixed abs/rel refs to be compatible")
+	}
+	if !detector.formulasCompatibleV2("Sheet1", 0, 2, 2, 2) {
+		t.Error("expected formulas with mixed abs/rel refs to be compatible")
+	}
+
+	// Now test incompatible case - formulas where absolute ref moves (shouldn't happen in real Excel)
+	// Create a formula where the "absolute" ref incorrectly moves
+	badFormulas := []string{"B1*$A$1", "B2*$A$2"} // Second one has different absolute ref
+	badParsedFormulas := make(map[string]*xlsx.ParsedFormula)
+	for i, f := range badFormulas {
+		key := fmt.Sprintf("Sheet1!%d,3", i)
+		badParsedFormulas[key] = xlsx.ParseFormula(f, "Sheet1")
+	}
+
+	badDetector := NewArrayDetectorV2(wb, badParsedFormulas)
+	if badDetector.formulasCompatibleV2("Sheet1", 0, 3, 1, 3) {
+		t.Error("expected formulas with inconsistent absolute refs to be incompatible")
+	}
+}
+
+// Test that arrays are correctly detected with absolute reference formulas
+func TestArrayDetectorV2_MixedAbsoluteRelativeFormulas(t *testing.T) {
+	wb := makeTestWorkbook()
+	sheet := wb.Sheets["Sheet1"]
+
+	// Create a parameter cell at A1
+	sheet.SetCell(&model.RawCell{
+		Ref:   model.CellRef{Sheet: "Sheet1", Row: 0, Col: 0},
+		Value: 1.5,
+		Type:  model.CellTypeNumber,
+	})
+
+	// Create input values in column B (rows 1-5)
+	for i := 1; i <= 5; i++ {
+		sheet.SetCell(&model.RawCell{
+			Ref:   model.CellRef{Sheet: "Sheet1", Row: i, Col: 1},
+			Value: float64(i * 100),
+			Type:  model.CellTypeNumber,
+		})
+	}
+
+	// Create formulas in column C with B relative, A absolute
+	parsedFormulas := make(map[string]*xlsx.ParsedFormula)
+	for i := 1; i <= 5; i++ {
+		formula := fmt.Sprintf("B%d*$A$1", i+1)
+		sheet.SetCell(&model.RawCell{
+			Ref:     model.CellRef{Sheet: "Sheet1", Row: i, Col: 2},
+			Value:   float64(i * 100) * 1.5,
+			Formula: formula,
+			Type:    model.CellTypeFormula,
+		})
+		key := fmt.Sprintf("Sheet1!%d,2", i)
+		parsedFormulas[key] = xlsx.ParseFormula(formula, "Sheet1")
+	}
+
+	detector := NewArrayDetectorV2(wb, parsedFormulas)
+	arrays := detector.DetectArrays()
+
+	// Find the formula array in column C
+	var formulaArray *model.InferredArray
+	for _, arr := range arrays {
+		if arr.HasFormulas && arr.RangeRef.TopLeft[1] == 2 {
+			formulaArray = arr
+			break
+		}
+	}
+
+	if formulaArray == nil {
+		t.Fatal("expected to find formula array in column C")
+	}
+
+	// Should be a 5-row column vector
+	rows, cols := formulaArray.RangeRef.Shape()
+	if rows != 5 || cols != 1 {
+		t.Errorf("expected 5x1 array, got %dx%d", rows, cols)
+	}
+
+	// Formula template should have 100% coverage
+	if formulaArray.FormulaTemplate == nil {
+		t.Fatal("expected formula template to be populated")
+	}
+	if formulaArray.FormulaTemplate.Coverage != 1.0 {
+		t.Errorf("expected 100%% coverage, got %.1f%%", formulaArray.FormulaTemplate.Coverage*100)
+	}
+}
+
 // Test formula hash computation
 func TestComputeFormulaHash(t *testing.T) {
 	wb := makeTestWorkbook()

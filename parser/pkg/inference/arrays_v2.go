@@ -835,6 +835,7 @@ func (d *ArrayDetectorV2) extractFormulaTemplate(arr *model.InferredArray) *mode
 }
 
 // formulasCompatibleV2 checks if two cells have compatible formulas
+// Uses absolute/relative reference information for accurate congruence checking
 func (d *ArrayDetectorV2) formulasCompatibleV2(sheet string, baseRow, baseCol, targetRow, targetCol int) bool {
 	baseKey := fmt.Sprintf("%s!%d,%d", sheet, baseRow, baseCol)
 	targetKey := fmt.Sprintf("%s!%d,%d", sheet, targetRow, targetCol)
@@ -856,28 +857,109 @@ func (d *ArrayDetectorV2) formulasCompatibleV2(sheet string, baseRow, baseCol, t
 		}
 	}
 
-	// Check if same number of references
-	if len(baseParsed.References) != len(targetParsed.References) {
+	// Check if same number of references (use FormulaRefs for absolute info)
+	if len(baseParsed.FormulaRefs) != len(targetParsed.FormulaRefs) {
 		return false
 	}
 
-	// Check if references follow consistent offset pattern
+	// Check if references follow consistent offset pattern based on absolute/relative markers
 	rowDiff := targetRow - baseRow
 	colDiff := targetCol - baseCol
 
-	for i, baseRef := range baseParsed.References {
-		targetRef := targetParsed.References[i]
+	for i, baseRef := range baseParsed.FormulaRefs {
+		targetRef := targetParsed.FormulaRefs[i]
 
-		// Reference should either be fixed or move with the cell
+		// Check absolute/relative markers match
+		if baseRef.RowAbsolute != targetRef.RowAbsolute || baseRef.ColAbsolute != targetRef.ColAbsolute {
+			return false
+		}
+
 		rowRefDiff := targetRef.Row - baseRef.Row
 		colRefDiff := targetRef.Col - baseRef.Col
 
-		// References should move by 0 (fixed) or by the cell offset (relative)
-		if rowRefDiff != 0 && rowRefDiff != rowDiff {
+		// For absolute references ($), the position should stay the same
+		// For relative references, the position should move with the cell
+		if baseRef.RowAbsolute {
+			// Absolute row: should not change
+			if rowRefDiff != 0 {
+				return false
+			}
+		} else {
+			// Relative row: should move by cell row offset
+			if rowRefDiff != rowDiff {
+				return false
+			}
+		}
+
+		if baseRef.ColAbsolute {
+			// Absolute column: should not change
+			if colRefDiff != 0 {
+				return false
+			}
+		} else {
+			// Relative column: should move by cell column offset
+			if colRefDiff != colDiff {
+				return false
+			}
+		}
+	}
+
+	// Also check range references for consistency
+	if len(baseParsed.FormulaRanges) != len(targetParsed.FormulaRanges) {
+		return false
+	}
+
+	for i, baseRange := range baseParsed.FormulaRanges {
+		targetRange := targetParsed.FormulaRanges[i]
+
+		// Check absolute markers match
+		if baseRange.TopRowAbsolute != targetRange.TopRowAbsolute ||
+			baseRange.TopColAbsolute != targetRange.TopColAbsolute ||
+			baseRange.BotRowAbsolute != targetRange.BotRowAbsolute ||
+			baseRange.BotColAbsolute != targetRange.BotColAbsolute {
 			return false
 		}
-		if colRefDiff != 0 && colRefDiff != colDiff {
-			return false
+
+		// Check top-left corner
+		if baseRange.TopRowAbsolute {
+			if targetRange.TopLeft[0] != baseRange.TopLeft[0] {
+				return false
+			}
+		} else {
+			if targetRange.TopLeft[0]-baseRange.TopLeft[0] != rowDiff {
+				return false
+			}
+		}
+
+		if baseRange.TopColAbsolute {
+			if targetRange.TopLeft[1] != baseRange.TopLeft[1] {
+				return false
+			}
+		} else {
+			if targetRange.TopLeft[1]-baseRange.TopLeft[1] != colDiff {
+				return false
+			}
+		}
+
+		// Check bottom-right corner
+		if baseRange.BotRowAbsolute {
+			if targetRange.BottomRight[0] != baseRange.BottomRight[0] {
+				return false
+			}
+		} else {
+			if targetRange.BottomRight[0]-baseRange.BottomRight[0] != rowDiff {
+				return false
+			}
+		}
+
+		if baseRange.BotColAbsolute {
+			if targetRange.BottomRight[1] != baseRange.BottomRight[1] {
+				return false
+			}
+		} else {
+			if targetRange.BottomRight[1]-baseRange.BottomRight[1] != colDiff {
+				return false
+			}
 		}
 	}
 

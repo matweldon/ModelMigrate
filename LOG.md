@@ -380,12 +380,31 @@ New tests added:
 - `TestBuildDependencyGraph_NamedRange` - named range edges
 - `TestBuildDependencyGraph_CrossSheetReference` - cross-sheet edges
 
+### Absolute Reference Handling (Completed)
+
+Added proper handling of absolute (`$A$1`) vs relative (`A1`) references in formula congruence checking:
+
+1. **New model types** (`pkg/model/raw.go`):
+   - `FormulaRef` - cell reference with `RowAbsolute`/`ColAbsolute` boolean fields
+   - `FormulaRangeRef` - range reference with absolute markers for all four corners
+
+2. **Formula parser updates** (`pkg/xlsx/formulas.go`):
+   - `extractFormulaRef()` - extracts cell refs with absolute markers from regex
+   - `extractFormulaRangeRef()` - extracts range refs with absolute markers
+   - `ParsedFormula` now has `FormulaRefs` and `FormulaRanges` fields (legacy `References`/`RangeReferences` kept for compatibility)
+
+3. **Congruence checking updates** (`pkg/inference/arrays_v2.go`):
+   - `formulasCompatibleV2()` now uses `FormulaRefs` and checks:
+     - Absolute references must stay fixed across cells
+     - Relative references must move by cell offset
+     - Both cell and range references are validated
+
+**Example**: `=B1*$A$1` and `=B2*$A$1` are now correctly recognized as congruent because B moves relatively while A stays fixed.
+
 ### Pending Tasks
 
-1. **Handle absolute refs in congruence** - The formula parser captures `$` markers in regex but doesn't store them in CellRef. Need to add `RowAbsolute`/`ColAbsolute` fields.
+1. **Array-to-array template references** - Convert relative patterns from cell offsets to array references.
 
-2. **Array-to-array template references** - Convert relative patterns from cell offsets to array references.
-
-3. **Shuffle test** - Verify algorithm stability with different cell orderings.
+2. **Shuffle test** - Verify algorithm stability with different cell orderings.
 
 ---

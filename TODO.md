@@ -9,7 +9,7 @@ Updated automatically during sessions. Check LOG.md for detailed session notes.
 - [x] Document formula congruence definition
 - [x] Document 4-phase algorithm ("bag" approach)
 - [x] Increase test coverage for inference package (56% → 64%)
-- [ ] Handle formula congruence with absolute refs ($A$1 vs A1)
+- [x] Handle formula congruence with absolute refs ($A$1 vs A1)
 
 ## Previous Session Tasks (Session 4 - 2026-02-02)
 
@@ -22,7 +22,7 @@ Updated automatically during sessions. Check LOG.md for detailed session notes.
 
 ## Parser Improvements
 
-- [ ] Handle formula congruence with absolute refs ($A$1 vs A1)
+- [x] Handle formula congruence with absolute refs ($A$1 vs A1)
 - [ ] Improve formula template representation to reference arrays instead of cells
 - [ ] Test stability with different cell orderings (shuffle test)
 - [x] Find more complex test workbooks with formulas

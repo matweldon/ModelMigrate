@@ -13,6 +13,37 @@ type CellRef struct {
 	Col   int    `json:"col"` // 0-indexed
 }
 
+// FormulaRef represents a cell reference within a formula, including absolute/relative markers.
+// This is used for formula parsing and congruence checking.
+type FormulaRef struct {
+	Sheet       string `json:"sheet"`
+	Row         int    `json:"row"`          // 0-indexed
+	Col         int    `json:"col"`          // 0-indexed
+	RowAbsolute bool   `json:"row_absolute"` // true if row has $ (e.g., A$1 or $A$1)
+	ColAbsolute bool   `json:"col_absolute"` // true if col has $ (e.g., $A1 or $A$1)
+}
+
+// ToCellRef converts a FormulaRef to a CellRef (drops absolute info).
+func (fr FormulaRef) ToCellRef() CellRef {
+	return CellRef{Sheet: fr.Sheet, Row: fr.Row, Col: fr.Col}
+}
+
+// FormulaRangeRef represents a range reference within a formula, including absolute/relative markers.
+type FormulaRangeRef struct {
+	Sheet           string `json:"sheet"`
+	TopLeft         [2]int `json:"top_left"`          // [row, col]
+	BottomRight     [2]int `json:"bottom_right"`      // [row, col]
+	TopRowAbsolute  bool   `json:"top_row_absolute"`  // $ on start row
+	TopColAbsolute  bool   `json:"top_col_absolute"`  // $ on start col
+	BotRowAbsolute  bool   `json:"bot_row_absolute"`  // $ on end row
+	BotColAbsolute  bool   `json:"bot_col_absolute"`  // $ on end col
+}
+
+// ToRangeRef converts a FormulaRangeRef to a RangeRef (drops absolute info).
+func (frr FormulaRangeRef) ToRangeRef() RangeRef {
+	return RangeRef{Sheet: frr.Sheet, TopLeft: frr.TopLeft, BottomRight: frr.BottomRight}
+}
+
 // RangeRef represents a range of cells.
 type RangeRef struct {
 	Sheet       string `json:"sheet"`

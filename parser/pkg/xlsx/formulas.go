@@ -11,12 +11,14 @@ import (
 
 // ParsedFormula represents a parsed Excel formula with extracted references.
 type ParsedFormula struct {
-	Original        string              `json:"original"`
-	References      []model.CellRef     `json:"references"`
-	RangeReferences []model.RangeRef    `json:"range_references"`
-	NamedReferences []string            `json:"named_references"`
-	Functions       []string            `json:"functions"`
-	IsArrayFormula  bool                `json:"is_array_formula"`
+	Original        string                  `json:"original"`
+	References      []model.CellRef         `json:"references"`       // Legacy: positions only
+	RangeReferences []model.RangeRef        `json:"range_references"` // Legacy: positions only
+	FormulaRefs     []model.FormulaRef      `json:"formula_refs"`     // With absolute/relative info
+	FormulaRanges   []model.FormulaRangeRef `json:"formula_ranges"`   // With absolute/relative info
+	NamedReferences []string                `json:"named_references"`
+	Functions       []string                `json:"functions"`
+	IsArrayFormula  bool                    `json:"is_array_formula"`
 }
 
 // Reference patterns for Excel formulas
@@ -74,6 +76,8 @@ func ParseFormula(formula string, currentSheet string) *ParsedFormula {
 		Original:        formula,
 		References:      []model.CellRef{},
 		RangeReferences: []model.RangeRef{},
+		FormulaRefs:     []model.FormulaRef{},
+		FormulaRanges:   []model.FormulaRangeRef{},
 		NamedReferences: []string{},
 		Functions:       []string{},
 		IsArrayFormula:  strings.HasPrefix(formula, "{") && strings.HasSuffix(formula, "}"),
@@ -95,9 +99,10 @@ func ParseFormula(formula string, currentSheet string) *ParsedFormula {
 	rangeMatches := rangeRefPattern.FindAllStringSubmatchIndex(formula, -1)
 	for _, match := range rangeMatches {
 		rangePositions[match[0]] = match[1]
-		rangeRef := extractRangeRef(formula, match, currentSheet)
-		if rangeRef != nil {
-			parsed.RangeReferences = append(parsed.RangeReferences, *rangeRef)
+		formulaRangeRef := extractFormulaRangeRef(formula, match, currentSheet)
+		if formulaRangeRef != nil {
+			parsed.FormulaRanges = append(parsed.FormulaRanges, *formulaRangeRef)
+			parsed.RangeReferences = append(parsed.RangeReferences, formulaRangeRef.ToRangeRef())
 		}
 	}
 
@@ -116,9 +121,10 @@ func ParseFormula(formula string, currentSheet string) *ParsedFormula {
 			continue
 		}
 
-		cellRef := extractCellRef(formula, match, currentSheet)
-		if cellRef != nil {
-			parsed.References = append(parsed.References, *cellRef)
+		formulaRef := extractFormulaRef(formula, match, currentSheet)
+		if formulaRef != nil {
+			parsed.FormulaRefs = append(parsed.FormulaRefs, *formulaRef)
+			parsed.References = append(parsed.References, formulaRef.ToCellRef())
 		}
 	}
 
@@ -153,8 +159,18 @@ func ParseFormula(formula string, currentSheet string) *ParsedFormula {
 	return parsed
 }
 
-// extractCellRef extracts a CellRef from regex match indices
+// extractCellRef extracts a CellRef from regex match indices (legacy, no absolute info)
 func extractCellRef(formula string, match []int, currentSheet string) *model.CellRef {
+	ref := extractFormulaRef(formula, match, currentSheet)
+	if ref == nil {
+		return nil
+	}
+	cellRef := ref.ToCellRef()
+	return &cellRef
+}
+
+// extractFormulaRef extracts a FormulaRef from regex match indices, including absolute markers
+func extractFormulaRef(formula string, match []int, currentSheet string) *model.FormulaRef {
 	// Match groups: 0-1: full match, 2-3: quoted sheet, 4-5: plain sheet, 6-7: col$, 8-9: col, 10-11: row$, 12-13: row
 	if len(match) < 14 {
 		return nil
@@ -170,12 +186,24 @@ func extractCellRef(formula string, match []int, currentSheet string) *model.Cel
 		sheet = strings.TrimSuffix(formula[match[4]:match[5]], "!")
 	}
 
+	// Check for column absolute marker ($)
+	colAbsolute := false
+	if match[6] != -1 && match[7] != -1 && match[7] > match[6] {
+		colAbsolute = formula[match[6]:match[7]] == "$"
+	}
+
 	// Extract column letters
 	if match[8] == -1 || match[9] == -1 {
 		return nil
 	}
 	colStr := formula[match[8]:match[9]]
 	col := colLettersToIndex(colStr)
+
+	// Check for row absolute marker ($)
+	rowAbsolute := false
+	if match[10] != -1 && match[11] != -1 && match[11] > match[10] {
+		rowAbsolute = formula[match[10]:match[11]] == "$"
+	}
 
 	// Extract row number
 	if match[12] == -1 || match[13] == -1 {
@@ -188,16 +216,30 @@ func extractCellRef(formula string, match []int, currentSheet string) *model.Cel
 	}
 	row-- // Convert to 0-indexed
 
-	return &model.CellRef{
-		Sheet: sheet,
-		Row:   row,
-		Col:   col,
+	return &model.FormulaRef{
+		Sheet:       sheet,
+		Row:         row,
+		Col:         col,
+		RowAbsolute: rowAbsolute,
+		ColAbsolute: colAbsolute,
 	}
 }
 
-// extractRangeRef extracts a RangeRef from regex match indices
+// extractRangeRef extracts a RangeRef from regex match indices (legacy, no absolute info)
 func extractRangeRef(formula string, match []int, currentSheet string) *model.RangeRef {
-	// Match groups for range: sheet, col1$, col1, row1$, row1, col2$, col2, row2$, row2
+	ref := extractFormulaRangeRef(formula, match, currentSheet)
+	if ref == nil {
+		return nil
+	}
+	rangeRef := ref.ToRangeRef()
+	return &rangeRef
+}
+
+// extractFormulaRangeRef extracts a FormulaRangeRef from regex match indices, including absolute markers
+func extractFormulaRangeRef(formula string, match []int, currentSheet string) *model.FormulaRangeRef {
+	// Match groups for range: 0-1: full, 2-3: quoted sheet, 4-5: plain sheet,
+	// 6-7: col1$, 8-9: col1, 10-11: row1$, 12-13: row1,
+	// 14-15: col2$, 16-17: col2, 18-19: row2$, 20-21: row2
 	if len(match) < 22 {
 		return nil
 	}
@@ -210,6 +252,16 @@ func extractRangeRef(formula string, match []int, currentSheet string) *model.Ra
 		sheet = strings.TrimSuffix(formula[match[4]:match[5]], "!")
 	}
 
+	// First cell absolute markers
+	topColAbsolute := false
+	if match[6] != -1 && match[7] != -1 && match[7] > match[6] {
+		topColAbsolute = formula[match[6]:match[7]] == "$"
+	}
+	topRowAbsolute := false
+	if match[10] != -1 && match[11] != -1 && match[11] > match[10] {
+		topRowAbsolute = formula[match[10]:match[11]] == "$"
+	}
+
 	// Extract first cell (col1, row1)
 	if match[8] == -1 || match[12] == -1 {
 		return nil
@@ -219,6 +271,16 @@ func extractRangeRef(formula string, match []int, currentSheet string) *model.Ra
 	col1 := colLettersToIndex(col1Str)
 	row1, _ := strconv.Atoi(row1Str)
 	row1--
+
+	// Second cell absolute markers
+	botColAbsolute := false
+	if match[14] != -1 && match[15] != -1 && match[15] > match[14] {
+		botColAbsolute = formula[match[14]:match[15]] == "$"
+	}
+	botRowAbsolute := false
+	if match[18] != -1 && match[19] != -1 && match[19] > match[18] {
+		botRowAbsolute = formula[match[18]:match[19]] == "$"
+	}
 
 	// Extract second cell (col2, row2)
 	if match[16] == -1 || match[20] == -1 {
@@ -230,10 +292,14 @@ func extractRangeRef(formula string, match []int, currentSheet string) *model.Ra
 	row2, _ := strconv.Atoi(row2Str)
 	row2--
 
-	return &model.RangeRef{
-		Sheet:       sheet,
-		TopLeft:     [2]int{row1, col1},
-		BottomRight: [2]int{row2, col2},
+	return &model.FormulaRangeRef{
+		Sheet:          sheet,
+		TopLeft:        [2]int{row1, col1},
+		BottomRight:    [2]int{row2, col2},
+		TopRowAbsolute: topRowAbsolute,
+		TopColAbsolute: topColAbsolute,
+		BotRowAbsolute: botRowAbsolute,
+		BotColAbsolute: botColAbsolute,
 	}
 }
 
