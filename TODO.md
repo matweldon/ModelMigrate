@@ -3,7 +3,15 @@
 This file tracks the current state of tasks for the AI agent working on this project.
 Updated automatically during sessions. Check LOG.md for detailed session notes.
 
-## Current Session Tasks (Session 4 - 2026-02-02)
+## Current Session Tasks (Session 5 - 2026-02-04)
+
+- [x] Update SPEC.md with clearer documentation of core design principles
+- [x] Document formula congruence definition
+- [x] Document 4-phase algorithm ("bag" approach)
+- [x] Increase test coverage for inference package (56% → 64%)
+- [ ] Handle formula congruence with absolute refs ($A$1 vs A1)
+
+## Previous Session Tasks (Session 4 - 2026-02-02)
 
 - [x] Create TODO.md file with current task state
 - [x] Update AGENTS.md with TODO.md usage instructions

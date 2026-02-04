@@ -1,6 +1,7 @@
 package inference
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/matweldon/modelmigrate/parser/pkg/model"
@@ -620,5 +621,397 @@ func TestColIndexToLetters(t *testing.T) {
 		if got != tt.want {
 			t.Errorf("colIndexToLetters(%d) = %q, want %q", tt.col, got, tt.want)
 		}
+	}
+}
+
+// Tests for containsString helper function
+func TestContainsString(t *testing.T) {
+	tests := []struct {
+		s      string
+		substr string
+		want   bool
+	}{
+		{"HELLO WORLD", "HELLO", true},
+		{"hello world", "HELLO", true},  // Case insensitive
+		{"HELLO WORLD", "hello", true},  // Case insensitive
+		{"SUM(A1:A10)", "SUM", true},
+		{"sum(A1:A10)", "SUM", true},
+		{"AVERAGE(B1:B5)", "SUM", false},
+		{"A1+B1", "+", true},
+		{"A1*B1-C1", "*", true},
+		{"A1*B1-C1", "/", false},
+		{"", "SUM", false},
+		{"SUM", "", true},
+		{"CONCATENATE(A1,B1)", "CONCATENATE", true},
+		{"LEFT(A1,5)", "LEFT", true},
+	}
+
+	for _, tt := range tests {
+		got := containsString(tt.s, tt.substr)
+		if got != tt.want {
+			t.Errorf("containsString(%q, %q) = %v, want %v", tt.s, tt.substr, got, tt.want)
+		}
+	}
+}
+
+// Tests for inferPhantomType
+func TestInferPhantomType(t *testing.T) {
+	detector := NewArrayDetectorV2(makeTestWorkbook(), make(map[string]*xlsx.ParsedFormula))
+
+	tests := []struct {
+		formula string
+		want    CellType
+	}{
+		{"A1+B1", CellTypeNumeric},
+		{"A1-B1", CellTypeNumeric},
+		{"A1*B1", CellTypeNumeric},
+		{"A1/B1", CellTypeNumeric},
+		{"A1^2", CellTypeNumeric},
+		{"SUM(A1:A10)", CellTypeNumeric},
+		{"AVERAGE(B1:B5)", CellTypeNumeric},
+		{"MIN(C1:C10)", CellTypeNumeric},
+		{"MAX(D1:D10)", CellTypeNumeric},
+		{"COUNT(E1:E10)", CellTypeNumeric},
+		{"CONCATENATE(A1,B1)", CellTypeString},
+		{"LEFT(A1,5)", CellTypeString},
+		{"RIGHT(A1,3)", CellTypeString},
+		{"MID(A1,2,4)", CellTypeString},
+		{"TRIM(A1)", CellTypeString},
+		{"UPPER(A1)", CellTypeString},
+		{"LOWER(A1)", CellTypeString},
+		{"TEXT(A1,\"$#,##0\")", CellTypeString},
+		{"IF(A1>0,B1,C1)", CellTypeUnknown}, // Ambiguous
+		{"VLOOKUP(A1,B1:C10,2)", CellTypeUnknown},
+	}
+
+	for _, tt := range tests {
+		got := detector.inferPhantomType(tt.formula)
+		if got != tt.want {
+			t.Errorf("inferPhantomType(%q) = %v, want %v", tt.formula, got, tt.want)
+		}
+	}
+}
+
+// Test phantom cell detection through formula references
+func TestArrayDetectorV2_PhantomCells(t *testing.T) {
+	wb := makeTestWorkbook()
+	sheet := wb.Sheets["Sheet1"]
+
+	// Create a formula that references non-existent cells
+	sheet.SetCell(&model.RawCell{
+		Ref:     model.CellRef{Sheet: "Sheet1", Row: 5, Col: 5},
+		Value:   10.0,
+		Formula: "A1+B1+C1", // A1, B1, C1 don't exist
+		Type:    model.CellTypeFormula,
+	})
+
+	// Parse the formula
+	parsedFormulas := make(map[string]*xlsx.ParsedFormula)
+	parsedFormulas["Sheet1!5,5"] = xlsx.ParseFormula("A1+B1+C1", "Sheet1")
+
+	detector := NewArrayDetectorV2(wb, parsedFormulas)
+	detector.collectCellUniverse()
+
+	// Check that phantom cells were created
+	sheetCells := detector.cells["Sheet1"]
+
+	phantomCells := []string{"0,0", "0,1", "0,2"} // A1, B1, C1
+	for _, key := range phantomCells {
+		cell := sheetCells[key]
+		if cell == nil {
+			t.Errorf("expected phantom cell at %s", key)
+			continue
+		}
+		if !cell.IsPhantom {
+			t.Errorf("expected cell at %s to be phantom", key)
+		}
+	}
+}
+
+// Test formula template extraction with relative references
+func TestArrayDetectorV2_FormulaTemplateRelative(t *testing.T) {
+	wb := makeTestWorkbook()
+	sheet := wb.Sheets["Sheet1"]
+
+	// Create input values in column A
+	for i := 0; i < 3; i++ {
+		sheet.SetCell(&model.RawCell{
+			Ref:   model.CellRef{Sheet: "Sheet1", Row: i, Col: 0},
+			Value: float64(i + 1),
+			Type:  model.CellTypeNumber,
+		})
+	}
+
+	// Create formulas in column B with consistent relative references
+	formulas := []string{"A1*2", "A2*2", "A3*2"}
+	parsedFormulas := make(map[string]*xlsx.ParsedFormula)
+	for i, f := range formulas {
+		sheet.SetCell(&model.RawCell{
+			Ref:     model.CellRef{Sheet: "Sheet1", Row: i, Col: 1},
+			Value:   float64((i + 1) * 2),
+			Formula: f,
+			Type:    model.CellTypeFormula,
+		})
+		key := fmt.Sprintf("Sheet1!%d,1", i)
+		parsedFormulas[key] = xlsx.ParseFormula(f, "Sheet1")
+	}
+
+	detector := NewArrayDetectorV2(wb, parsedFormulas)
+	arrays := detector.DetectArrays()
+
+	// Find the formula array
+	var formulaArray *model.InferredArray
+	for _, arr := range arrays {
+		if arr.HasFormulas {
+			formulaArray = arr
+			break
+		}
+	}
+
+	if formulaArray == nil {
+		t.Fatal("expected to find formula array")
+	}
+
+	if formulaArray.FormulaTemplate == nil {
+		t.Fatal("expected formula template to be populated")
+	}
+
+	// Check coverage is 100%
+	if formulaArray.FormulaTemplate.Coverage != 1.0 {
+		t.Errorf("expected 100%% coverage, got %.1f%%", formulaArray.FormulaTemplate.Coverage*100)
+	}
+
+	// Check that relative pattern was detected
+	if len(formulaArray.FormulaTemplate.RelativePatterns) == 0 {
+		t.Error("expected relative patterns to be detected")
+	}
+}
+
+// Test formula compatibility check
+func TestFormulasCompatibleV2(t *testing.T) {
+	wb := makeTestWorkbook()
+	sheet := wb.Sheets["Sheet1"]
+
+	// Create a grid of compatible formulas
+	formulas := [][]string{
+		{"A1*2", "B1*2"},
+		{"A2*2", "B2*2"},
+	}
+
+	parsedFormulas := make(map[string]*xlsx.ParsedFormula)
+	for row := 0; row < 2; row++ {
+		for col := 2; col < 4; col++ {
+			f := formulas[row][col-2]
+			sheet.SetCell(&model.RawCell{
+				Ref:     model.CellRef{Sheet: "Sheet1", Row: row, Col: col},
+				Value:   float64(row*10 + col),
+				Formula: f,
+				Type:    model.CellTypeFormula,
+			})
+			key := fmt.Sprintf("Sheet1!%d,%d", row, col)
+			parsedFormulas[key] = xlsx.ParseFormula(f, "Sheet1")
+		}
+	}
+
+	detector := NewArrayDetectorV2(wb, parsedFormulas)
+
+	// Test compatible formulas
+	if !detector.formulasCompatibleV2("Sheet1", 0, 2, 0, 3) {
+		t.Error("expected formulas to be compatible horizontally")
+	}
+
+	if !detector.formulasCompatibleV2("Sheet1", 0, 2, 1, 2) {
+		t.Error("expected formulas to be compatible vertically")
+	}
+
+	// Test incompatible case (no formula at target)
+	if detector.formulasCompatibleV2("Sheet1", 0, 2, 10, 10) {
+		t.Error("expected formulas to be incompatible when target has no formula")
+	}
+}
+
+// Test string array expansion across multiple columns
+func TestArrayDetectorV2_StringArrayMultiColumn(t *testing.T) {
+	wb := makeTestWorkbook()
+	sheet := wb.Sheets["Sheet1"]
+
+	// Create a 2x3 block of strings
+	strings := [][]string{
+		{"A", "B", "C"},
+		{"D", "E", "F"},
+	}
+	for row := 0; row < 2; row++ {
+		for col := 0; col < 3; col++ {
+			sheet.SetCell(&model.RawCell{
+				Ref:   model.CellRef{Sheet: "Sheet1", Row: row, Col: col},
+				Value: strings[row][col],
+				Type:  model.CellTypeString,
+			})
+		}
+	}
+
+	detector := NewArrayDetectorV2(wb, make(map[string]*xlsx.ParsedFormula))
+	arrays := detector.DetectArrays()
+
+	// Should find a string array
+	var stringArray *model.InferredArray
+	for _, arr := range arrays {
+		if arr.DType == "str" {
+			stringArray = arr
+			break
+		}
+	}
+
+	if stringArray == nil {
+		t.Fatal("expected to find string array")
+	}
+
+	rows, cols := stringArray.RangeRef.Shape()
+	if rows != 2 || cols != 3 {
+		t.Errorf("expected 2x3 string array, got %dx%d", rows, cols)
+	}
+}
+
+// Test ClassifyDataRoles with all roles
+func TestClassifyDataRoles_AllRoles(t *testing.T) {
+	wb := makeTestWorkbook()
+	sheet := wb.Sheets["Sheet1"]
+
+	// INPUT: Value with no references to it and no formula
+	sheet.SetCell(&model.RawCell{
+		Ref:   model.CellRef{Sheet: "Sheet1", Row: 10, Col: 10},
+		Value: 100.0,
+		Type:  model.CellTypeNumber,
+	})
+
+	// PARAMETER: Value referenced by formulas but has no formula itself
+	sheet.SetCell(&model.RawCell{
+		Ref:   model.CellRef{Sheet: "Sheet1", Row: 0, Col: 0},
+		Value: 10.0,
+		Type:  model.CellTypeNumber,
+	})
+
+	// INTERMEDIATE: Has formula and is referenced by other formulas
+	sheet.SetCell(&model.RawCell{
+		Ref:     model.CellRef{Sheet: "Sheet1", Row: 0, Col: 1},
+		Value:   20.0,
+		Formula: "A1*2",
+		Type:    model.CellTypeFormula,
+	})
+
+	// OUTPUT: Has formula but not referenced by anything
+	sheet.SetCell(&model.RawCell{
+		Ref:     model.CellRef{Sheet: "Sheet1", Row: 0, Col: 2},
+		Value:   40.0,
+		Formula: "B1*2",
+		Type:    model.CellTypeFormula,
+	})
+
+	graph, _ := BuildDependencyGraph(wb)
+
+	arrays := []*model.InferredArray{
+		{ID: "input", RangeRef: model.RangeRef{Sheet: "Sheet1", TopLeft: [2]int{10, 10}, BottomRight: [2]int{10, 10}}, HasFormulas: false},
+		{ID: "param", RangeRef: model.RangeRef{Sheet: "Sheet1", TopLeft: [2]int{0, 0}, BottomRight: [2]int{0, 0}}, HasFormulas: false},
+		{ID: "inter", RangeRef: model.RangeRef{Sheet: "Sheet1", TopLeft: [2]int{0, 1}, BottomRight: [2]int{0, 1}}, HasFormulas: true},
+		{ID: "output", RangeRef: model.RangeRef{Sheet: "Sheet1", TopLeft: [2]int{0, 2}, BottomRight: [2]int{0, 2}}, HasFormulas: true},
+	}
+
+	ClassifyDataRoles(arrays, graph)
+
+	expected := map[string]model.DataRole{
+		"input":  model.RoleInput,
+		"param":  model.RoleParameter,
+		"inter":  model.RoleIntermediate,
+		"output": model.RoleOutput,
+	}
+
+	for _, arr := range arrays {
+		if arr.DataRole != expected[arr.ID] {
+			t.Errorf("array %s: expected role %s, got %s", arr.ID, expected[arr.ID], arr.DataRole)
+		}
+	}
+}
+
+// Test array detection with mixed types that shouldn't merge
+func TestArrayDetectorV2_MixedTypesNoMerge(t *testing.T) {
+	wb := makeTestWorkbook()
+	sheet := wb.Sheets["Sheet1"]
+
+	// Numbers in column A, string separator in column B
+	// This ensures the string doesn't get used as a header
+	sheet.SetCell(&model.RawCell{
+		Ref:   model.CellRef{Sheet: "Sheet1", Row: 0, Col: 0},
+		Value: 1.0,
+		Type:  model.CellTypeNumber,
+	})
+	sheet.SetCell(&model.RawCell{
+		Ref:   model.CellRef{Sheet: "Sheet1", Row: 0, Col: 1},
+		Value: "labelA",
+		Type:  model.CellTypeString,
+	})
+	sheet.SetCell(&model.RawCell{
+		Ref:   model.CellRef{Sheet: "Sheet1", Row: 5, Col: 0},
+		Value: 2.0,
+		Type:  model.CellTypeNumber,
+	})
+	sheet.SetCell(&model.RawCell{
+		Ref:   model.CellRef{Sheet: "Sheet1", Row: 5, Col: 1},
+		Value: "labelB",
+		Type:  model.CellTypeString,
+	})
+
+	detector := NewArrayDetectorV2(wb, make(map[string]*xlsx.ParsedFormula))
+	arrays := detector.DetectArrays()
+
+	// Should have numeric arrays and string arrays separately
+	numericCount := 0
+	stringCount := 0
+	for _, arr := range arrays {
+		if arr.DType == "float64" {
+			numericCount++
+		} else if arr.DType == "str" {
+			stringCount++
+		}
+	}
+
+	// At least 2 separate numeric arrays (row 0 and row 5)
+	if numericCount < 2 {
+		t.Errorf("expected at least 2 numeric arrays, got %d", numericCount)
+	}
+}
+
+// Test formula hash computation
+func TestComputeFormulaHash(t *testing.T) {
+	wb := makeTestWorkbook()
+	sheet := wb.Sheets["Sheet1"]
+
+	// Two cells with similar formulas should have same hash
+	formulas := []string{"SUM(A1:A5)", "SUM(B1:B5)"}
+	parsedFormulas := make(map[string]*xlsx.ParsedFormula)
+
+	for i, f := range formulas {
+		sheet.SetCell(&model.RawCell{
+			Ref:     model.CellRef{Sheet: "Sheet1", Row: 0, Col: i},
+			Value:   10.0,
+			Formula: f,
+			Type:    model.CellTypeFormula,
+		})
+		key := fmt.Sprintf("Sheet1!0,%d", i)
+		parsedFormulas[key] = xlsx.ParseFormula(f, "Sheet1")
+	}
+
+	detector := NewArrayDetectorV2(wb, parsedFormulas)
+
+	hash1 := detector.computeFormulaHash("Sheet1", 0, 0)
+	hash2 := detector.computeFormulaHash("Sheet1", 0, 1)
+
+	if hash1 != hash2 {
+		t.Errorf("expected same hash for similar formulas, got %q and %q", hash1, hash2)
+	}
+
+	// Non-existent cell should return empty hash
+	hash3 := detector.computeFormulaHash("Sheet1", 99, 99)
+	if hash3 != "" {
+		t.Errorf("expected empty hash for non-existent cell, got %q", hash3)
 	}
 }

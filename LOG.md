@@ -334,3 +334,58 @@ Sample formula templates now working:
 3. Consider error detection prototypes
 
 ---
+
+## 2026-02-04: Session 5 - Documentation Clarification & Test Coverage
+
+### Documentation Updates
+
+Updated SPEC.md to clearly articulate core design principles that were previously implicit or scattered:
+
+1. **Parsimony Goal**: Explicitly stated that the parser aims to find the *fewest, largest arrays possible* rather than treating cells individually. The goal is array-to-array computation, not cell-to-cell.
+
+2. **Formula Congruence**: Added clear definition - two formulas are congruent if they have:
+   - Same operators and functions
+   - Same number of references
+   - References that either stay fixed (absolute `$A$1`) or move consistently (relative `A1`)
+
+   Examples added to illustrate congruent vs non-congruent formulas.
+
+3. **Algorithm Phases**: Documented the 4-phase "bag" algorithm:
+   - Phase 1: Collect cell universe (including phantom cells from formula refs)
+   - Phase 2: Build numeric arrays column-first
+   - Phase 3: Assign string labels to numeric arrays
+   - Phase 4: Gather remaining cells
+
+4. **Array-to-Array Templates**: Clarified that formula templates should eventually express array-level operations, not just cell patterns.
+
+### Test Coverage Improvements
+
+Increased inference package test coverage from 56% to 64%:
+
+| Function | Before | After |
+|----------|--------|-------|
+| containsString | 0% | 100% |
+| inferPhantomType | 0% | 100% |
+| computeFormulaHash | 88% | 100% |
+| resolveNamedRange | 0% | covered |
+| formulasCompatibleV2 | 70% | covered |
+
+New tests added:
+- `TestContainsString` - case-insensitive string matching
+- `TestInferPhantomType` - numeric vs string type inference
+- `TestArrayDetectorV2_PhantomCells` - phantom cell detection
+- `TestArrayDetectorV2_FormulaTemplateRelative` - relative reference patterns
+- `TestFormulasCompatibleV2` - formula compatibility checking
+- `TestResolveNamedRange_*` - named range resolution
+- `TestBuildDependencyGraph_NamedRange` - named range edges
+- `TestBuildDependencyGraph_CrossSheetReference` - cross-sheet edges
+
+### Pending Tasks
+
+1. **Handle absolute refs in congruence** - The formula parser captures `$` markers in regex but doesn't store them in CellRef. Need to add `RowAbsolute`/`ColAbsolute` fields.
+
+2. **Array-to-array template references** - Convert relative patterns from cell offsets to array references.
+
+3. **Shuffle test** - Verify algorithm stability with different cell orderings.
+
+---
