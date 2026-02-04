@@ -24,7 +24,7 @@ Updated automatically during sessions. Check LOG.md for detailed session notes.
 
 - [x] Handle formula congruence with absolute refs ($A$1 vs A1)
 - [ ] Improve formula template representation to reference arrays instead of cells
-- [ ] Test stability with different cell orderings (shuffle test)
+- [x] Test stability with different cell orderings (shuffle test)
 - [x] Find more complex test workbooks with formulas
 - [x] Fix formula templates not being populated in v2 algorithm
 

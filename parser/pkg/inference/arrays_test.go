@@ -1142,3 +1142,193 @@ func TestComputeFormulaHash(t *testing.T) {
 		t.Errorf("expected empty hash for non-existent cell, got %q", hash3)
 	}
 }
+
+// Test algorithm stability with different cell orderings (shuffle test)
+// The algorithm should produce identical results regardless of the order cells are added
+func TestArrayDetectorV2_ShuffleStability(t *testing.T) {
+	// Define a consistent set of cells to add
+	type cellData struct {
+		row     int
+		col     int
+		value   any
+		formula string
+		typ     model.CellType
+	}
+
+	// Create a complex workbook structure:
+	// - Header row in row 0 (strings)
+	// - Data in rows 1-5, columns 0-2 (numbers)
+	// - Formulas in column 3 referencing column 2
+	cells := []cellData{
+		// Headers
+		{0, 0, "Name", "", model.CellTypeString},
+		{0, 1, "Value1", "", model.CellTypeString},
+		{0, 2, "Value2", "", model.CellTypeString},
+		{0, 3, "Total", "", model.CellTypeString},
+		// Data rows
+		{1, 0, "A", "", model.CellTypeString},
+		{1, 1, 10.0, "", model.CellTypeNumber},
+		{1, 2, 20.0, "", model.CellTypeNumber},
+		{1, 3, 30.0, "B2+C2", model.CellTypeFormula},
+		{2, 0, "B", "", model.CellTypeString},
+		{2, 1, 15.0, "", model.CellTypeNumber},
+		{2, 2, 25.0, "", model.CellTypeNumber},
+		{2, 3, 40.0, "B3+C3", model.CellTypeFormula},
+		{3, 0, "C", "", model.CellTypeString},
+		{3, 1, 20.0, "", model.CellTypeNumber},
+		{3, 2, 30.0, "", model.CellTypeNumber},
+		{3, 3, 50.0, "B4+C4", model.CellTypeFormula},
+		{4, 0, "D", "", model.CellTypeString},
+		{4, 1, 25.0, "", model.CellTypeNumber},
+		{4, 2, 35.0, "", model.CellTypeNumber},
+		{4, 3, 60.0, "B5+C5", model.CellTypeFormula},
+		{5, 0, "E", "", model.CellTypeString},
+		{5, 1, 30.0, "", model.CellTypeNumber},
+		{5, 2, 40.0, "", model.CellTypeNumber},
+		{5, 3, 70.0, "B6+C6", model.CellTypeFormula},
+	}
+
+	// Helper to create workbook with cells in given order
+	createWorkbook := func(order []int) (*model.RawWorkbook, map[string]*xlsx.ParsedFormula) {
+		wb := model.NewRawWorkbook()
+		wb.SheetOrder = []string{"Sheet1"}
+		sheet := model.NewRawSheet("Sheet1")
+		wb.Sheets["Sheet1"] = sheet
+		parsedFormulas := make(map[string]*xlsx.ParsedFormula)
+
+		for _, idx := range order {
+			c := cells[idx]
+			cell := &model.RawCell{
+				Ref:     model.CellRef{Sheet: "Sheet1", Row: c.row, Col: c.col},
+				Value:   c.value,
+				Formula: c.formula,
+				Type:    c.typ,
+			}
+			sheet.SetCell(cell)
+
+			if c.formula != "" {
+				key := fmt.Sprintf("Sheet1!%d,%d", c.row, c.col)
+				parsedFormulas[key] = xlsx.ParseFormula(c.formula, "Sheet1")
+			}
+		}
+		return wb, parsedFormulas
+	}
+
+	// Helper to extract array signature for comparison
+	type arraySignature struct {
+		topLeft     [2]int
+		bottomRight [2]int
+		hasFormulas bool
+		dtype       string
+		orientation model.ArrayOrientation
+	}
+
+	getSignatures := func(arrays []*model.InferredArray) []arraySignature {
+		sigs := make([]arraySignature, len(arrays))
+		for i, arr := range arrays {
+			sigs[i] = arraySignature{
+				topLeft:     arr.RangeRef.TopLeft,
+				bottomRight: arr.RangeRef.BottomRight,
+				hasFormulas: arr.HasFormulas,
+				dtype:       arr.DType,
+				orientation: arr.Orientation,
+			}
+		}
+		// Sort by position for consistent comparison
+		for i := 0; i < len(sigs); i++ {
+			for j := i + 1; j < len(sigs); j++ {
+				if sigs[i].topLeft[0] > sigs[j].topLeft[0] ||
+					(sigs[i].topLeft[0] == sigs[j].topLeft[0] && sigs[i].topLeft[1] > sigs[j].topLeft[1]) {
+					sigs[i], sigs[j] = sigs[j], sigs[i]
+				}
+			}
+		}
+		return sigs
+	}
+
+	// Create baseline with natural order
+	naturalOrder := make([]int, len(cells))
+	for i := range naturalOrder {
+		naturalOrder[i] = i
+	}
+	baseWb, baseParsed := createWorkbook(naturalOrder)
+	baseDetector := NewArrayDetectorV2(baseWb, baseParsed)
+	baseArrays := baseDetector.DetectArrays()
+	baseSignatures := getSignatures(baseArrays)
+
+	// Test with different orderings
+	orderings := [][]int{
+		// Reverse order
+		func() []int {
+			o := make([]int, len(cells))
+			for i := range o {
+				o[i] = len(cells) - 1 - i
+			}
+			return o
+		}(),
+		// Column-major order (all col 0, then col 1, etc.)
+		{0, 4, 8, 12, 16, 20, 1, 5, 9, 13, 17, 21, 2, 6, 10, 14, 18, 22, 3, 7, 11, 15, 19, 23},
+		// Interleaved (every other cell)
+		{0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23},
+		// Random-ish shuffle
+		{12, 3, 18, 7, 0, 15, 22, 9, 4, 20, 11, 1, 17, 6, 23, 8, 14, 2, 19, 5, 21, 10, 16, 13},
+	}
+
+	for orderIdx, order := range orderings {
+		wb, parsed := createWorkbook(order)
+		detector := NewArrayDetectorV2(wb, parsed)
+		arrays := detector.DetectArrays()
+		signatures := getSignatures(arrays)
+
+		// Compare with baseline
+		if len(signatures) != len(baseSignatures) {
+			t.Errorf("order %d: got %d arrays, want %d", orderIdx, len(signatures), len(baseSignatures))
+			continue
+		}
+
+		for i, sig := range signatures {
+			base := baseSignatures[i]
+			if sig.topLeft != base.topLeft || sig.bottomRight != base.bottomRight {
+				t.Errorf("order %d, array %d: range mismatch - got %v:%v, want %v:%v",
+					orderIdx, i, sig.topLeft, sig.bottomRight, base.topLeft, base.bottomRight)
+			}
+			if sig.hasFormulas != base.hasFormulas {
+				t.Errorf("order %d, array %d: hasFormulas mismatch - got %v, want %v",
+					orderIdx, i, sig.hasFormulas, base.hasFormulas)
+			}
+			if sig.dtype != base.dtype {
+				t.Errorf("order %d, array %d: dtype mismatch - got %s, want %s",
+					orderIdx, i, sig.dtype, base.dtype)
+			}
+		}
+	}
+}
+
+// Test that the algorithm handles empty sheets gracefully
+func TestArrayDetectorV2_EmptySheet(t *testing.T) {
+	wb := model.NewRawWorkbook()
+	wb.SheetOrder = []string{"Sheet1", "Sheet2"}
+	wb.Sheets["Sheet1"] = model.NewRawSheet("Sheet1")
+	wb.Sheets["Sheet2"] = model.NewRawSheet("Sheet2")
+
+	// Add data only to Sheet1
+	wb.Sheets["Sheet1"].SetCell(&model.RawCell{
+		Ref:   model.CellRef{Sheet: "Sheet1", Row: 0, Col: 0},
+		Value: 1.0,
+		Type:  model.CellTypeNumber,
+	})
+
+	detector := NewArrayDetectorV2(wb, make(map[string]*xlsx.ParsedFormula))
+	arrays := detector.DetectArrays()
+
+	// Should only find arrays in Sheet1, not crash on empty Sheet2
+	if len(arrays) == 0 {
+		t.Error("expected at least one array from Sheet1")
+	}
+
+	for _, arr := range arrays {
+		if arr.RangeRef.Sheet == "Sheet2" {
+			t.Error("should not find arrays in empty Sheet2")
+		}
+	}
+}

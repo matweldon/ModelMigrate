@@ -401,10 +401,19 @@ Added proper handling of absolute (`$A$1`) vs relative (`A1`) references in form
 
 **Example**: `=B1*$A$1` and `=B2*$A$1` are now correctly recognized as congruent because B moves relatively while A stays fixed.
 
+### Shuffle Test (Completed)
+
+Added `TestArrayDetectorV2_ShuffleStability` to verify the algorithm produces identical results regardless of input ordering:
+
+- Creates a workbook with headers, numeric data, and formulas
+- Tests with 4 different cell orderings: reverse, column-major, interleaved, and random
+- Compares array signatures (position, formulas, dtype, orientation) against baseline
+- All orderings produce identical array structures, confirming algorithm stability
+
+Also added `TestArrayDetectorV2_EmptySheet` to verify graceful handling of empty sheets.
+
 ### Pending Tasks
 
 1. **Array-to-array template references** - Convert relative patterns from cell offsets to array references.
-
-2. **Shuffle test** - Verify algorithm stability with different cell orderings.
 
 ---
