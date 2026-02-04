@@ -270,3 +270,176 @@ func TestIsCellRefLike(t *testing.T) {
 		})
 	}
 }
+
+// Tests for absolute/relative reference parsing
+func TestParseFormula_AbsoluteRefs(t *testing.T) {
+	tests := []struct {
+		name         string
+		formula      string
+		wantRefs     []model.FormulaRef
+	}{
+		{
+			name:    "fully relative",
+			formula: "A1",
+			wantRefs: []model.FormulaRef{
+				{Sheet: "Sheet1", Row: 0, Col: 0, RowAbsolute: false, ColAbsolute: false},
+			},
+		},
+		{
+			name:    "absolute column only",
+			formula: "$A1",
+			wantRefs: []model.FormulaRef{
+				{Sheet: "Sheet1", Row: 0, Col: 0, RowAbsolute: false, ColAbsolute: true},
+			},
+		},
+		{
+			name:    "absolute row only",
+			formula: "A$1",
+			wantRefs: []model.FormulaRef{
+				{Sheet: "Sheet1", Row: 0, Col: 0, RowAbsolute: true, ColAbsolute: false},
+			},
+		},
+		{
+			name:    "fully absolute",
+			formula: "$A$1",
+			wantRefs: []model.FormulaRef{
+				{Sheet: "Sheet1", Row: 0, Col: 0, RowAbsolute: true, ColAbsolute: true},
+			},
+		},
+		{
+			name:    "mixed references in formula",
+			formula: "A1+$B$2*C$3",
+			wantRefs: []model.FormulaRef{
+				{Sheet: "Sheet1", Row: 0, Col: 0, RowAbsolute: false, ColAbsolute: false},
+				{Sheet: "Sheet1", Row: 1, Col: 1, RowAbsolute: true, ColAbsolute: true},
+				{Sheet: "Sheet1", Row: 2, Col: 2, RowAbsolute: true, ColAbsolute: false},
+			},
+		},
+		{
+			name:    "cross-sheet absolute",
+			formula: "Sheet2!$B$5",
+			wantRefs: []model.FormulaRef{
+				{Sheet: "Sheet2", Row: 4, Col: 1, RowAbsolute: true, ColAbsolute: true},
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			parsed := ParseFormula(tt.formula, "Sheet1")
+			if parsed == nil {
+				t.Fatal("ParseFormula returned nil")
+			}
+
+			if len(parsed.FormulaRefs) != len(tt.wantRefs) {
+				t.Errorf("got %d formula refs, want %d", len(parsed.FormulaRefs), len(tt.wantRefs))
+				return
+			}
+
+			for i, want := range tt.wantRefs {
+				got := parsed.FormulaRefs[i]
+				if got.Sheet != want.Sheet {
+					t.Errorf("ref[%d].Sheet = %q, want %q", i, got.Sheet, want.Sheet)
+				}
+				if got.Row != want.Row || got.Col != want.Col {
+					t.Errorf("ref[%d] position = (%d,%d), want (%d,%d)", i, got.Row, got.Col, want.Row, want.Col)
+				}
+				if got.RowAbsolute != want.RowAbsolute {
+					t.Errorf("ref[%d].RowAbsolute = %v, want %v", i, got.RowAbsolute, want.RowAbsolute)
+				}
+				if got.ColAbsolute != want.ColAbsolute {
+					t.Errorf("ref[%d].ColAbsolute = %v, want %v", i, got.ColAbsolute, want.ColAbsolute)
+				}
+			}
+		})
+	}
+}
+
+func TestParseFormula_AbsoluteRangeRefs(t *testing.T) {
+	tests := []struct {
+		name       string
+		formula    string
+		wantRanges []model.FormulaRangeRef
+	}{
+		{
+			name:    "fully relative range",
+			formula: "SUM(A1:B10)",
+			wantRanges: []model.FormulaRangeRef{
+				{
+					Sheet: "Sheet1", TopLeft: [2]int{0, 0}, BottomRight: [2]int{9, 1},
+					TopRowAbsolute: false, TopColAbsolute: false,
+					BotRowAbsolute: false, BotColAbsolute: false,
+				},
+			},
+		},
+		{
+			name:    "fully absolute range",
+			formula: "SUM($A$1:$B$10)",
+			wantRanges: []model.FormulaRangeRef{
+				{
+					Sheet: "Sheet1", TopLeft: [2]int{0, 0}, BottomRight: [2]int{9, 1},
+					TopRowAbsolute: true, TopColAbsolute: true,
+					BotRowAbsolute: true, BotColAbsolute: true,
+				},
+			},
+		},
+		{
+			name:    "mixed absolute range - columns fixed",
+			formula: "SUM($A1:$B10)",
+			wantRanges: []model.FormulaRangeRef{
+				{
+					Sheet: "Sheet1", TopLeft: [2]int{0, 0}, BottomRight: [2]int{9, 1},
+					TopRowAbsolute: false, TopColAbsolute: true,
+					BotRowAbsolute: false, BotColAbsolute: true,
+				},
+			},
+		},
+		{
+			name:    "mixed absolute range - rows fixed",
+			formula: "SUM(A$1:B$10)",
+			wantRanges: []model.FormulaRangeRef{
+				{
+					Sheet: "Sheet1", TopLeft: [2]int{0, 0}, BottomRight: [2]int{9, 1},
+					TopRowAbsolute: true, TopColAbsolute: false,
+					BotRowAbsolute: true, BotColAbsolute: false,
+				},
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			parsed := ParseFormula(tt.formula, "Sheet1")
+			if parsed == nil {
+				t.Fatal("ParseFormula returned nil")
+			}
+
+			if len(parsed.FormulaRanges) != len(tt.wantRanges) {
+				t.Errorf("got %d formula ranges, want %d", len(parsed.FormulaRanges), len(tt.wantRanges))
+				return
+			}
+
+			for i, want := range tt.wantRanges {
+				got := parsed.FormulaRanges[i]
+				if got.Sheet != want.Sheet {
+					t.Errorf("range[%d].Sheet = %q, want %q", i, got.Sheet, want.Sheet)
+				}
+				if got.TopLeft != want.TopLeft || got.BottomRight != want.BottomRight {
+					t.Errorf("range[%d] bounds = %v:%v, want %v:%v", i, got.TopLeft, got.BottomRight, want.TopLeft, want.BottomRight)
+				}
+				if got.TopRowAbsolute != want.TopRowAbsolute {
+					t.Errorf("range[%d].TopRowAbsolute = %v, want %v", i, got.TopRowAbsolute, want.TopRowAbsolute)
+				}
+				if got.TopColAbsolute != want.TopColAbsolute {
+					t.Errorf("range[%d].TopColAbsolute = %v, want %v", i, got.TopColAbsolute, want.TopColAbsolute)
+				}
+				if got.BotRowAbsolute != want.BotRowAbsolute {
+					t.Errorf("range[%d].BotRowAbsolute = %v, want %v", i, got.BotRowAbsolute, want.BotRowAbsolute)
+				}
+				if got.BotColAbsolute != want.BotColAbsolute {
+					t.Errorf("range[%d].BotColAbsolute = %v, want %v", i, got.BotColAbsolute, want.BotColAbsolute)
+				}
+			}
+		})
+	}
+}

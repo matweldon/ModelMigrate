@@ -77,6 +77,9 @@ func (d *ArrayDetectorV2) DetectArrays() []*model.InferredArray {
 	// Combine all arrays
 	allArrays := append(numericArrays, remainingArrays...)
 
+	// Phase 5: Resolve cell references to array references in formula templates
+	d.resolveArrayReferences(allArrays)
+
 	return allArrays
 }
 
@@ -835,6 +838,7 @@ func (d *ArrayDetectorV2) extractFormulaTemplate(arr *model.InferredArray) *mode
 }
 
 // formulasCompatibleV2 checks if two cells have compatible formulas
+// Uses absolute/relative reference information for accurate congruence checking
 func (d *ArrayDetectorV2) formulasCompatibleV2(sheet string, baseRow, baseCol, targetRow, targetCol int) bool {
 	baseKey := fmt.Sprintf("%s!%d,%d", sheet, baseRow, baseCol)
 	targetKey := fmt.Sprintf("%s!%d,%d", sheet, targetRow, targetCol)
@@ -856,28 +860,109 @@ func (d *ArrayDetectorV2) formulasCompatibleV2(sheet string, baseRow, baseCol, t
 		}
 	}
 
-	// Check if same number of references
-	if len(baseParsed.References) != len(targetParsed.References) {
+	// Check if same number of references (use FormulaRefs for absolute info)
+	if len(baseParsed.FormulaRefs) != len(targetParsed.FormulaRefs) {
 		return false
 	}
 
-	// Check if references follow consistent offset pattern
+	// Check if references follow consistent offset pattern based on absolute/relative markers
 	rowDiff := targetRow - baseRow
 	colDiff := targetCol - baseCol
 
-	for i, baseRef := range baseParsed.References {
-		targetRef := targetParsed.References[i]
+	for i, baseRef := range baseParsed.FormulaRefs {
+		targetRef := targetParsed.FormulaRefs[i]
 
-		// Reference should either be fixed or move with the cell
+		// Check absolute/relative markers match
+		if baseRef.RowAbsolute != targetRef.RowAbsolute || baseRef.ColAbsolute != targetRef.ColAbsolute {
+			return false
+		}
+
 		rowRefDiff := targetRef.Row - baseRef.Row
 		colRefDiff := targetRef.Col - baseRef.Col
 
-		// References should move by 0 (fixed) or by the cell offset (relative)
-		if rowRefDiff != 0 && rowRefDiff != rowDiff {
+		// For absolute references ($), the position should stay the same
+		// For relative references, the position should move with the cell
+		if baseRef.RowAbsolute {
+			// Absolute row: should not change
+			if rowRefDiff != 0 {
+				return false
+			}
+		} else {
+			// Relative row: should move by cell row offset
+			if rowRefDiff != rowDiff {
+				return false
+			}
+		}
+
+		if baseRef.ColAbsolute {
+			// Absolute column: should not change
+			if colRefDiff != 0 {
+				return false
+			}
+		} else {
+			// Relative column: should move by cell column offset
+			if colRefDiff != colDiff {
+				return false
+			}
+		}
+	}
+
+	// Also check range references for consistency
+	if len(baseParsed.FormulaRanges) != len(targetParsed.FormulaRanges) {
+		return false
+	}
+
+	for i, baseRange := range baseParsed.FormulaRanges {
+		targetRange := targetParsed.FormulaRanges[i]
+
+		// Check absolute markers match
+		if baseRange.TopRowAbsolute != targetRange.TopRowAbsolute ||
+			baseRange.TopColAbsolute != targetRange.TopColAbsolute ||
+			baseRange.BotRowAbsolute != targetRange.BotRowAbsolute ||
+			baseRange.BotColAbsolute != targetRange.BotColAbsolute {
 			return false
 		}
-		if colRefDiff != 0 && colRefDiff != colDiff {
-			return false
+
+		// Check top-left corner
+		if baseRange.TopRowAbsolute {
+			if targetRange.TopLeft[0] != baseRange.TopLeft[0] {
+				return false
+			}
+		} else {
+			if targetRange.TopLeft[0]-baseRange.TopLeft[0] != rowDiff {
+				return false
+			}
+		}
+
+		if baseRange.TopColAbsolute {
+			if targetRange.TopLeft[1] != baseRange.TopLeft[1] {
+				return false
+			}
+		} else {
+			if targetRange.TopLeft[1]-baseRange.TopLeft[1] != colDiff {
+				return false
+			}
+		}
+
+		// Check bottom-right corner
+		if baseRange.BotRowAbsolute {
+			if targetRange.BottomRight[0] != baseRange.BottomRight[0] {
+				return false
+			}
+		} else {
+			if targetRange.BottomRight[0]-baseRange.BottomRight[0] != rowDiff {
+				return false
+			}
+		}
+
+		if baseRange.BotColAbsolute {
+			if targetRange.BottomRight[1] != baseRange.BottomRight[1] {
+				return false
+			}
+		} else {
+			if targetRange.BottomRight[1]-baseRange.BottomRight[1] != colDiff {
+				return false
+			}
 		}
 	}
 
@@ -889,4 +974,103 @@ func boolToIntV2(b bool) int {
 		return 1
 	}
 	return 0
+}
+
+// Phase 5: Resolve cell references in formula templates to array references
+func (d *ArrayDetectorV2) resolveArrayReferences(arrays []*model.InferredArray) {
+	// Build a map from cell position to array ID for quick lookup
+	cellToArray := make(map[string]string) // "sheet!row,col" -> array ID
+
+	for _, arr := range arrays {
+		for row := arr.RangeRef.TopLeft[0]; row <= arr.RangeRef.BottomRight[0]; row++ {
+			for col := arr.RangeRef.TopLeft[1]; col <= arr.RangeRef.BottomRight[1]; col++ {
+				key := fmt.Sprintf("%s!%d,%d", arr.RangeRef.Sheet, row, col)
+				cellToArray[key] = arr.ID
+			}
+		}
+	}
+
+	// Create a map for quick array lookup by ID
+	arrayByID := make(map[string]*model.InferredArray)
+	for _, arr := range arrays {
+		arrayByID[arr.ID] = arr
+	}
+
+	// Now resolve references in each array's formula template
+	for _, arr := range arrays {
+		if arr.FormulaTemplate == nil {
+			continue
+		}
+
+		// Resolve relative patterns to array references
+		for refName, pattern := range arr.FormulaTemplate.RelativePatterns {
+			// Calculate the actual cell position for the first cell of this array
+			refRow := arr.RangeRef.TopLeft[0] + pattern.BaseOffset[0]
+			refCol := arr.RangeRef.TopLeft[1] + pattern.BaseOffset[1]
+			refKey := fmt.Sprintf("%s!%d,%d", arr.RangeRef.Sheet, refRow, refCol)
+
+			if targetArrayID, ok := cellToArray[refKey]; ok {
+				pattern.TargetArrayID = targetArrayID
+
+				// Determine indexing pattern
+				targetArr := arrayByID[targetArrayID]
+				if targetArr != nil {
+					// Calculate how the reference indexes into the target array
+					pattern.RowIndexing = d.calculateIndexing(
+						pattern.RowDelta,
+						refRow-targetArr.RangeRef.TopLeft[0],
+						arr.RangeRef.TopLeft[0]-targetArr.RangeRef.TopLeft[0],
+					)
+					pattern.ColIndexing = d.calculateIndexing(
+						pattern.ColDelta,
+						refCol-targetArr.RangeRef.TopLeft[1],
+						arr.RangeRef.TopLeft[1]-targetArr.RangeRef.TopLeft[1],
+					)
+				}
+
+				// Update the pattern in the map
+				arr.FormulaTemplate.RelativePatterns[refName] = pattern
+			}
+		}
+
+		// Resolve fixed refs to array references
+		if len(arr.FormulaTemplate.FixedRefs) > 0 {
+			arr.FormulaTemplate.ResolvedFixed = make(map[string]model.FixedRefResolved)
+
+			for refName, cellRef := range arr.FormulaTemplate.FixedRefs {
+				refKey := fmt.Sprintf("%s!%d,%d", cellRef.Sheet, cellRef.Row, cellRef.Col)
+
+				resolved := model.FixedRefResolved{CellRef: cellRef}
+
+				if targetArrayID, ok := cellToArray[refKey]; ok {
+					resolved.TargetArrayID = targetArrayID
+
+					targetArr := arrayByID[targetArrayID]
+					if targetArr != nil {
+						resolved.ArrayRow = cellRef.Row - targetArr.RangeRef.TopLeft[0]
+						resolved.ArrayCol = cellRef.Col - targetArr.RangeRef.TopLeft[1]
+					}
+				}
+
+				arr.FormulaTemplate.ResolvedFixed[refName] = resolved
+			}
+		}
+	}
+}
+
+// calculateIndexing determines how a reference indexes into a target array
+func (d *ArrayDetectorV2) calculateIndexing(delta int, baseOffset int, sourceArrayOffset int) string {
+	if delta == 0 {
+		// Fixed index within the target array
+		return fmt.Sprintf("fixed:%d", baseOffset)
+	} else if delta == 1 {
+		// Moves with the source array
+		if sourceArrayOffset == 0 {
+			return "same"
+		}
+		return fmt.Sprintf("same%+d", -sourceArrayOffset)
+	} else {
+		// More complex pattern
+		return fmt.Sprintf("delta:%d,base:%d", delta, baseOffset)
+	}
 }

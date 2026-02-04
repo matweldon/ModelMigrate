@@ -334,3 +334,119 @@ Sample formula templates now working:
 3. Consider error detection prototypes
 
 ---
+
+## 2026-02-04: Session 5 - Documentation Clarification & Test Coverage
+
+### Documentation Updates
+
+Updated SPEC.md to clearly articulate core design principles that were previously implicit or scattered:
+
+1. **Parsimony Goal**: Explicitly stated that the parser aims to find the *fewest, largest arrays possible* rather than treating cells individually. The goal is array-to-array computation, not cell-to-cell.
+
+2. **Formula Congruence**: Added clear definition - two formulas are congruent if they have:
+   - Same operators and functions
+   - Same number of references
+   - References that either stay fixed (absolute `$A$1`) or move consistently (relative `A1`)
+
+   Examples added to illustrate congruent vs non-congruent formulas.
+
+3. **Algorithm Phases**: Documented the 4-phase "bag" algorithm:
+   - Phase 1: Collect cell universe (including phantom cells from formula refs)
+   - Phase 2: Build numeric arrays column-first
+   - Phase 3: Assign string labels to numeric arrays
+   - Phase 4: Gather remaining cells
+
+4. **Array-to-Array Templates**: Clarified that formula templates should eventually express array-level operations, not just cell patterns.
+
+### Test Coverage Improvements
+
+Increased inference package test coverage from 56% to 64%:
+
+| Function | Before | After |
+|----------|--------|-------|
+| containsString | 0% | 100% |
+| inferPhantomType | 0% | 100% |
+| computeFormulaHash | 88% | 100% |
+| resolveNamedRange | 0% | covered |
+| formulasCompatibleV2 | 70% | covered |
+
+New tests added:
+- `TestContainsString` - case-insensitive string matching
+- `TestInferPhantomType` - numeric vs string type inference
+- `TestArrayDetectorV2_PhantomCells` - phantom cell detection
+- `TestArrayDetectorV2_FormulaTemplateRelative` - relative reference patterns
+- `TestFormulasCompatibleV2` - formula compatibility checking
+- `TestResolveNamedRange_*` - named range resolution
+- `TestBuildDependencyGraph_NamedRange` - named range edges
+- `TestBuildDependencyGraph_CrossSheetReference` - cross-sheet edges
+
+### Absolute Reference Handling (Completed)
+
+Added proper handling of absolute (`$A$1`) vs relative (`A1`) references in formula congruence checking:
+
+1. **New model types** (`pkg/model/raw.go`):
+   - `FormulaRef` - cell reference with `RowAbsolute`/`ColAbsolute` boolean fields
+   - `FormulaRangeRef` - range reference with absolute markers for all four corners
+
+2. **Formula parser updates** (`pkg/xlsx/formulas.go`):
+   - `extractFormulaRef()` - extracts cell refs with absolute markers from regex
+   - `extractFormulaRangeRef()` - extracts range refs with absolute markers
+   - `ParsedFormula` now has `FormulaRefs` and `FormulaRanges` fields (legacy `References`/`RangeReferences` kept for compatibility)
+
+3. **Congruence checking updates** (`pkg/inference/arrays_v2.go`):
+   - `formulasCompatibleV2()` now uses `FormulaRefs` and checks:
+     - Absolute references must stay fixed across cells
+     - Relative references must move by cell offset
+     - Both cell and range references are validated
+
+**Example**: `=B1*$A$1` and `=B2*$A$1` are now correctly recognized as congruent because B moves relatively while A stays fixed.
+
+### Shuffle Test (Completed)
+
+Added `TestArrayDetectorV2_ShuffleStability` to verify the algorithm produces identical results regardless of input ordering:
+
+- Creates a workbook with headers, numeric data, and formulas
+- Tests with 4 different cell orderings: reverse, column-major, interleaved, and random
+- Compares array signatures (position, formulas, dtype, orientation) against baseline
+- All orderings produce identical array structures, confirming algorithm stability
+
+Also added `TestArrayDetectorV2_EmptySheet` to verify graceful handling of empty sheets.
+
+### Array-to-Array Reference Resolution (Completed)
+
+Added Phase 5 to the detection algorithm that resolves cell references in formula templates to array-level references:
+
+1. **Model updates** (`pkg/model/structural.go`):
+   - Extended `RelativePattern` with `TargetArrayID`, `RowIndexing`, `ColIndexing`
+   - Added `FixedRefResolved` type with array position info
+   - Added `ResolvedFixed` field to `FormulaTemplate`
+
+2. **Resolution logic** (`pkg/inference/arrays_v2.go`):
+   - `resolveArrayReferences()` - Phase 5 that runs after all arrays are detected
+   - Builds cell-to-array mapping for quick lookup
+   - Resolves both relative and fixed references to their target arrays
+   - Calculates indexing patterns ("same", "fixed:N", etc.)
+
+**Example output** for formula `=A1*$B$1`:
+```json
+"relative_patterns": {
+  "ref_0": {
+    "target_array_id": "arr_001",
+    "row_indexing": "same",
+    "col_indexing": "fixed:0"
+  }
+},
+"resolved_fixed": {
+  "ref_1": {
+    "target_array_id": "arr_002",
+    "array_row": 0,
+    "array_col": 0
+  }
+}
+```
+
+### Pending Tasks
+
+1. **Error detection** - Look for common spreadsheet errors.
+
+---

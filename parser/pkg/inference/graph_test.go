@@ -201,3 +201,172 @@ func TestCellToKey(t *testing.T) {
 		t.Errorf("cellToKey = %q, want %q", key, expected)
 	}
 }
+
+func TestResolveNamedRange_SingleCell(t *testing.T) {
+	nr := model.NamedRange{
+		Name:     "MyCell",
+		RefersTo: "'Sheet1'!$A$1",
+	}
+
+	refs := resolveNamedRange(nr)
+
+	if len(refs) == 0 {
+		t.Fatal("expected at least one cell reference")
+	}
+
+	// Should have a reference to A1 (row 0, col 0)
+	found := false
+	for _, ref := range refs {
+		if ref.Row == 0 && ref.Col == 0 {
+			found = true
+			break
+		}
+	}
+	if !found {
+		t.Error("expected reference to A1 (0,0)")
+	}
+}
+
+func TestResolveNamedRange_Range(t *testing.T) {
+	nr := model.NamedRange{
+		Name:     "MyRange",
+		RefersTo: "'Sheet1'!$A$1:$B$3",
+	}
+
+	refs := resolveNamedRange(nr)
+
+	// Should have 6 cells (2 cols x 3 rows)
+	if len(refs) != 6 {
+		t.Errorf("expected 6 cell references, got %d", len(refs))
+	}
+}
+
+func TestResolveNamedRange_Invalid(t *testing.T) {
+	tests := []model.NamedRange{
+		{Name: "Empty", RefersTo: ""},
+		{Name: "Ref", RefersTo: "#REF!"},
+	}
+
+	for _, nr := range tests {
+		refs := resolveNamedRange(nr)
+		if len(refs) != 0 {
+			t.Errorf("expected 0 refs for invalid named range %s, got %d", nr.Name, len(refs))
+		}
+	}
+}
+
+func TestBuildDependencyGraph_NamedRange(t *testing.T) {
+	wb := model.NewRawWorkbook()
+	wb.SheetOrder = []string{"Sheet1"}
+
+	sheet := model.NewRawSheet("Sheet1")
+	wb.Sheets["Sheet1"] = sheet
+
+	// Add a named range pointing to A1
+	wb.NamedRanges = map[string]*model.NamedRange{
+		"InputValue": {
+			Name:     "InputValue",
+			RefersTo: "'Sheet1'!$A$1",
+		},
+	}
+
+	// A1 = value
+	sheet.SetCell(&model.RawCell{
+		Ref:   model.CellRef{Sheet: "Sheet1", Row: 0, Col: 0},
+		Value: 10.0,
+		Type:  model.CellTypeNumber,
+	})
+
+	// B1 = formula using named range
+	sheet.SetCell(&model.RawCell{
+		Ref:     model.CellRef{Sheet: "Sheet1", Row: 0, Col: 1},
+		Value:   20.0,
+		Formula: "InputValue*2",
+		Type:    model.CellTypeFormula,
+	})
+
+	graph, _ := BuildDependencyGraph(wb)
+
+	// Should have edge from A1 to B1 via named range
+	foundNamedEdge := false
+	for _, edge := range graph.Edges {
+		if edge.Source == "Sheet1!0,0" && edge.Target == "Sheet1!0,1" && edge.RefType == "named" {
+			foundNamedEdge = true
+			break
+		}
+	}
+
+	if !foundNamedEdge {
+		t.Error("expected named range edge from A1 to B1")
+	}
+}
+
+func TestBuildDependencyGraph_CrossSheetReference(t *testing.T) {
+	wb := model.NewRawWorkbook()
+	wb.SheetOrder = []string{"Sheet1", "Sheet2"}
+
+	sheet1 := model.NewRawSheet("Sheet1")
+	sheet2 := model.NewRawSheet("Sheet2")
+	wb.Sheets["Sheet1"] = sheet1
+	wb.Sheets["Sheet2"] = sheet2
+
+	// Sheet1!A1 = value
+	sheet1.SetCell(&model.RawCell{
+		Ref:   model.CellRef{Sheet: "Sheet1", Row: 0, Col: 0},
+		Value: 10.0,
+		Type:  model.CellTypeNumber,
+	})
+
+	// Sheet2!A1 = formula referencing Sheet1
+	sheet2.SetCell(&model.RawCell{
+		Ref:     model.CellRef{Sheet: "Sheet2", Row: 0, Col: 0},
+		Value:   20.0,
+		Formula: "Sheet1!A1*2",
+		Type:    model.CellTypeFormula,
+	})
+
+	graph, _ := BuildDependencyGraph(wb)
+
+	// Should have edge from Sheet1!A1 to Sheet2!A1
+	foundCrossSheetEdge := false
+	for _, edge := range graph.Edges {
+		if edge.Source == "Sheet1!0,0" && edge.Target == "Sheet2!0,0" {
+			foundCrossSheetEdge = true
+			break
+		}
+	}
+
+	if !foundCrossSheetEdge {
+		t.Error("expected cross-sheet edge from Sheet1!A1 to Sheet2!A1")
+	}
+}
+
+func TestGetDependencies_NoDeps(t *testing.T) {
+	graph := &model.DependencyGraph{
+		Nodes: []string{"A", "B"},
+		Edges: []model.DependencyEdge{
+			{Source: "A", Target: "B"},
+		},
+	}
+
+	// A has no dependencies
+	deps := GetDependencies(graph, "A")
+	if len(deps) != 0 {
+		t.Errorf("expected 0 dependencies for A, got %d", len(deps))
+	}
+}
+
+func TestGetDependents_NoDeps(t *testing.T) {
+	graph := &model.DependencyGraph{
+		Nodes: []string{"A", "B"},
+		Edges: []model.DependencyEdge{
+			{Source: "A", Target: "B"},
+		},
+	}
+
+	// B has no dependents
+	deps := GetDependents(graph, "B")
+	if len(deps) != 0 {
+		t.Errorf("expected 0 dependents for B, got %d", len(deps))
+	}
+}

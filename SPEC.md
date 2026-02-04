@@ -65,13 +65,68 @@ Data extracted:
 
 ### 1.2 Structural Inference (Layer 2)
 
-Deterministic heuristics to identify computational structure:
+**Core Design Goal: Parsimony**
 
-**Arrays:** Contiguous regions with consistent formula patterns
-- Detect orientation (row vector, column vector, time-horizontal, matrix)
+The parser's goal is to find the most *parsimonious* representation of the workbook - meaning the **fewest, largest arrays possible** that faithfully represent the computational structure. Rather than treating each cell as a node in the computational graph, we want to identify arrays (tensors) and express the computation as **array-to-array operations**.
+
+For example, if cells B1:B10 each contain formulas like `=A1*2`, `=A2*2`, ..., `=A10*2`, we don't want 10 separate scalar operations - we want to recognize that array B depends on array A via the formula `B = A * 2`.
+
+**Formula Congruence**
+
+Two formulas are *congruent* if they have the same computational structure with predictable reference offsets. Specifically:
+- Same operators and functions
+- Same number of cell/range references
+- References that either stay fixed (absolute, e.g., `$A$1`) or move consistently with the cell position (relative, e.g., `A1`)
+
+Examples:
+- `=A1*2` and `=A2*2` are congruent (same structure, row offset +1)
+- `=A1+$B$1` and `=A2+$B$1` are congruent (A moves relatively, B is fixed)
+- `=SUM(A1:A5)` and `=SUM(B1:B5)` are congruent (same function, column offset +1)
+- `=A1+B1` and `=A1*B1` are NOT congruent (different operators)
+
+Congruent formulas indicate that cells belong to the same array with a consistent formula template.
+
+**Array Detection Algorithm (V2 - Column-First)**
+
+The algorithm builds arrays in four phases:
+
+*Phase 1: Collect Cell Universe ("The Bag")*
+- Collect ALL cell references into a single "bag", including:
+  - Cells that exist in the workbook with data/formulas
+  - "Phantom" cells that don't exist but are referenced by formulas (these are implicit inputs)
+- Classify each cell by type: numeric, string, or unknown
+
+*Phase 2: Build Numeric Arrays (Column-First)*
+- Process numeric cells column-by-column (prioritizing vertical structure)
+- Find maximal vertical runs of congruent cells (same type, format, formula pattern)
+- Expand runs horizontally only if compatible
+- This prioritizes column structure because most financial/data models organize data in columns
+
+*Phase 3: Assign String Labels*
+- Look for string cells adjacent to numeric arrays (up to 2 rows above, 2 columns left)
+- Attach as column headers (above) or row headers (left)
+- Mark attached strings as "assigned" so they're not duplicated
+
+*Phase 4: Gather Remaining Cells*
+- Collect any unassigned cells (strings, unknowns) into their own arrays
+- Ensures complete coverage - no cell is lost
+
+**Formula Templates (Array-to-Array References)**
+
+Once arrays are identified, formula templates express the computation at the array level:
+- `TemplateStr`: The formula pattern (e.g., `(F7-G7)*I7`)
+- `FixedRefs`: References that don't change across the array (absolute refs)
+- `RelativePatterns`: References that move with cell position
+- `Exceptions`: Cells that deviate from the template (potential errors)
+- `Coverage`: Percentage of cells matching the template (1.0 = perfect)
+
+*Future goal*: Convert relative patterns to array references (e.g., "ref_0 points to arr_015[same_row, col-3]")
+
+**Arrays:** Contiguous regions with congruent formula patterns
+- Detect orientation (row vector, column vector, matrix)
 - Extract row/column headers from adjacent text cells
-- Build formula templates capturing the pattern
-- Track exceptions (cells that break the pattern)
+- Build formula templates capturing the array-level computation
+- Track exceptions (cells that break the pattern - potential errors)
 
 **Scalars:** Single cells with computational significance
 - Link to named ranges if present

@@ -1,6 +1,7 @@
 package inference
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/matweldon/modelmigrate/parser/pkg/model"
@@ -620,5 +621,881 @@ func TestColIndexToLetters(t *testing.T) {
 		if got != tt.want {
 			t.Errorf("colIndexToLetters(%d) = %q, want %q", tt.col, got, tt.want)
 		}
+	}
+}
+
+// Tests for containsString helper function
+func TestContainsString(t *testing.T) {
+	tests := []struct {
+		s      string
+		substr string
+		want   bool
+	}{
+		{"HELLO WORLD", "HELLO", true},
+		{"hello world", "HELLO", true},  // Case insensitive
+		{"HELLO WORLD", "hello", true},  // Case insensitive
+		{"SUM(A1:A10)", "SUM", true},
+		{"sum(A1:A10)", "SUM", true},
+		{"AVERAGE(B1:B5)", "SUM", false},
+		{"A1+B1", "+", true},
+		{"A1*B1-C1", "*", true},
+		{"A1*B1-C1", "/", false},
+		{"", "SUM", false},
+		{"SUM", "", true},
+		{"CONCATENATE(A1,B1)", "CONCATENATE", true},
+		{"LEFT(A1,5)", "LEFT", true},
+	}
+
+	for _, tt := range tests {
+		got := containsString(tt.s, tt.substr)
+		if got != tt.want {
+			t.Errorf("containsString(%q, %q) = %v, want %v", tt.s, tt.substr, got, tt.want)
+		}
+	}
+}
+
+// Tests for inferPhantomType
+func TestInferPhantomType(t *testing.T) {
+	detector := NewArrayDetectorV2(makeTestWorkbook(), make(map[string]*xlsx.ParsedFormula))
+
+	tests := []struct {
+		formula string
+		want    CellType
+	}{
+		{"A1+B1", CellTypeNumeric},
+		{"A1-B1", CellTypeNumeric},
+		{"A1*B1", CellTypeNumeric},
+		{"A1/B1", CellTypeNumeric},
+		{"A1^2", CellTypeNumeric},
+		{"SUM(A1:A10)", CellTypeNumeric},
+		{"AVERAGE(B1:B5)", CellTypeNumeric},
+		{"MIN(C1:C10)", CellTypeNumeric},
+		{"MAX(D1:D10)", CellTypeNumeric},
+		{"COUNT(E1:E10)", CellTypeNumeric},
+		{"CONCATENATE(A1,B1)", CellTypeString},
+		{"LEFT(A1,5)", CellTypeString},
+		{"RIGHT(A1,3)", CellTypeString},
+		{"MID(A1,2,4)", CellTypeString},
+		{"TRIM(A1)", CellTypeString},
+		{"UPPER(A1)", CellTypeString},
+		{"LOWER(A1)", CellTypeString},
+		{"TEXT(A1,\"$#,##0\")", CellTypeString},
+		{"IF(A1>0,B1,C1)", CellTypeUnknown}, // Ambiguous
+		{"VLOOKUP(A1,B1:C10,2)", CellTypeUnknown},
+	}
+
+	for _, tt := range tests {
+		got := detector.inferPhantomType(tt.formula)
+		if got != tt.want {
+			t.Errorf("inferPhantomType(%q) = %v, want %v", tt.formula, got, tt.want)
+		}
+	}
+}
+
+// Test phantom cell detection through formula references
+func TestArrayDetectorV2_PhantomCells(t *testing.T) {
+	wb := makeTestWorkbook()
+	sheet := wb.Sheets["Sheet1"]
+
+	// Create a formula that references non-existent cells
+	sheet.SetCell(&model.RawCell{
+		Ref:     model.CellRef{Sheet: "Sheet1", Row: 5, Col: 5},
+		Value:   10.0,
+		Formula: "A1+B1+C1", // A1, B1, C1 don't exist
+		Type:    model.CellTypeFormula,
+	})
+
+	// Parse the formula
+	parsedFormulas := make(map[string]*xlsx.ParsedFormula)
+	parsedFormulas["Sheet1!5,5"] = xlsx.ParseFormula("A1+B1+C1", "Sheet1")
+
+	detector := NewArrayDetectorV2(wb, parsedFormulas)
+	detector.collectCellUniverse()
+
+	// Check that phantom cells were created
+	sheetCells := detector.cells["Sheet1"]
+
+	phantomCells := []string{"0,0", "0,1", "0,2"} // A1, B1, C1
+	for _, key := range phantomCells {
+		cell := sheetCells[key]
+		if cell == nil {
+			t.Errorf("expected phantom cell at %s", key)
+			continue
+		}
+		if !cell.IsPhantom {
+			t.Errorf("expected cell at %s to be phantom", key)
+		}
+	}
+}
+
+// Test formula template extraction with relative references
+func TestArrayDetectorV2_FormulaTemplateRelative(t *testing.T) {
+	wb := makeTestWorkbook()
+	sheet := wb.Sheets["Sheet1"]
+
+	// Create input values in column A
+	for i := 0; i < 3; i++ {
+		sheet.SetCell(&model.RawCell{
+			Ref:   model.CellRef{Sheet: "Sheet1", Row: i, Col: 0},
+			Value: float64(i + 1),
+			Type:  model.CellTypeNumber,
+		})
+	}
+
+	// Create formulas in column B with consistent relative references
+	formulas := []string{"A1*2", "A2*2", "A3*2"}
+	parsedFormulas := make(map[string]*xlsx.ParsedFormula)
+	for i, f := range formulas {
+		sheet.SetCell(&model.RawCell{
+			Ref:     model.CellRef{Sheet: "Sheet1", Row: i, Col: 1},
+			Value:   float64((i + 1) * 2),
+			Formula: f,
+			Type:    model.CellTypeFormula,
+		})
+		key := fmt.Sprintf("Sheet1!%d,1", i)
+		parsedFormulas[key] = xlsx.ParseFormula(f, "Sheet1")
+	}
+
+	detector := NewArrayDetectorV2(wb, parsedFormulas)
+	arrays := detector.DetectArrays()
+
+	// Find the formula array
+	var formulaArray *model.InferredArray
+	for _, arr := range arrays {
+		if arr.HasFormulas {
+			formulaArray = arr
+			break
+		}
+	}
+
+	if formulaArray == nil {
+		t.Fatal("expected to find formula array")
+	}
+
+	if formulaArray.FormulaTemplate == nil {
+		t.Fatal("expected formula template to be populated")
+	}
+
+	// Check coverage is 100%
+	if formulaArray.FormulaTemplate.Coverage != 1.0 {
+		t.Errorf("expected 100%% coverage, got %.1f%%", formulaArray.FormulaTemplate.Coverage*100)
+	}
+
+	// Check that relative pattern was detected
+	if len(formulaArray.FormulaTemplate.RelativePatterns) == 0 {
+		t.Error("expected relative patterns to be detected")
+	}
+}
+
+// Test formula compatibility check
+func TestFormulasCompatibleV2(t *testing.T) {
+	wb := makeTestWorkbook()
+	sheet := wb.Sheets["Sheet1"]
+
+	// Create a grid of compatible formulas
+	formulas := [][]string{
+		{"A1*2", "B1*2"},
+		{"A2*2", "B2*2"},
+	}
+
+	parsedFormulas := make(map[string]*xlsx.ParsedFormula)
+	for row := 0; row < 2; row++ {
+		for col := 2; col < 4; col++ {
+			f := formulas[row][col-2]
+			sheet.SetCell(&model.RawCell{
+				Ref:     model.CellRef{Sheet: "Sheet1", Row: row, Col: col},
+				Value:   float64(row*10 + col),
+				Formula: f,
+				Type:    model.CellTypeFormula,
+			})
+			key := fmt.Sprintf("Sheet1!%d,%d", row, col)
+			parsedFormulas[key] = xlsx.ParseFormula(f, "Sheet1")
+		}
+	}
+
+	detector := NewArrayDetectorV2(wb, parsedFormulas)
+
+	// Test compatible formulas
+	if !detector.formulasCompatibleV2("Sheet1", 0, 2, 0, 3) {
+		t.Error("expected formulas to be compatible horizontally")
+	}
+
+	if !detector.formulasCompatibleV2("Sheet1", 0, 2, 1, 2) {
+		t.Error("expected formulas to be compatible vertically")
+	}
+
+	// Test incompatible case (no formula at target)
+	if detector.formulasCompatibleV2("Sheet1", 0, 2, 10, 10) {
+		t.Error("expected formulas to be incompatible when target has no formula")
+	}
+}
+
+// Test string array expansion across multiple columns
+func TestArrayDetectorV2_StringArrayMultiColumn(t *testing.T) {
+	wb := makeTestWorkbook()
+	sheet := wb.Sheets["Sheet1"]
+
+	// Create a 2x3 block of strings
+	strings := [][]string{
+		{"A", "B", "C"},
+		{"D", "E", "F"},
+	}
+	for row := 0; row < 2; row++ {
+		for col := 0; col < 3; col++ {
+			sheet.SetCell(&model.RawCell{
+				Ref:   model.CellRef{Sheet: "Sheet1", Row: row, Col: col},
+				Value: strings[row][col],
+				Type:  model.CellTypeString,
+			})
+		}
+	}
+
+	detector := NewArrayDetectorV2(wb, make(map[string]*xlsx.ParsedFormula))
+	arrays := detector.DetectArrays()
+
+	// Should find a string array
+	var stringArray *model.InferredArray
+	for _, arr := range arrays {
+		if arr.DType == "str" {
+			stringArray = arr
+			break
+		}
+	}
+
+	if stringArray == nil {
+		t.Fatal("expected to find string array")
+	}
+
+	rows, cols := stringArray.RangeRef.Shape()
+	if rows != 2 || cols != 3 {
+		t.Errorf("expected 2x3 string array, got %dx%d", rows, cols)
+	}
+}
+
+// Test ClassifyDataRoles with all roles
+func TestClassifyDataRoles_AllRoles(t *testing.T) {
+	wb := makeTestWorkbook()
+	sheet := wb.Sheets["Sheet1"]
+
+	// INPUT: Value with no references to it and no formula
+	sheet.SetCell(&model.RawCell{
+		Ref:   model.CellRef{Sheet: "Sheet1", Row: 10, Col: 10},
+		Value: 100.0,
+		Type:  model.CellTypeNumber,
+	})
+
+	// PARAMETER: Value referenced by formulas but has no formula itself
+	sheet.SetCell(&model.RawCell{
+		Ref:   model.CellRef{Sheet: "Sheet1", Row: 0, Col: 0},
+		Value: 10.0,
+		Type:  model.CellTypeNumber,
+	})
+
+	// INTERMEDIATE: Has formula and is referenced by other formulas
+	sheet.SetCell(&model.RawCell{
+		Ref:     model.CellRef{Sheet: "Sheet1", Row: 0, Col: 1},
+		Value:   20.0,
+		Formula: "A1*2",
+		Type:    model.CellTypeFormula,
+	})
+
+	// OUTPUT: Has formula but not referenced by anything
+	sheet.SetCell(&model.RawCell{
+		Ref:     model.CellRef{Sheet: "Sheet1", Row: 0, Col: 2},
+		Value:   40.0,
+		Formula: "B1*2",
+		Type:    model.CellTypeFormula,
+	})
+
+	graph, _ := BuildDependencyGraph(wb)
+
+	arrays := []*model.InferredArray{
+		{ID: "input", RangeRef: model.RangeRef{Sheet: "Sheet1", TopLeft: [2]int{10, 10}, BottomRight: [2]int{10, 10}}, HasFormulas: false},
+		{ID: "param", RangeRef: model.RangeRef{Sheet: "Sheet1", TopLeft: [2]int{0, 0}, BottomRight: [2]int{0, 0}}, HasFormulas: false},
+		{ID: "inter", RangeRef: model.RangeRef{Sheet: "Sheet1", TopLeft: [2]int{0, 1}, BottomRight: [2]int{0, 1}}, HasFormulas: true},
+		{ID: "output", RangeRef: model.RangeRef{Sheet: "Sheet1", TopLeft: [2]int{0, 2}, BottomRight: [2]int{0, 2}}, HasFormulas: true},
+	}
+
+	ClassifyDataRoles(arrays, graph)
+
+	expected := map[string]model.DataRole{
+		"input":  model.RoleInput,
+		"param":  model.RoleParameter,
+		"inter":  model.RoleIntermediate,
+		"output": model.RoleOutput,
+	}
+
+	for _, arr := range arrays {
+		if arr.DataRole != expected[arr.ID] {
+			t.Errorf("array %s: expected role %s, got %s", arr.ID, expected[arr.ID], arr.DataRole)
+		}
+	}
+}
+
+// Test array detection with mixed types that shouldn't merge
+func TestArrayDetectorV2_MixedTypesNoMerge(t *testing.T) {
+	wb := makeTestWorkbook()
+	sheet := wb.Sheets["Sheet1"]
+
+	// Numbers in column A, string separator in column B
+	// This ensures the string doesn't get used as a header
+	sheet.SetCell(&model.RawCell{
+		Ref:   model.CellRef{Sheet: "Sheet1", Row: 0, Col: 0},
+		Value: 1.0,
+		Type:  model.CellTypeNumber,
+	})
+	sheet.SetCell(&model.RawCell{
+		Ref:   model.CellRef{Sheet: "Sheet1", Row: 0, Col: 1},
+		Value: "labelA",
+		Type:  model.CellTypeString,
+	})
+	sheet.SetCell(&model.RawCell{
+		Ref:   model.CellRef{Sheet: "Sheet1", Row: 5, Col: 0},
+		Value: 2.0,
+		Type:  model.CellTypeNumber,
+	})
+	sheet.SetCell(&model.RawCell{
+		Ref:   model.CellRef{Sheet: "Sheet1", Row: 5, Col: 1},
+		Value: "labelB",
+		Type:  model.CellTypeString,
+	})
+
+	detector := NewArrayDetectorV2(wb, make(map[string]*xlsx.ParsedFormula))
+	arrays := detector.DetectArrays()
+
+	// Should have numeric arrays and string arrays separately
+	numericCount := 0
+	stringCount := 0
+	for _, arr := range arrays {
+		if arr.DType == "float64" {
+			numericCount++
+		} else if arr.DType == "str" {
+			stringCount++
+		}
+	}
+
+	// At least 2 separate numeric arrays (row 0 and row 5)
+	if numericCount < 2 {
+		t.Errorf("expected at least 2 numeric arrays, got %d", numericCount)
+	}
+}
+
+// Test formula congruence with absolute references
+func TestFormulasCompatibleV2_AbsoluteRefs(t *testing.T) {
+	wb := makeTestWorkbook()
+	sheet := wb.Sheets["Sheet1"]
+
+	// Create a parameter cell at A1 (will be referenced with $A$1)
+	sheet.SetCell(&model.RawCell{
+		Ref:   model.CellRef{Sheet: "Sheet1", Row: 0, Col: 0},
+		Value: 10.0,
+		Type:  model.CellTypeNumber,
+	})
+
+	// Create input values in column B
+	for i := 0; i < 3; i++ {
+		sheet.SetCell(&model.RawCell{
+			Ref:   model.CellRef{Sheet: "Sheet1", Row: i, Col: 1},
+			Value: float64(i + 1),
+			Type:  model.CellTypeNumber,
+		})
+	}
+
+	// Create formulas in column C with mixed absolute/relative references
+	// C1 = B1 * $A$1, C2 = B2 * $A$1, C3 = B3 * $A$1
+	formulas := []string{"B1*$A$1", "B2*$A$1", "B3*$A$1"}
+	parsedFormulas := make(map[string]*xlsx.ParsedFormula)
+	for i, f := range formulas {
+		sheet.SetCell(&model.RawCell{
+			Ref:     model.CellRef{Sheet: "Sheet1", Row: i, Col: 2},
+			Value:   float64((i + 1) * 10),
+			Formula: f,
+			Type:    model.CellTypeFormula,
+		})
+		key := fmt.Sprintf("Sheet1!%d,2", i)
+		parsedFormulas[key] = xlsx.ParseFormula(f, "Sheet1")
+	}
+
+	detector := NewArrayDetectorV2(wb, parsedFormulas)
+
+	// These should be compatible - B moves relatively, A is fixed
+	if !detector.formulasCompatibleV2("Sheet1", 0, 2, 1, 2) {
+		t.Error("expected formulas with mixed abs/rel refs to be compatible")
+	}
+	if !detector.formulasCompatibleV2("Sheet1", 0, 2, 2, 2) {
+		t.Error("expected formulas with mixed abs/rel refs to be compatible")
+	}
+
+	// Now test incompatible case - formulas where absolute ref moves (shouldn't happen in real Excel)
+	// Create a formula where the "absolute" ref incorrectly moves
+	badFormulas := []string{"B1*$A$1", "B2*$A$2"} // Second one has different absolute ref
+	badParsedFormulas := make(map[string]*xlsx.ParsedFormula)
+	for i, f := range badFormulas {
+		key := fmt.Sprintf("Sheet1!%d,3", i)
+		badParsedFormulas[key] = xlsx.ParseFormula(f, "Sheet1")
+	}
+
+	badDetector := NewArrayDetectorV2(wb, badParsedFormulas)
+	if badDetector.formulasCompatibleV2("Sheet1", 0, 3, 1, 3) {
+		t.Error("expected formulas with inconsistent absolute refs to be incompatible")
+	}
+}
+
+// Test that arrays are correctly detected with absolute reference formulas
+func TestArrayDetectorV2_MixedAbsoluteRelativeFormulas(t *testing.T) {
+	wb := makeTestWorkbook()
+	sheet := wb.Sheets["Sheet1"]
+
+	// Create a parameter cell at A1
+	sheet.SetCell(&model.RawCell{
+		Ref:   model.CellRef{Sheet: "Sheet1", Row: 0, Col: 0},
+		Value: 1.5,
+		Type:  model.CellTypeNumber,
+	})
+
+	// Create input values in column B (rows 1-5)
+	for i := 1; i <= 5; i++ {
+		sheet.SetCell(&model.RawCell{
+			Ref:   model.CellRef{Sheet: "Sheet1", Row: i, Col: 1},
+			Value: float64(i * 100),
+			Type:  model.CellTypeNumber,
+		})
+	}
+
+	// Create formulas in column C with B relative, A absolute
+	parsedFormulas := make(map[string]*xlsx.ParsedFormula)
+	for i := 1; i <= 5; i++ {
+		formula := fmt.Sprintf("B%d*$A$1", i+1)
+		sheet.SetCell(&model.RawCell{
+			Ref:     model.CellRef{Sheet: "Sheet1", Row: i, Col: 2},
+			Value:   float64(i * 100) * 1.5,
+			Formula: formula,
+			Type:    model.CellTypeFormula,
+		})
+		key := fmt.Sprintf("Sheet1!%d,2", i)
+		parsedFormulas[key] = xlsx.ParseFormula(formula, "Sheet1")
+	}
+
+	detector := NewArrayDetectorV2(wb, parsedFormulas)
+	arrays := detector.DetectArrays()
+
+	// Find the formula array in column C
+	var formulaArray *model.InferredArray
+	for _, arr := range arrays {
+		if arr.HasFormulas && arr.RangeRef.TopLeft[1] == 2 {
+			formulaArray = arr
+			break
+		}
+	}
+
+	if formulaArray == nil {
+		t.Fatal("expected to find formula array in column C")
+	}
+
+	// Should be a 5-row column vector
+	rows, cols := formulaArray.RangeRef.Shape()
+	if rows != 5 || cols != 1 {
+		t.Errorf("expected 5x1 array, got %dx%d", rows, cols)
+	}
+
+	// Formula template should have 100% coverage
+	if formulaArray.FormulaTemplate == nil {
+		t.Fatal("expected formula template to be populated")
+	}
+	if formulaArray.FormulaTemplate.Coverage != 1.0 {
+		t.Errorf("expected 100%% coverage, got %.1f%%", formulaArray.FormulaTemplate.Coverage*100)
+	}
+}
+
+// Test formula hash computation
+func TestComputeFormulaHash(t *testing.T) {
+	wb := makeTestWorkbook()
+	sheet := wb.Sheets["Sheet1"]
+
+	// Two cells with similar formulas should have same hash
+	formulas := []string{"SUM(A1:A5)", "SUM(B1:B5)"}
+	parsedFormulas := make(map[string]*xlsx.ParsedFormula)
+
+	for i, f := range formulas {
+		sheet.SetCell(&model.RawCell{
+			Ref:     model.CellRef{Sheet: "Sheet1", Row: 0, Col: i},
+			Value:   10.0,
+			Formula: f,
+			Type:    model.CellTypeFormula,
+		})
+		key := fmt.Sprintf("Sheet1!0,%d", i)
+		parsedFormulas[key] = xlsx.ParseFormula(f, "Sheet1")
+	}
+
+	detector := NewArrayDetectorV2(wb, parsedFormulas)
+
+	hash1 := detector.computeFormulaHash("Sheet1", 0, 0)
+	hash2 := detector.computeFormulaHash("Sheet1", 0, 1)
+
+	if hash1 != hash2 {
+		t.Errorf("expected same hash for similar formulas, got %q and %q", hash1, hash2)
+	}
+
+	// Non-existent cell should return empty hash
+	hash3 := detector.computeFormulaHash("Sheet1", 99, 99)
+	if hash3 != "" {
+		t.Errorf("expected empty hash for non-existent cell, got %q", hash3)
+	}
+}
+
+// Test algorithm stability with different cell orderings (shuffle test)
+// The algorithm should produce identical results regardless of the order cells are added
+func TestArrayDetectorV2_ShuffleStability(t *testing.T) {
+	// Define a consistent set of cells to add
+	type cellData struct {
+		row     int
+		col     int
+		value   any
+		formula string
+		typ     model.CellType
+	}
+
+	// Create a complex workbook structure:
+	// - Header row in row 0 (strings)
+	// - Data in rows 1-5, columns 0-2 (numbers)
+	// - Formulas in column 3 referencing column 2
+	cells := []cellData{
+		// Headers
+		{0, 0, "Name", "", model.CellTypeString},
+		{0, 1, "Value1", "", model.CellTypeString},
+		{0, 2, "Value2", "", model.CellTypeString},
+		{0, 3, "Total", "", model.CellTypeString},
+		// Data rows
+		{1, 0, "A", "", model.CellTypeString},
+		{1, 1, 10.0, "", model.CellTypeNumber},
+		{1, 2, 20.0, "", model.CellTypeNumber},
+		{1, 3, 30.0, "B2+C2", model.CellTypeFormula},
+		{2, 0, "B", "", model.CellTypeString},
+		{2, 1, 15.0, "", model.CellTypeNumber},
+		{2, 2, 25.0, "", model.CellTypeNumber},
+		{2, 3, 40.0, "B3+C3", model.CellTypeFormula},
+		{3, 0, "C", "", model.CellTypeString},
+		{3, 1, 20.0, "", model.CellTypeNumber},
+		{3, 2, 30.0, "", model.CellTypeNumber},
+		{3, 3, 50.0, "B4+C4", model.CellTypeFormula},
+		{4, 0, "D", "", model.CellTypeString},
+		{4, 1, 25.0, "", model.CellTypeNumber},
+		{4, 2, 35.0, "", model.CellTypeNumber},
+		{4, 3, 60.0, "B5+C5", model.CellTypeFormula},
+		{5, 0, "E", "", model.CellTypeString},
+		{5, 1, 30.0, "", model.CellTypeNumber},
+		{5, 2, 40.0, "", model.CellTypeNumber},
+		{5, 3, 70.0, "B6+C6", model.CellTypeFormula},
+	}
+
+	// Helper to create workbook with cells in given order
+	createWorkbook := func(order []int) (*model.RawWorkbook, map[string]*xlsx.ParsedFormula) {
+		wb := model.NewRawWorkbook()
+		wb.SheetOrder = []string{"Sheet1"}
+		sheet := model.NewRawSheet("Sheet1")
+		wb.Sheets["Sheet1"] = sheet
+		parsedFormulas := make(map[string]*xlsx.ParsedFormula)
+
+		for _, idx := range order {
+			c := cells[idx]
+			cell := &model.RawCell{
+				Ref:     model.CellRef{Sheet: "Sheet1", Row: c.row, Col: c.col},
+				Value:   c.value,
+				Formula: c.formula,
+				Type:    c.typ,
+			}
+			sheet.SetCell(cell)
+
+			if c.formula != "" {
+				key := fmt.Sprintf("Sheet1!%d,%d", c.row, c.col)
+				parsedFormulas[key] = xlsx.ParseFormula(c.formula, "Sheet1")
+			}
+		}
+		return wb, parsedFormulas
+	}
+
+	// Helper to extract array signature for comparison
+	type arraySignature struct {
+		topLeft     [2]int
+		bottomRight [2]int
+		hasFormulas bool
+		dtype       string
+		orientation model.ArrayOrientation
+	}
+
+	getSignatures := func(arrays []*model.InferredArray) []arraySignature {
+		sigs := make([]arraySignature, len(arrays))
+		for i, arr := range arrays {
+			sigs[i] = arraySignature{
+				topLeft:     arr.RangeRef.TopLeft,
+				bottomRight: arr.RangeRef.BottomRight,
+				hasFormulas: arr.HasFormulas,
+				dtype:       arr.DType,
+				orientation: arr.Orientation,
+			}
+		}
+		// Sort by position for consistent comparison
+		for i := 0; i < len(sigs); i++ {
+			for j := i + 1; j < len(sigs); j++ {
+				if sigs[i].topLeft[0] > sigs[j].topLeft[0] ||
+					(sigs[i].topLeft[0] == sigs[j].topLeft[0] && sigs[i].topLeft[1] > sigs[j].topLeft[1]) {
+					sigs[i], sigs[j] = sigs[j], sigs[i]
+				}
+			}
+		}
+		return sigs
+	}
+
+	// Create baseline with natural order
+	naturalOrder := make([]int, len(cells))
+	for i := range naturalOrder {
+		naturalOrder[i] = i
+	}
+	baseWb, baseParsed := createWorkbook(naturalOrder)
+	baseDetector := NewArrayDetectorV2(baseWb, baseParsed)
+	baseArrays := baseDetector.DetectArrays()
+	baseSignatures := getSignatures(baseArrays)
+
+	// Test with different orderings
+	orderings := [][]int{
+		// Reverse order
+		func() []int {
+			o := make([]int, len(cells))
+			for i := range o {
+				o[i] = len(cells) - 1 - i
+			}
+			return o
+		}(),
+		// Column-major order (all col 0, then col 1, etc.)
+		{0, 4, 8, 12, 16, 20, 1, 5, 9, 13, 17, 21, 2, 6, 10, 14, 18, 22, 3, 7, 11, 15, 19, 23},
+		// Interleaved (every other cell)
+		{0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23},
+		// Random-ish shuffle
+		{12, 3, 18, 7, 0, 15, 22, 9, 4, 20, 11, 1, 17, 6, 23, 8, 14, 2, 19, 5, 21, 10, 16, 13},
+	}
+
+	for orderIdx, order := range orderings {
+		wb, parsed := createWorkbook(order)
+		detector := NewArrayDetectorV2(wb, parsed)
+		arrays := detector.DetectArrays()
+		signatures := getSignatures(arrays)
+
+		// Compare with baseline
+		if len(signatures) != len(baseSignatures) {
+			t.Errorf("order %d: got %d arrays, want %d", orderIdx, len(signatures), len(baseSignatures))
+			continue
+		}
+
+		for i, sig := range signatures {
+			base := baseSignatures[i]
+			if sig.topLeft != base.topLeft || sig.bottomRight != base.bottomRight {
+				t.Errorf("order %d, array %d: range mismatch - got %v:%v, want %v:%v",
+					orderIdx, i, sig.topLeft, sig.bottomRight, base.topLeft, base.bottomRight)
+			}
+			if sig.hasFormulas != base.hasFormulas {
+				t.Errorf("order %d, array %d: hasFormulas mismatch - got %v, want %v",
+					orderIdx, i, sig.hasFormulas, base.hasFormulas)
+			}
+			if sig.dtype != base.dtype {
+				t.Errorf("order %d, array %d: dtype mismatch - got %s, want %s",
+					orderIdx, i, sig.dtype, base.dtype)
+			}
+		}
+	}
+}
+
+// Test that the algorithm handles empty sheets gracefully
+func TestArrayDetectorV2_EmptySheet(t *testing.T) {
+	wb := model.NewRawWorkbook()
+	wb.SheetOrder = []string{"Sheet1", "Sheet2"}
+	wb.Sheets["Sheet1"] = model.NewRawSheet("Sheet1")
+	wb.Sheets["Sheet2"] = model.NewRawSheet("Sheet2")
+
+	// Add data only to Sheet1
+	wb.Sheets["Sheet1"].SetCell(&model.RawCell{
+		Ref:   model.CellRef{Sheet: "Sheet1", Row: 0, Col: 0},
+		Value: 1.0,
+		Type:  model.CellTypeNumber,
+	})
+
+	detector := NewArrayDetectorV2(wb, make(map[string]*xlsx.ParsedFormula))
+	arrays := detector.DetectArrays()
+
+	// Should only find arrays in Sheet1, not crash on empty Sheet2
+	if len(arrays) == 0 {
+		t.Error("expected at least one array from Sheet1")
+	}
+
+	for _, arr := range arrays {
+		if arr.RangeRef.Sheet == "Sheet2" {
+			t.Error("should not find arrays in empty Sheet2")
+		}
+	}
+}
+
+// Test array-to-array reference resolution in formula templates
+func TestArrayDetectorV2_ArrayReferenceResolution(t *testing.T) {
+	wb := makeTestWorkbook()
+	sheet := wb.Sheets["Sheet1"]
+
+	// Create input array in column A (arr_input: A1:A5)
+	for i := 0; i < 5; i++ {
+		sheet.SetCell(&model.RawCell{
+			Ref:   model.CellRef{Sheet: "Sheet1", Row: i, Col: 0},
+			Value: float64((i + 1) * 10),
+			Type:  model.CellTypeNumber,
+		})
+	}
+
+	// Create parameter cell at B1 (arr_param)
+	sheet.SetCell(&model.RawCell{
+		Ref:   model.CellRef{Sheet: "Sheet1", Row: 0, Col: 1},
+		Value: 1.5,
+		Type:  model.CellTypeNumber,
+	})
+
+	// Create formula array in column C (arr_output: C1:C5)
+	// Each formula references the corresponding cell in A and the fixed cell B1
+	parsedFormulas := make(map[string]*xlsx.ParsedFormula)
+	for i := 0; i < 5; i++ {
+		formula := fmt.Sprintf("A%d*$B$1", i+1)
+		sheet.SetCell(&model.RawCell{
+			Ref:     model.CellRef{Sheet: "Sheet1", Row: i, Col: 2},
+			Value:   float64((i+1)*10) * 1.5,
+			Formula: formula,
+			Type:    model.CellTypeFormula,
+		})
+		key := fmt.Sprintf("Sheet1!%d,2", i)
+		parsedFormulas[key] = xlsx.ParseFormula(formula, "Sheet1")
+	}
+
+	detector := NewArrayDetectorV2(wb, parsedFormulas)
+	arrays := detector.DetectArrays()
+
+	// Find the formula array (should be in column C)
+	var formulaArray *model.InferredArray
+	for _, arr := range arrays {
+		if arr.HasFormulas && arr.RangeRef.TopLeft[1] == 2 {
+			formulaArray = arr
+			break
+		}
+	}
+
+	if formulaArray == nil {
+		t.Fatal("expected to find formula array")
+	}
+
+	if formulaArray.FormulaTemplate == nil {
+		t.Fatal("expected formula template to be populated")
+	}
+
+	// Check that relative patterns have array references resolved
+	if len(formulaArray.FormulaTemplate.RelativePatterns) == 0 {
+		t.Fatal("expected relative patterns")
+	}
+
+	foundInputRef := false
+	for _, pattern := range formulaArray.FormulaTemplate.RelativePatterns {
+		if pattern.TargetArrayID != "" {
+			foundInputRef = true
+			// The relative reference should point to the input array (column A)
+			if pattern.RowIndexing == "" {
+				t.Error("expected RowIndexing to be set")
+			}
+			t.Logf("Relative pattern: TargetArrayID=%s, RowIndexing=%s, ColIndexing=%s",
+				pattern.TargetArrayID, pattern.RowIndexing, pattern.ColIndexing)
+		}
+	}
+
+	if !foundInputRef {
+		t.Error("expected at least one relative pattern with resolved TargetArrayID")
+	}
+
+	// Check that fixed refs have array references resolved
+	if len(formulaArray.FormulaTemplate.ResolvedFixed) == 0 {
+		t.Log("Note: No ResolvedFixed refs found (B1 may be treated as relative)")
+	} else {
+		for refName, resolved := range formulaArray.FormulaTemplate.ResolvedFixed {
+			t.Logf("Fixed ref %s: TargetArrayID=%s, ArrayRow=%d, ArrayCol=%d",
+				refName, resolved.TargetArrayID, resolved.ArrayRow, resolved.ArrayCol)
+			if resolved.TargetArrayID == "" {
+				t.Errorf("expected TargetArrayID for fixed ref %s", refName)
+			}
+		}
+	}
+}
+
+// Test that array references work with cross-array formulas
+func TestArrayDetectorV2_CrossArrayReferences(t *testing.T) {
+	wb := makeTestWorkbook()
+	sheet := wb.Sheets["Sheet1"]
+
+	// Create two input arrays side by side
+	// Array 1: A1:A3 (values 1, 2, 3)
+	// Array 2: B1:B3 (values 10, 20, 30)
+	for i := 0; i < 3; i++ {
+		sheet.SetCell(&model.RawCell{
+			Ref:   model.CellRef{Sheet: "Sheet1", Row: i, Col: 0},
+			Value: float64(i + 1),
+			Type:  model.CellTypeNumber,
+		})
+		sheet.SetCell(&model.RawCell{
+			Ref:   model.CellRef{Sheet: "Sheet1", Row: i, Col: 1},
+			Value: float64((i + 1) * 10),
+			Type:  model.CellTypeNumber,
+		})
+	}
+
+	// Create formula array: C1:C3 = A1+B1, A2+B2, A3+B3
+	parsedFormulas := make(map[string]*xlsx.ParsedFormula)
+	for i := 0; i < 3; i++ {
+		formula := fmt.Sprintf("A%d+B%d", i+1, i+1)
+		sheet.SetCell(&model.RawCell{
+			Ref:     model.CellRef{Sheet: "Sheet1", Row: i, Col: 2},
+			Value:   float64((i+1)*11),
+			Formula: formula,
+			Type:    model.CellTypeFormula,
+		})
+		key := fmt.Sprintf("Sheet1!%d,2", i)
+		parsedFormulas[key] = xlsx.ParseFormula(formula, "Sheet1")
+	}
+
+	detector := NewArrayDetectorV2(wb, parsedFormulas)
+	arrays := detector.DetectArrays()
+
+	// Find the formula array
+	var formulaArray *model.InferredArray
+	for _, arr := range arrays {
+		if arr.HasFormulas {
+			formulaArray = arr
+			break
+		}
+	}
+
+	if formulaArray == nil {
+		t.Fatal("expected to find formula array")
+	}
+
+	if formulaArray.FormulaTemplate == nil {
+		t.Fatal("expected formula template")
+	}
+
+	// Should have two relative patterns (one for A, one for B)
+	if len(formulaArray.FormulaTemplate.RelativePatterns) < 2 {
+		t.Errorf("expected at least 2 relative patterns, got %d", len(formulaArray.FormulaTemplate.RelativePatterns))
+	}
+
+	// Count how many have resolved array IDs
+	resolvedCount := 0
+	for _, pattern := range formulaArray.FormulaTemplate.RelativePatterns {
+		if pattern.TargetArrayID != "" {
+			resolvedCount++
+			t.Logf("Pattern: TargetArrayID=%s, RowIndexing=%s, ColIndexing=%s",
+				pattern.TargetArrayID, pattern.RowIndexing, pattern.ColIndexing)
+		}
+	}
+
+	if resolvedCount < 2 {
+		t.Errorf("expected at least 2 resolved array references, got %d", resolvedCount)
 	}
 }
