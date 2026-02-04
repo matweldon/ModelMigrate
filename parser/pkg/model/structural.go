@@ -57,12 +57,13 @@ type InferredArray struct {
 
 // FormulaTemplate captures the pattern of formulas in an array.
 type FormulaTemplate struct {
-	TemplateStr      string            `json:"template_str"`
-	FixedRefs        map[string]CellRef `json:"fixed_refs"`        // References that don't change
-	RelativePatterns map[string]RelativePattern `json:"relative_patterns"` // References that vary
+	TemplateStr      string                         `json:"template_str"`
+	FixedRefs        map[string]CellRef             `json:"fixed_refs"`                   // References that don't change (cell-level)
+	RelativePatterns map[string]RelativePattern     `json:"relative_patterns"`            // References that vary (includes array-level resolution)
+	ResolvedFixed    map[string]FixedRefResolved    `json:"resolved_fixed,omitempty"`     // Fixed refs with array resolution
 	DynamicRanges    map[string]DynamicRangePattern `json:"dynamic_ranges,omitempty"`
-	Exceptions       map[string]string `json:"exceptions,omitempty"` // Position -> different formula
-	Coverage         float64           `json:"coverage"` // Fraction of cells matching template
+	Exceptions       map[string]string              `json:"exceptions,omitempty"`         // Position -> different formula
+	Coverage         float64                        `json:"coverage"`                     // Fraction of cells matching template
 }
 
 // RelativePattern describes how a reference varies across array positions.
@@ -70,6 +71,19 @@ type RelativePattern struct {
 	BaseOffset [2]int `json:"base_offset"` // Offset from array top-left
 	RowDelta   int    `json:"row_delta"`   // How much row changes per array row
 	ColDelta   int    `json:"col_delta"`   // How much col changes per array col
+
+	// Array-level reference resolution (populated after array detection)
+	TargetArrayID string `json:"target_array_id,omitempty"` // ID of referenced array
+	RowIndexing   string `json:"row_indexing,omitempty"`    // "same" (moves with source), "fixed", or offset like "+1", "-2"
+	ColIndexing   string `json:"col_indexing,omitempty"`    // "same" (moves with source), "fixed", or offset like "+1", "-2"
+}
+
+// FixedRefResolved extends FixedRefs with array-level resolution
+type FixedRefResolved struct {
+	CellRef       CellRef `json:"cell_ref"`
+	TargetArrayID string  `json:"target_array_id,omitempty"` // ID of referenced array
+	ArrayRow      int     `json:"array_row,omitempty"`       // Row index within target array (0-indexed)
+	ArrayCol      int     `json:"array_col,omitempty"`       // Col index within target array (0-indexed)
 }
 
 // DynamicRangePattern describes ranges that grow/shrink.

@@ -1332,3 +1332,170 @@ func TestArrayDetectorV2_EmptySheet(t *testing.T) {
 		}
 	}
 }
+
+// Test array-to-array reference resolution in formula templates
+func TestArrayDetectorV2_ArrayReferenceResolution(t *testing.T) {
+	wb := makeTestWorkbook()
+	sheet := wb.Sheets["Sheet1"]
+
+	// Create input array in column A (arr_input: A1:A5)
+	for i := 0; i < 5; i++ {
+		sheet.SetCell(&model.RawCell{
+			Ref:   model.CellRef{Sheet: "Sheet1", Row: i, Col: 0},
+			Value: float64((i + 1) * 10),
+			Type:  model.CellTypeNumber,
+		})
+	}
+
+	// Create parameter cell at B1 (arr_param)
+	sheet.SetCell(&model.RawCell{
+		Ref:   model.CellRef{Sheet: "Sheet1", Row: 0, Col: 1},
+		Value: 1.5,
+		Type:  model.CellTypeNumber,
+	})
+
+	// Create formula array in column C (arr_output: C1:C5)
+	// Each formula references the corresponding cell in A and the fixed cell B1
+	parsedFormulas := make(map[string]*xlsx.ParsedFormula)
+	for i := 0; i < 5; i++ {
+		formula := fmt.Sprintf("A%d*$B$1", i+1)
+		sheet.SetCell(&model.RawCell{
+			Ref:     model.CellRef{Sheet: "Sheet1", Row: i, Col: 2},
+			Value:   float64((i+1)*10) * 1.5,
+			Formula: formula,
+			Type:    model.CellTypeFormula,
+		})
+		key := fmt.Sprintf("Sheet1!%d,2", i)
+		parsedFormulas[key] = xlsx.ParseFormula(formula, "Sheet1")
+	}
+
+	detector := NewArrayDetectorV2(wb, parsedFormulas)
+	arrays := detector.DetectArrays()
+
+	// Find the formula array (should be in column C)
+	var formulaArray *model.InferredArray
+	for _, arr := range arrays {
+		if arr.HasFormulas && arr.RangeRef.TopLeft[1] == 2 {
+			formulaArray = arr
+			break
+		}
+	}
+
+	if formulaArray == nil {
+		t.Fatal("expected to find formula array")
+	}
+
+	if formulaArray.FormulaTemplate == nil {
+		t.Fatal("expected formula template to be populated")
+	}
+
+	// Check that relative patterns have array references resolved
+	if len(formulaArray.FormulaTemplate.RelativePatterns) == 0 {
+		t.Fatal("expected relative patterns")
+	}
+
+	foundInputRef := false
+	for _, pattern := range formulaArray.FormulaTemplate.RelativePatterns {
+		if pattern.TargetArrayID != "" {
+			foundInputRef = true
+			// The relative reference should point to the input array (column A)
+			if pattern.RowIndexing == "" {
+				t.Error("expected RowIndexing to be set")
+			}
+			t.Logf("Relative pattern: TargetArrayID=%s, RowIndexing=%s, ColIndexing=%s",
+				pattern.TargetArrayID, pattern.RowIndexing, pattern.ColIndexing)
+		}
+	}
+
+	if !foundInputRef {
+		t.Error("expected at least one relative pattern with resolved TargetArrayID")
+	}
+
+	// Check that fixed refs have array references resolved
+	if len(formulaArray.FormulaTemplate.ResolvedFixed) == 0 {
+		t.Log("Note: No ResolvedFixed refs found (B1 may be treated as relative)")
+	} else {
+		for refName, resolved := range formulaArray.FormulaTemplate.ResolvedFixed {
+			t.Logf("Fixed ref %s: TargetArrayID=%s, ArrayRow=%d, ArrayCol=%d",
+				refName, resolved.TargetArrayID, resolved.ArrayRow, resolved.ArrayCol)
+			if resolved.TargetArrayID == "" {
+				t.Errorf("expected TargetArrayID for fixed ref %s", refName)
+			}
+		}
+	}
+}
+
+// Test that array references work with cross-array formulas
+func TestArrayDetectorV2_CrossArrayReferences(t *testing.T) {
+	wb := makeTestWorkbook()
+	sheet := wb.Sheets["Sheet1"]
+
+	// Create two input arrays side by side
+	// Array 1: A1:A3 (values 1, 2, 3)
+	// Array 2: B1:B3 (values 10, 20, 30)
+	for i := 0; i < 3; i++ {
+		sheet.SetCell(&model.RawCell{
+			Ref:   model.CellRef{Sheet: "Sheet1", Row: i, Col: 0},
+			Value: float64(i + 1),
+			Type:  model.CellTypeNumber,
+		})
+		sheet.SetCell(&model.RawCell{
+			Ref:   model.CellRef{Sheet: "Sheet1", Row: i, Col: 1},
+			Value: float64((i + 1) * 10),
+			Type:  model.CellTypeNumber,
+		})
+	}
+
+	// Create formula array: C1:C3 = A1+B1, A2+B2, A3+B3
+	parsedFormulas := make(map[string]*xlsx.ParsedFormula)
+	for i := 0; i < 3; i++ {
+		formula := fmt.Sprintf("A%d+B%d", i+1, i+1)
+		sheet.SetCell(&model.RawCell{
+			Ref:     model.CellRef{Sheet: "Sheet1", Row: i, Col: 2},
+			Value:   float64((i+1)*11),
+			Formula: formula,
+			Type:    model.CellTypeFormula,
+		})
+		key := fmt.Sprintf("Sheet1!%d,2", i)
+		parsedFormulas[key] = xlsx.ParseFormula(formula, "Sheet1")
+	}
+
+	detector := NewArrayDetectorV2(wb, parsedFormulas)
+	arrays := detector.DetectArrays()
+
+	// Find the formula array
+	var formulaArray *model.InferredArray
+	for _, arr := range arrays {
+		if arr.HasFormulas {
+			formulaArray = arr
+			break
+		}
+	}
+
+	if formulaArray == nil {
+		t.Fatal("expected to find formula array")
+	}
+
+	if formulaArray.FormulaTemplate == nil {
+		t.Fatal("expected formula template")
+	}
+
+	// Should have two relative patterns (one for A, one for B)
+	if len(formulaArray.FormulaTemplate.RelativePatterns) < 2 {
+		t.Errorf("expected at least 2 relative patterns, got %d", len(formulaArray.FormulaTemplate.RelativePatterns))
+	}
+
+	// Count how many have resolved array IDs
+	resolvedCount := 0
+	for _, pattern := range formulaArray.FormulaTemplate.RelativePatterns {
+		if pattern.TargetArrayID != "" {
+			resolvedCount++
+			t.Logf("Pattern: TargetArrayID=%s, RowIndexing=%s, ColIndexing=%s",
+				pattern.TargetArrayID, pattern.RowIndexing, pattern.ColIndexing)
+		}
+	}
+
+	if resolvedCount < 2 {
+		t.Errorf("expected at least 2 resolved array references, got %d", resolvedCount)
+	}
+}

@@ -412,8 +412,41 @@ Added `TestArrayDetectorV2_ShuffleStability` to verify the algorithm produces id
 
 Also added `TestArrayDetectorV2_EmptySheet` to verify graceful handling of empty sheets.
 
+### Array-to-Array Reference Resolution (Completed)
+
+Added Phase 5 to the detection algorithm that resolves cell references in formula templates to array-level references:
+
+1. **Model updates** (`pkg/model/structural.go`):
+   - Extended `RelativePattern` with `TargetArrayID`, `RowIndexing`, `ColIndexing`
+   - Added `FixedRefResolved` type with array position info
+   - Added `ResolvedFixed` field to `FormulaTemplate`
+
+2. **Resolution logic** (`pkg/inference/arrays_v2.go`):
+   - `resolveArrayReferences()` - Phase 5 that runs after all arrays are detected
+   - Builds cell-to-array mapping for quick lookup
+   - Resolves both relative and fixed references to their target arrays
+   - Calculates indexing patterns ("same", "fixed:N", etc.)
+
+**Example output** for formula `=A1*$B$1`:
+```json
+"relative_patterns": {
+  "ref_0": {
+    "target_array_id": "arr_001",
+    "row_indexing": "same",
+    "col_indexing": "fixed:0"
+  }
+},
+"resolved_fixed": {
+  "ref_1": {
+    "target_array_id": "arr_002",
+    "array_row": 0,
+    "array_col": 0
+  }
+}
+```
+
 ### Pending Tasks
 
-1. **Array-to-array template references** - Convert relative patterns from cell offsets to array references.
+1. **Error detection** - Look for common spreadsheet errors.
 
 ---
